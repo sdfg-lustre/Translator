@@ -14,6 +14,6 @@ Contents of the Directory:<br>
        -SDFG2LUSTRE_mergedCycles<br>
        
 
-The lustre models are tested with the <a href="https://kind2-mc.github.io/kind2/"> Kind 2 </a>  model checker.
+The formal verification tool  <a href="https://kind2-mc.github.io/kind2/"> Kind 2 </a>  is used.
 </pre> 
 

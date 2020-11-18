@@ -1,9 +1,0 @@
-autograph
-window "Harness" "Harness" 100 100 800 600 3000 3000
-labels 2
-0: "s0"
-1: "~in/!noError"
-vertices
-1: initial 100 100 unexpl names name struct 0 1 -10
-edges
-0: 1 1 names  name behav 1
