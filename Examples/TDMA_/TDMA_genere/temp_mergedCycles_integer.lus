@@ -1,0 +1,186 @@
+--** This lustre code is generated automatically. 
+--** It corresponds to the translation of an SDFG model to Lustre. This version produce a Lustre code having a reduced number of steps.
+--     26 mai 2020 10:23:31 AM
+
+
+
+
+--**************** Const Rates ****************--
+
+const maxValue = 15;
+const A_Z_rate_out = 1;
+const A1_Z_rate_in = 1;
+
+--****************  Actors' durations ****************--
+
+const A_maxStages  = 2;
+const A_duration  = 3;
+const A1_maxStages  = 2;
+const A1_duration  = 2;
+const  maxDuration  = 3;
+
+--**************** Init Channel ****************--
+
+const Z_I = 0;
+
+
+--************************************************--
+--******* Translation of Actor: A***************--
+--************************************************--
+node A(clock, ) returns (nextClock, Z_P :int; AnbrFired: int );
+
+var
+Z_PD :int;
+stage :int;
+ lastStage  :int;
+rTime1, Z_P1 : int; 
+rTime2, Z_P2 : int; 
+let
+AnbrFired= if ADoFire(3) then 3
+		else if ADoFire(2) then 2
+		else if ADoFire(1) then 1
+		else 0;
+
+(Z_PD) = ((AnbrFired * A_Z_rate_out));
+
+stage = (if (AnbrFired = 0) then 0 
+         else   1) 
+ -> if (AnbrFired = 0) then 0 
+         else if (pre lastStage = A_maxStages) then  1 
+         else  (pre lastStage + 1) ; 
+ 
+lastStage = (if (AnbrFired = 0) then 0 
+         else   1) 
+ -> if (AnbrFired = 0) then (pre lastStage) 
+         else stage; 
+ 
+
+(rTime1, Z_P1)=AStage(clock, stage, 1, Z_PD); 
+(rTime2, Z_P2)=AStage(clock, stage, 2, Z_PD); 
+
+ nextClock= Min(rTime1 , rTime2);
+ 
+Z_P = (Z_P1 + Z_P2);
+
+tel;
+------------------subnode Dofire of ActorA-----------------
+node ADoFire(times:int) returns ( yes: bool);
+let
+
+yes = if then true 
+	else false;
+
+tel;
+------------------subnode Stage of ActorA-----------------
+node AStage(clock,  stage, numStage, Z_PD: int) returns (rTime, Z_P : int);
+
+var 
+Z_PDBuffer: int; 
+selected, endExecution, active : bool; 
+
+ let 
+selected = if  (stage = numStage) then true else false ; 
+ endExecution= false -> if not pre (active)  then false else pre  ((rTime - clock) = 0); 
+active = if  selected then true else false -> 
+           if  selected then true 
+         else if  endExecution then false else pre active; 
+rTime = if  selected then A_duration  else maxDuration -> 
+          if  selected then A_duration 
+          else if  (pre active) then if  (pre (rTime > clock) )then  pre (rTime - clock) 
+          else maxDuration   else maxDuration ; 
+(Z_PDBuffer) = if selected then (Z_PD) 
+                               else (0) 
+ ->if selected then (Z_PD) 
+                               else if endExecution then (0)
+           else pre (Z_PDBuffer); 
+(Z_P) = (0) ->   if endExecution then pre (Z_PDBuffer)
+                                        else (0); 
+tel; 
+
+
+--************************************************--
+--******* Translation of Actor: A1***************--
+--************************************************--
+node A1(clock, Z :int) returns (nextClock, Z_C :int; A1nbrFired: int );
+
+let
+A1nbrFired= if A1DoFire(Z,3) then 3
+		else if A1DoFire(Z,2) then 2
+		else if A1DoFire(Z,1) then 1
+		else 0;
+
+(Z_C) = ((A1nbrFired * A1_Z_rate_in));
+
+nextClock = maxDuration ;
+tel;
+------------------subnode Dofire of ActorA1-----------------
+node A1DoFire(Z,times:int) returns ( yes: bool);
+let
+
+yes = if (Z>=  (times * A1_Z_rate_in)) 
+	then true 
+	else false;
+
+tel;
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (_: bool) returns ( clock, Z, AnbrFired, A1nbrFired:int);
+
+var
+
+Z_C, Z_P: int; 
+AnextClock : int;  
+A1nextClock : int;  
+
+let
+
+Z = Z_I ->  ( pre ( Z - Z_C) + Z_P);
+
+
+
+(AnextClock, Z_P, AnbrFired) = A(clock, );
+(A1nextClock, Z_C, A1nbrFired) = A1(clock, Z);
+
+clock=  Min(AnextClock , A1nextClock);
+
+
+
+tel;
+
+
+
+--************************************************--
+--******* Node Harness***************--
+--************************************************--
+node Harness (_: bool ) returns (noError :bool)
+
+var
+clock : int;
+
+Z, AnbrFired, A1nbrFired:int;
+
+positiveValues: bool;
+
+let
+
+(clock, Z, AnbrFired, A1nbrFired) =top(_); 
+
+positiveValues = ( Z >= 0) 
+	and ( AnbrFired  >=  0) 
+	and ( A1nbrFired  >=  0) ;
+
+noError= positiveValues;
+
+--%MAIN;
+
+--%PROPERTY  "All variables are positive "  noError;
+
+tel 
+

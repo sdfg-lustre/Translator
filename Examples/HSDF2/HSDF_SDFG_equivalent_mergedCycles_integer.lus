@@ -1,0 +1,579 @@
+--** This lustre code is generated automatically on 22 août 2020 10:55:45 AM
+--** It corresponds to the translation of an SDFG model (hdfs)  to Lustre. This version produce a Lustre code having a reduced number of steps.
+
+
+
+
+--**************** Const Rates ****************--
+
+const a0_in_rate_in = 1;
+const a0_e1in_rate_in = 1;
+const a0_e1out_rate_out = 1;
+const a0_e2_rate_out = 1;
+const a0_e3_rate_out = 1;
+const a0_e4_rate_out = 1;
+const a0_e5x_rate_out = 3;
+const b0_e3_rate_in = 1;
+const b0_e8_rate_in = 1;
+const b0_e6_rate_out = 1;
+const b0_e7_rate_out = 1;
+const b1_e2_rate_in = 1;
+const b1_e7_rate_in = 1;
+const b1_e9_rate_out = 1;
+const b1_e10_rate_out = 1;
+const b2_e4_rate_in = 1;
+const b2_e9_rate_in = 1;
+const b2_e8_rate_out = 1;
+const b2_e11_rate_out = 1;
+const c0_e6_rate_in = 1;
+const c0_e12_rate_out = 1;
+const c1_e10_rate_in = 1;
+const c1_e13_rate_out = 1;
+const c2_e11_rate_in = 1;
+const c2_e14_rate_out = 1;
+const d0_e12_rate_in = 1;
+const d0_e13_rate_in = 1;
+const d0_e14_rate_in = 1;
+const d0_e15in_rate_in = 1;
+const d0_e15out_rate_out = 1;
+const b__e5x_rate_in = 1;
+const b__e16in_rate_in = 1;
+const b__e16out_rate_out = 1;
+const b__e17x_rate_out = 1;
+const c__e17x_rate_in = 1;
+const c__e18x_rate_out = 1;
+const d__e18x_rate_in = 3;
+const d__e19in_rate_in = 1;
+const d__e19out_rate_out = 1;
+
+--****************  Actors' durations ****************--
+
+const a0_maxStages  = 1;
+const a0_duration  = 4;
+const b0_maxStages  = 1;
+const b0_duration  = 1;
+const b1_maxStages  = 1;
+const b1_duration  = 1;
+const b2_maxStages  = 1;
+const b2_duration  = 1;
+const c0_maxStages  = 1;
+const c0_duration  = 1;
+const c1_maxStages  = 1;
+const c1_duration  = 1;
+const c2_maxStages  = 1;
+const c2_duration  = 1;
+const d0_maxStages  = 1;
+const d0_duration  = 1;
+const b__maxStages  = 1;
+const b__duration  = 1;
+const c__maxStages  = 1;
+const c__duration  = 1;
+const d__maxStages  = 1;
+const d__duration  = 1;
+const  maxDuration  = 4;
+
+--**************** Init Channel ****************--
+
+const e1_I = 1;
+const e2_I = 0;
+const e3_I = 0;
+const e4_I = 0;
+const e6_I = 0;
+const e7_I = 0;
+const e8_I = 1;
+const e9_I = 0;
+const e10_I = 0;
+const e11_I = 0;
+const e12_I = 0;
+const e13_I = 0;
+const e14_I = 0;
+const e15_I = 1;
+const e5x_I = 0;
+const e16x_I = 1;
+const e17x_I = 0;
+const e18x_I = 0;
+const e19x_I = 1;
+
+const in_I = 0;
+
+--************************************************--
+--******* Translation of Actor: a0***************--
+--************************************************--
+node a0(clock, in, e1in :int) returns (nextClock, in_C, e1in_C, e1out_P, e2_P, e3_P, e4_P, e5x_P :int; nbrFired, nbrEnd: int );
+
+var
+stage :int;
+let
+nbrFired= if a0DoFire(in, e1in,1) then 1
+		else 0;
+
+(in_C, e1in_C) = ((nbrFired * a0_in_rate_in), (nbrFired * a0_e1in_rate_in));
+
+stage = if (nbrFired = 0) then 0 
+         else   1 ;
+
+(nextClock, nbrEnd) = a0Stage (clock, stage, 1, nbrFired ); 
+(e1out_P, e2_P, e3_P, e4_P, e5x_P) = ((nbrEnd * a0_e1out_rate_out), (nbrEnd * a0_e2_rate_out), (nbrEnd * a0_e3_rate_out), (nbrEnd * a0_e4_rate_out), (nbrEnd * a0_e5x_rate_out));
+
+tel;
+------------------subnode Dofire of Actora0-----------------
+node a0DoFire(in, e1in,times:int) returns ( yes: bool);
+let
+
+yes = if (in>=  (times * a0_in_rate_in)) 
+	and (e1in>=  (times * a0_e1in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------subnode Stage of Actora0-----------------
+node a0Stage(clock,  stage, numStage, nbrFired : int) returns (rTime, nbrEnd : int);
+
+var 
+nbrFiredBuf : int; 
+selected, endExecution, running : bool; 
+
+ let
+ selected = if  (stage = numStage) then true else false ; 
+ 
+ endExecution= false -> if not pre (running)  then false else pre  ((rTime - clock) = 0); 
+
+ running = if  selected then true else false -> 
+           if  selected then true 
+         else if  endExecution then false else pre running; 
+
+ nbrFiredBuf = if selected then nbrFired  else 0 -> 
+                        if selected then  nbrFired  else if endExecution then 0 else pre nbrFiredBuf ; 
+
+ nbrEnd = 0 -> if endExecution then pre nbrFiredBuf else 0; 
+
+ rTime = if  selected then a0_duration  else maxDuration -> 
+          if  selected then a0_duration 
+          else if  (pre running) then if  (pre (rTime > clock) )then  pre (rTime - clock) 
+          else maxDuration   else maxDuration ; 
+
+ tel; 
+
+
+--************************************************--
+--******* Translation of Actor: b0***************--
+--************************************************--
+node b0(clock, e3, e8 :int) returns (nextClock, e3_C, e8_C, e6_P, e7_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if b0DoFire(e3, e8,1) then 1
+		else 0;
+
+(e3_C, e8_C) = ((nbrFired * b0_e3_rate_in), (nbrFired * b0_e8_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e6_P, e7_P) = ((nbrEnd * b0_e6_rate_out), (nbrEnd * b0_e7_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorb0-----------------
+node b0DoFire(e3, e8,times:int) returns ( yes: bool);
+let
+
+yes = if (e3>=  (times * b0_e3_rate_in)) 
+	and (e8>=  (times * b0_e8_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: b1***************--
+--************************************************--
+node b1(clock, e2, e7 :int) returns (nextClock, e2_C, e7_C, e9_P, e10_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if b1DoFire(e2, e7,1) then 1
+		else 0;
+
+(e2_C, e7_C) = ((nbrFired * b1_e2_rate_in), (nbrFired * b1_e7_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e9_P, e10_P) = ((nbrEnd * b1_e9_rate_out), (nbrEnd * b1_e10_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorb1-----------------
+node b1DoFire(e2, e7,times:int) returns ( yes: bool);
+let
+
+yes = if (e2>=  (times * b1_e2_rate_in)) 
+	and (e7>=  (times * b1_e7_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: b2***************--
+--************************************************--
+node b2(clock, e4, e9 :int) returns (nextClock, e4_C, e9_C, e8_P, e11_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if b2DoFire(e4, e9,1) then 1
+		else 0;
+
+(e4_C, e9_C) = ((nbrFired * b2_e4_rate_in), (nbrFired * b2_e9_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e8_P, e11_P) = ((nbrEnd * b2_e8_rate_out), (nbrEnd * b2_e11_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorb2-----------------
+node b2DoFire(e4, e9,times:int) returns ( yes: bool);
+let
+
+yes = if (e4>=  (times * b2_e4_rate_in)) 
+	and (e9>=  (times * b2_e9_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: c0***************--
+--************************************************--
+node c0(clock, e6 :int) returns (nextClock, e6_C, e12_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if c0DoFire(e6,1) then 1
+		else 0;
+
+(e6_C) = ((nbrFired * c0_e6_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e12_P) = ((nbrEnd * c0_e12_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorc0-----------------
+node c0DoFire(e6,times:int) returns ( yes: bool);
+let
+
+yes = if (e6>=  (times * c0_e6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: c1***************--
+--************************************************--
+node c1(clock, e10 :int) returns (nextClock, e10_C, e13_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if c1DoFire(e10,1) then 1
+		else 0;
+
+(e10_C) = ((nbrFired * c1_e10_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e13_P) = ((nbrEnd * c1_e13_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorc1-----------------
+node c1DoFire(e10,times:int) returns ( yes: bool);
+let
+
+yes = if (e10>=  (times * c1_e10_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: c2***************--
+--************************************************--
+node c2(clock, e11 :int) returns (nextClock, e11_C, e14_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if c2DoFire(e11,1) then 1
+		else 0;
+
+(e11_C) = ((nbrFired * c2_e11_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e14_P) = ((nbrEnd * c2_e14_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorc2-----------------
+node c2DoFire(e11,times:int) returns ( yes: bool);
+let
+
+yes = if (e11>=  (times * c2_e11_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: d0***************--
+--************************************************--
+node d0(clock, e12, e13, e14, e15in :int) returns (nextClock, e12_C, e13_C, e14_C, e15in_C, e15out_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if d0DoFire(e12, e13, e14, e15in,1) then 1
+		else 0;
+
+(e12_C, e13_C, e14_C, e15in_C) = ((nbrFired * d0_e12_rate_in), (nbrFired * d0_e13_rate_in), (nbrFired * d0_e14_rate_in), (nbrFired * d0_e15in_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e15out_P) = ((nbrEnd * d0_e15out_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actord0-----------------
+node d0DoFire(e12, e13, e14, e15in,times:int) returns ( yes: bool);
+let
+
+yes = if (e12>=  (times * d0_e12_rate_in)) 
+	and (e13>=  (times * d0_e13_rate_in)) 
+	and (e14>=  (times * d0_e14_rate_in)) 
+	and (e15in>=  (times * d0_e15in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: b_***************--
+--************************************************--
+node b_(clock, e5x, e16in :int) returns (nextClock, e5x_C, e16in_C, e16out_P, e17x_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if b_DoFire(e5x, e16in,1) then 1
+		else 0;
+
+(e5x_C, e16in_C) = ((nbrFired * b__e5x_rate_in), (nbrFired * b__e16in_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e16out_P, e17x_P) = ((nbrEnd * b__e16out_rate_out), (nbrEnd * b__e17x_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorb_-----------------
+node b_DoFire(e5x, e16in,times:int) returns ( yes: bool);
+let
+
+yes = if (e5x>=  (times * b__e5x_rate_in)) 
+	and (e16in>=  (times * b__e16in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: c_***************--
+--************************************************--
+node c_(clock, e17x :int) returns (nextClock, e17x_C, e18x_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if c_DoFire(e17x,1) then 1
+		else 0;
+
+(e17x_C) = ((nbrFired * c__e17x_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e18x_P) = ((nbrEnd * c__e18x_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorc_-----------------
+node c_DoFire(e17x,times:int) returns ( yes: bool);
+let
+
+yes = if (e17x>=  (times * c__e17x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: d_***************--
+--************************************************--
+node d_(clock, e18x, e19in :int) returns (nextClock, e18x_C, e19in_C, e19out_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if d_DoFire(e18x, e19in,1) then 1
+		else 0;
+
+(e18x_C, e19in_C) = ((nbrFired * d__e18x_rate_in), (nbrFired * d__e19in_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(e19out_P) = ((nbrEnd * d__e19out_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actord_-----------------
+node d_DoFire(e18x, e19in,times:int) returns ( yes: bool);
+let
+
+yes = if (e18x>=  (times * d__e18x_rate_in)) 
+	and (e19in>=  (times * d__e19in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (in_P: int) returns ( clock, e1, e2, e3, e4, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e5x, e16x, e17x, e18x, e19x, in, a0nbrFired, b0nbrFired, b1nbrFired, b2nbrFired, c0nbrFired, c1nbrFired, c2nbrFired, d0nbrFired, b_nbrFired, c_nbrFired, d_nbrFired:int);
+
+var
+
+e1_C, e1_P: int; 
+e2_C, e2_P: int; 
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e6_C, e6_P: int; 
+e7_C, e7_P: int; 
+e8_C, e8_P: int; 
+e9_C, e9_P: int; 
+e10_C, e10_P: int; 
+e11_C, e11_P: int; 
+e12_C, e12_P: int; 
+e13_C, e13_P: int; 
+e14_C, e14_P: int; 
+e15_C, e15_P: int; 
+e5x_C, e5x_P: int; 
+e16x_C, e16x_P: int; 
+e17x_C, e17x_P: int; 
+e18x_C, e18x_P: int; 
+e19x_C, e19x_P: int; 
+in_C : int;
+a0nextClock : int;  
+b0nextClock : int;  
+b1nextClock : int;  
+b2nextClock : int;  
+c0nextClock : int;  
+c1nextClock : int;  
+c2nextClock : int;  
+d0nextClock : int;  
+b_nextClock : int;  
+c_nextClock : int;  
+d_nextClock : int;  
+a0nbrEnd, b0nbrEnd, b1nbrEnd, b2nbrEnd, c0nbrEnd, c1nbrEnd, c2nbrEnd, d0nbrEnd, b_nbrEnd, c_nbrEnd, d_nbrEnd : int; 
+
+a0nbrRun, b0nbrRun, b1nbrRun, b2nbrRun, c0nbrRun, c1nbrRun, c2nbrRun, d0nbrRun, b_nbrRun, c_nbrRun, d_nbrRun : int; 
+
+positiveValues: bool; 
+
+let
+
+assert in_P  >=0; 
+ 
+e1 = e1_I ->  ( pre ( e1 - e1_C) + e1_P);
+e2 = e2_I ->  ( pre ( e2 - e2_C) + e2_P);
+e3 = e3_I ->  ( pre ( e3 - e3_C) + e3_P);
+e4 = e4_I ->  ( pre ( e4 - e4_C) + e4_P);
+e6 = e6_I ->  ( pre ( e6 - e6_C) + e6_P);
+e7 = e7_I ->  ( pre ( e7 - e7_C) + e7_P);
+e8 = e8_I ->  ( pre ( e8 - e8_C) + e8_P);
+e9 = e9_I ->  ( pre ( e9 - e9_C) + e9_P);
+e10 = e10_I ->  ( pre ( e10 - e10_C) + e10_P);
+e11 = e11_I ->  ( pre ( e11 - e11_C) + e11_P);
+e12 = e12_I ->  ( pre ( e12 - e12_C) + e12_P);
+e13 = e13_I ->  ( pre ( e13 - e13_C) + e13_P);
+e14 = e14_I ->  ( pre ( e14 - e14_C) + e14_P);
+e15 = e15_I ->  ( pre ( e15 - e15_C) + e15_P);
+e5x = e5x_I ->  ( pre ( e5x - e5x_C) + e5x_P);
+e16x = e16x_I ->  ( pre ( e16x - e16x_C) + e16x_P);
+e17x = e17x_I ->  ( pre ( e17x - e17x_C) + e17x_P);
+e18x = e18x_I ->  ( pre ( e18x - e18x_C) + e18x_P);
+e19x = e19x_I ->  ( pre ( e19x - e19x_C) + e19x_P);
+
+
+in = in_P -> pre  ( in-in_C)+ in_P ;
+
+
+(a0nextClock, in_C, e1_C, e1_P, e2_P, e3_P, e4_P, e5x_P, a0nbrFired, a0nbrEnd ) = a0(clock, in, e1);
+(b0nextClock, e3_C, e8_C, e6_P, e7_P, b0nbrFired, b0nbrEnd ) = b0(clock, e3, e8);
+(b1nextClock, e2_C, e7_C, e9_P, e10_P, b1nbrFired, b1nbrEnd ) = b1(clock, e2, e7);
+(b2nextClock, e4_C, e9_C, e8_P, e11_P, b2nbrFired, b2nbrEnd ) = b2(clock, e4, e9);
+(c0nextClock, e6_C, e12_P, c0nbrFired, c0nbrEnd ) = c0(clock, e6);
+(c1nextClock, e10_C, e13_P, c1nbrFired, c1nbrEnd ) = c1(clock, e10);
+(c2nextClock, e11_C, e14_P, c2nbrFired, c2nbrEnd ) = c2(clock, e11);
+(d0nextClock, e12_C, e13_C, e14_C, e15_C, e15_P, d0nbrFired, d0nbrEnd ) = d0(clock, e12, e13, e14, e15);
+(b_nextClock, e5x_C, e16x_C, e16x_P, e17x_P, b_nbrFired, b_nbrEnd ) = b_(clock, e5x, e16x);
+(c_nextClock, e17x_C, e18x_P, c_nbrFired, c_nbrEnd ) = c_(clock, e17x);
+(d_nextClock, e18x_C, e19x_C, e19x_P, d_nbrFired, d_nbrEnd ) = d_(clock, e18x, e19x);
+
+clock= Min(a0nextClock , Min(b0nextClock , Min(b1nextClock , Min(b2nextClock , Min(c0nextClock , Min(c1nextClock , Min(c2nextClock , Min(d0nextClock , Min(b_nextClock , Min(c_nextClock , d_nextClock))))))))));
+
+
+a0nbrRun=  a0nbrFired  -> (pre a0nbrRun) +a0nbrFired - a0nbrEnd ;
+
+b0nbrRun=  b0nbrFired  -> (pre b0nbrRun) +b0nbrFired - b0nbrEnd ;
+
+b1nbrRun=  b1nbrFired  -> (pre b1nbrRun) +b1nbrFired - b1nbrEnd ;
+
+b2nbrRun=  b2nbrFired  -> (pre b2nbrRun) +b2nbrFired - b2nbrEnd ;
+
+c0nbrRun=  c0nbrFired  -> (pre c0nbrRun) +c0nbrFired - c0nbrEnd ;
+
+c1nbrRun=  c1nbrFired  -> (pre c1nbrRun) +c1nbrFired - c1nbrEnd ;
+
+c2nbrRun=  c2nbrFired  -> (pre c2nbrRun) +c2nbrFired - c2nbrEnd ;
+
+d0nbrRun=  d0nbrFired  -> (pre d0nbrRun) +d0nbrFired - d0nbrEnd ;
+
+b_nbrRun=  b_nbrFired  -> (pre b_nbrRun) +b_nbrFired - b_nbrEnd ;
+
+c_nbrRun=  c_nbrFired  -> (pre c_nbrRun) +c_nbrFired - c_nbrEnd ;
+
+d_nbrRun=  d_nbrFired  -> (pre d_nbrRun) +d_nbrFired - d_nbrEnd ;
+
+
+positiveValues = ( e1 >= 0) 
+	and ( e2 >= 0) 
+	and ( e3 >= 0) 
+	and ( e4 >= 0) 
+	and ( e6 >= 0) 
+	and ( e7 >= 0) 
+	and ( e8 >= 0) 
+	and ( e9 >= 0) 
+	and ( e10 >= 0) 
+	and ( e11 >= 0) 
+	and ( e12 >= 0) 
+	and ( e13 >= 0) 
+	and ( e14 >= 0) 
+	and ( e15 >= 0) 
+	and ( e5x >= 0) 
+	and ( e16x >= 0) 
+	and ( e17x >= 0) 
+	and ( e18x >= 0) 
+	and ( e19x >= 0) 
+	and ( in >= 0) 
+	and ( a0nbrFired  >=  0) 
+	and ( b0nbrFired  >=  0) 
+	and ( b1nbrFired  >=  0) 
+	and ( b2nbrFired  >=  0) 
+	and ( c0nbrFired  >=  0) 
+	and ( c1nbrFired  >=  0) 
+	and ( c2nbrFired  >=  0) 
+	and ( d0nbrFired  >=  0) 
+	and ( b_nbrFired  >=  0) 
+	and ( c_nbrFired  >=  0) 
+	and ( d_nbrFired  >=  0) ;
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+
+
+tel;
+
+

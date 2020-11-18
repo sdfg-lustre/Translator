@@ -1,0 +1,42 @@
+<sdf name="hdfs"    >
+  
+   <actor name="a_" duration="1" maxAutoConcurrences="3">
+
+        <port name="e1in" type="in"  rate="1" />
+        <port name="e1out" type="out"  rate="1" />
+ 
+         <port name="e5x" type="out"  rate="3" />
+    </actor>
+
+  
+ <actor name="b_" duration="1" maxAutoConcurrences="3">
+         <port name="e5x" type="in"  rate="1" />
+        <port name="e16in" type="in"  rate="1" />
+        <port name="e16out" type="out"  rate="1" />
+        <port name="e17x" type="out"  rate="1" />
+    </actor>
+
+<actor name="c_" duration="1" maxAutoConcurrences="3">
+         <port name="e17x" type="in"  rate="1" />
+        <port name="e18x" type="out"  rate="1" />
+    </actor>
+<actor name="d_" duration="1" maxAutoConcurrences="3">
+         <port name="e18x" type="in"  rate="3" />
+        <port name="e19in" type="in"  rate="1" />
+        <port name="e19out" type="out"  rate="1" />
+    </actor>
+
+ 
+ 
+     
+     <channel name = "e1x" srcActor="a_" srcPort="e1out" dstActor="a_" dstPort="e1in" initialTokens="1"/>
+ 
+     <channel name = "e5x" srcActor="a_" srcPort="e5x" dstActor="b_" dstPort="e5x" initialTokens="0"/>
+     <channel name = "e16x" srcActor="b_" srcPort="e16out" dstActor="b_" dstPort="e16in" initialTokens="1"/>
+     <channel name = "e17x" srcActor="b_" srcPort="e17x" dstActor="c_" dstPort="e17x" initialTokens="0"/>
+     <channel name = "e18x" srcActor="c_" srcPort="e18x" dstActor="d_" dstPort="e18x" initialTokens="0"/>
+     <channel name = "e19x" srcActor="d_" srcPort="e19out" dstActor="d_" dstPort="e19in" initialTokens="1"/>
+
+
+ 
+ </sdf>

@@ -1,0 +1,157 @@
+const BIN_SZ = 8;
+
+const UsrInt_0 = [0,0,0,0,0,0,0,0];
+const UsrInt_1 = [1,0,0,0,0,0,0,0];
+const UsrInt_2 = [0,1,0,0,0,0,0,0];
+
+------------------------------------------------------
+
+type UsrInt = bool^BIN_SZ ;
+
+node UsrIntIf (c : bool ; x : UsrInt ; y : UsrInt) returns (s : UsrInt);
+let
+s = if c^BIN_SZ then x else y ;
+tel
+
+------------------------------------------------------
+
+node UsrIntPlus ( x, y : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = false ;
+c[1..BIN_SZ]= if c [0..BIN_SZ -1] then (x or y) else (x and y);
+s= x xor y xor c[0..BIN_SZ -1];
+tel
+
+------------------------------------------------------
+
+node UsrIntChs ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = false ;
+c [1..BIN_SZ]= c [0..BIN_SZ -1] or x ;
+s = c [0..BIN_SZ -1] xor x ;
+tel
+
+------------------------------------------------------
+
+node UsrIntIncr ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = true ;
+c [ 1..BIN_SZ ] = c [ 0..BIN_SZ -1] and x ;
+s = c [ 0..BIN_SZ -1] xor x ;
+tel
+
+------------------------------------------------------
+
+node UsrIntDecr ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = true ;
+c [ 1..BIN_SZ ] = c [ 0..BIN_SZ -1] and not x ;
+s = c [ 0..BIN_SZ -1] xor x ;
+tel
+
+------------------------------------------------------
+
+node UsrIntMinus ( x : UsrInt ; y : UsrInt ) returns ( s : UsrInt ) ;
+let
+s = UsrIntPlus ( x , UsrIntChs ( y ) ) ;
+tel
+
+------------------------------------------------------
+
+node UsrIntGt ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+var
+z : UsrInt ;
+let
+-- x > y <=> y - x < 0
+z = UsrIntPlus ( y , UsrIntChs ( x ) ) ;
+o = z [ BIN_SZ - 1 ] ;
+tel
+
+------------------------------------------------------
+
+node UsrIntLt ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x < y <=> y > x
+o = UsrIntGt ( y , x ) ;
+tel
+
+------------------------------------------------------
+
+node UsrIntGte ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x >= y <=> not y > x
+o = not UsrIntGt ( y , x ) ;
+tel
+
+------------------------------------------------------
+
+node UsrIntLte ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x <= y <=> not x > y
+o = not UsrIntGt ( x , y ) ;
+tel
+
+------------------------------------------------------
+
+node UsrIntEq ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+var
+a : bool^BIN_SZ +1;
+let
+a [ 0 ] = true ;
+a [ 1..BIN_SZ ] = a [ 0..BIN_SZ -1] and ( x = y ) ;
+o = a [ BIN_SZ - 1 ] ;
+tel
+
+------------------------------------------------------
+
+node mult2Bit(a, b: bool^2) returns (q: bool^4)
+let
+ 
+	q[0]= a[0] and b[0];
+	q[1]= a[1] and b[0] xor a[0] and b[1];
+	q[2]= a[1] and b[0] and a[0] and b[1] xor a[1] and b[1];
+	q[3]= a[1] and b[0] and a[0] and b[1] and a[1] and b[1];
+
+tel
+
+------------------------------------------------------
+
+node UsrIntMult ( a, b: bool^8) returns ( q: bool^8)
+var
+ 
+a0, a1, b0, b1 : bool^2;
+outMult1, outMult2, outMult3, outMult4 : bool^4;
+in1Add1, in2Add1, in1Add2, in2Add2,  outLastAdd: bool^8;
+
+let
+
+a0[0..1]= a[0..1];
+a1[0..1]= a[2..3];
+b0[0..1]= b[0..1];
+b1[0..1]= b[2..3];
+
+outMult1 = mult2Bit (a0, b0);
+outMult2 = mult2Bit (a1, b0);
+outMult3 = mult2Bit (a0, b1);
+outMult4 = mult2Bit (a1, b1);
+
+in1Add1[0..1]= outMult1[2..3]; in1Add1[2..7]= false^(6);
+in2Add1[0..3]=outMult2[0..3];  in2Add1[4..7]= false^(4);
+
+in1Add2[0..3]=outMult3[0..3];  in1Add2[4..7]= false^(4);
+in2Add2[2..5]=outMult4[0..3];  in2Add2[0..1]= false^2; in2Add2[6..7]= false^(2);
+
+outLastAdd=UsrIntPlus(UsrIntPlus(in1Add1, in2Add1), UsrIntPlus(in1Add2, in2Add2));
+q[0..1]=outMult1[0..1];
+q[2..7]= outLastAdd[0..5];
+
+
+tel
+
+
+------------------------------------------------------
+

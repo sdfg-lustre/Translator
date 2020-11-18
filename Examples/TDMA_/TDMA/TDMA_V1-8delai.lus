@@ -1,0 +1,191 @@
+include "toInclude_BitBlasting_ok.lus"
+
+
+--------------instruction with --------------------
+--node P(const n: int; B: bool^n) returns (p:bool);
+--let
+-- p = with n=1 then B[0]
+--      else XOR(B[n-1] , P(n-1,B[0..n-2]));
+--tel
+
+
+
+------------------------------SDFG weights
+const IN_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const X0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+const IN_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Z0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const V0=[1, 1, 0 , 0,  0 , 0  ,0  ,0];
+
+const IN_P=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const P0=[0, 0 , 0 , 0,  0 , 0  ,0  ,0];
+
+const IN_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const B0=[0, 0,  0 , 0,  0 , 0  ,0  ,0];
+
+
+
+--******************************************************************************
+--******************node Ta******************************************************
+
+node Ta (X, V: UsrInt) returns ( consX, consV, prodV, prodZ:UsrInt;  TaFired:bool);
+let
+
+TaFired =UsrIntGte (X, IN_X) and UsrIntGte (V, IN_V);
+(consX, consV, prodV, prodZ) =	if 	DoFireTa (X,V,UsrInt_4) then FireTa (UsrInt_4) 
+				else if DoFireTa (X,V,UsrInt_3) then FireTa (UsrInt_3) 
+				else if DoFireTa (X,V,UsrInt_2) then FireTa (UsrInt_2)  
+				else if DoFireTa (X,V,UsrInt_1) then FireTa (UsrInt_1) 
+				else 					FireTa (UsrInt_0);
+tel
+
+----
+node DoFireTa (X, V, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (X, FourBitsMult(times, IN_X)) and 
+	 UsrIntGte (V, FourBitsMult(times, IN_V)) then true 
+	else false;
+tel
+---
+
+node FireTa (times:UsrInt) returns (consX, consV, prodV, prodZ: UsrInt);
+let
+consX= FourBitsMult(times, IN_X) ;
+consV= FourBitsMult(times, IN_V);
+prodV= FourBitsMult(times,OUT_V) ;
+prodZ= FourBitsMult(times,OUT_Z) ;
+tel
+----
+
+
+--******************************************************************************
+--*****************node Ta1*******************************************************
+ node Ta1 (Z: UsrInt) returns (consZ, prodB:UsrInt;  Ta1Fired:bool);
+let
+
+Ta1Fired =UsrIntGte (Z, IN_Z) ;
+(consZ, prodB) =	if 	DoFireTa1 (Z, UsrInt_4)  then FireTa1 (UsrInt_4) 
+				else if DoFireTa1 (Z, UsrInt_3) then FireTa1 (UsrInt_3) 
+				else if DoFireTa1 (Z,  UsrInt_2) then FireTa1 (UsrInt_2)  
+				else if DoFireTa1 (Z,  UsrInt_1) then FireTa1 (UsrInt_1) 
+				else 					FireTa1 (UsrInt_0);
+tel
+
+----
+node DoFireTa1 (Z, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (Z, FourBitsMult(times, IN_Z)) then true 
+	else false;
+tel
+---
+
+node FireTa1 (times:UsrInt) returns (consZ,  prodB: UsrInt);
+let
+consZ= FourBitsMult(times, IN_Z) ;
+prodB= FourBitsMult(times,OUT_B) ;
+tel
+----
+
+--*************************************************************************************
+--*******************node Generator*****************************************************
+
+node Generator (P , X: UsrInt) returns ( prodX : UsrInt;  GeneratorFired: bool);
+let
+
+GeneratorFired =UsrIntGte (P, IN_P)   and UsrIntLte (X, UsrInt_8);
+
+(prodX) =	if 	GeneratorFired then (P) else (UsrInt_0) ;
+
+ tel
+
+
+--********************top****************************************************
+node top (P:UsrInt) returns ( Ta1Fired, GeneratorFired, TaFired ,  noErreur: bool;  B, TX: UsrInt );
+
+--------------Les variables
+var  
+
+prodX, consX,  prodZ, consZ,   prodV, consV,  prodB, 
+ delayedV, delayedZ, delayedB,  
+ X,  Z, V,    X1,  Z1, V1,  B1: UsrInt;
+
+-------variables pour les propriétés
+TX_earlyTaTa1, B_earlyTa: UsrInt;
+ P0, P1, P2, P3: bool;
+
+
+---------
+let
+
+(prodX,  GeneratorFired) =  Generator (P,X);
+(consX, consV,   delayedV, delayedZ, TaFired) = Ta(X,V);
+(consZ,  delayedB, Ta1Fired)= Ta1(Z);
+
+X1= UsrIntPlus (UsrIntMinus (X, consX), prodX);   X= X0-> (pre X1); 
+Z1= UsrIntPlus (UsrIntMinus (Z, consZ), prodZ);   Z= Z0-> (pre Z1);
+V1= UsrIntPlus (UsrIntMinus (V, consV), prodV);     V= V0-> (pre V1);
+B1= UsrIntPlus (B, prodB);       B= B0-> (pre B1);
+TX= UsrInt_0 -> (pre  UsrIntPlus (TX, prodX));      
+
+
+------------***********************-Partie à modifier suivants les delais des noeuds*************************
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+-- delai de Ta== 6;
+--prodV= UsrInt_0-> pre (UsrInt_0-> pre delayedV ) ;
+--prodZ= UsrInt_0-> pre (UsrInt_0-> pre delayedZ );
+prodV= UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> pre (UsrInt_0-> pre delayedV ))))))) ;
+prodZ= UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> pre (UsrInt_0-> pre delayedZ ))))))) ;
+
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+--delai Ta1= 2
+prodB= UsrInt_0-> (pre delayedB);
+
+-------**********************-streams pour Les propriétes pour la verification du modele
+--si delai du noeud  Ta est X cycles alors il faut X "pre"
+--delai de Ta= 6
+--B_earlyTa= UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre B)))));
+B_earlyTa= UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> pre (UsrInt_0-> pre B ))))))))) ;
+--B_earlyTa= pre pre  pre B;--   cette façon de faire passe pour la verification formelle mait donne des warining à la simulation
+
+
+--delai de  Ta + ta1= 8
+TX_earlyTaTa1= UsrInt_0-> (pre (  UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> pre (UsrInt_0-> pre TX ))))))))))))) ;
+
+--TX_earlyTaTa1= pre pre pre pre pre  TX;
+
+-- ---------------------------------les propriétés
+
+P0=UsrIntGte(X, UsrInt_0) and UsrIntGte(V, UsrInt_0) and UsrIntGte(Z, UsrInt_0)  ;-- true
+-- P0=UsrIntGte(X, UsrInt_0);--true 
+--P0=UsrIntGte(V, UsrInt_0);--true
+--P0=UsrIntGte(Z, UsrInt_0);--true
+
+--Proriété P1:
+P1=  UsrIntLte(UsrIntMinus(B, B_earlyTa), V0) ; -- true
+
+--Proriété P2:
+P2=  UsrIntLte(B, TX_earlyTaTa1);-- true
+
+--Proriété P3: --true
+P3= (not UsrIntEq(B, pre B) )=> UsrIntEq(UsrIntMinus(B, B_earlyTa), V0) or  UsrIntEq(B, TX_earlyTaTa1);
+
+--noErreur=P1 and P2 and P3 and P0;-- true
+noErreur=P1 ;
+-----------------test temporaire
+
+
+
+
+-----------------------------assertions
+assert UsrIntLte(P, UsrInt_2) and UsrIntGte(P, UsrInt_0) ;
+
+tel
+
+
+
+--******************************************node test ***********************************
+node test (P:UsrInt) returns (  noErreur: bool);
+var
+Ta1Fired, GeneratorFired, TaFired  : bool;  B, TX: UsrInt;
+
+let
+
+ ( Ta1Fired, GeneratorFired, TaFired ,  noErreur,  B, TX )= top (P) ;
+
+tel

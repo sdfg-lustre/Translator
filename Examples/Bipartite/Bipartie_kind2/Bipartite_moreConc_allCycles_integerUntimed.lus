@@ -1,0 +1,203 @@
+--** This lustre code is generated automatically on 12 sept. 2020 11:03:17 PM
+--**It corresponds to a translation to Lustre of the Untimed SDFG model  of the design "bipartite" 
+
+
+
+
+--**************** Const Rates ****************--
+
+const a_p1_rate_out = 3 ;
+const a_p2_rate_out = 4 ;
+const a_ca_rate_in = 3 ;
+const a_da_rate_in = 4 ;
+const b_p1_rate_out = 1 ;
+const b_p2_rate_out = 4 ;
+const b_cb_rate_in = 1 ;
+const b_db_rate_in = 4 ;
+const c_p1_rate_in = 4 ;
+const c_p2_rate_in = 4 ;
+const c_ca_rate_out = 4 ;
+const c_cb_rate_out = 4 ;
+const d_p1_rate_in = 3 ;
+const d_p2_rate_in = 9 ;
+const d_da_rate_out = 3 ;
+const d_db_rate_out = 9 ;
+
+--**************** Init Channel ****************--
+
+const ch1_I = 0 ;
+const ch2_I = 0 ;
+const ch3_I = 0 ;
+const ch4_I = 0 ;
+const ca_I = 6 ;
+const cb_I = 4 ;
+const da_I = 6 ;
+const db_I = 12 ;
+
+
+--**************** Nodes Declaration ****************--
+
+node a(ca, da :int) returns (p1_P, p2_P, ca_C, da_C :int; anbrFired: int );
+
+var
+anbrEnd: int;
+let
+anbrFired= if aDoFire(ca, da,2) then 2
+		else if aDoFire(ca, da,1) then 1
+		else 0;
+
+anbrEnd= 0 -> pre (anbrFired);
+
+
+
+(ca_C, da_C) = ((anbrFired * a_ca_rate_in), (anbrFired * a_da_rate_in));
+
+(p1_P, p2_P) = ((anbrEnd * a_p1_rate_out), (anbrEnd * a_p2_rate_out));
+
+tel;
+------------------
+node aDoFire(ca, da :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ca>=  (times * a_ca_rate_in)) 
+	and  (da>=  (times * a_da_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b(cb, db :int) returns (p1_P, p2_P, cb_C, db_C :int; bnbrFired: int );
+
+var
+bnbrEnd: int;
+let
+bnbrFired= if bDoFire(cb, db,2) then 2
+		else if bDoFire(cb, db,1) then 1
+		else 0;
+
+bnbrEnd= 0 -> pre (bnbrFired);
+
+
+
+(cb_C, db_C) = ((bnbrFired * b_cb_rate_in), (bnbrFired * b_db_rate_in));
+
+(p1_P, p2_P) = ((bnbrEnd * b_p1_rate_out), (bnbrEnd * b_p2_rate_out));
+
+tel;
+------------------
+node bDoFire(cb, db :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (cb>=  (times * b_cb_rate_in)) 
+	and  (db>=  (times * b_db_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c(p1, p2 :int) returns (p1_C, p2_C, ca_P, cb_P :int; cnbrFired: int );
+
+var
+cnbrEnd: int;
+let
+cnbrFired= if cDoFire(p1, p2,2) then 2
+		else if cDoFire(p1, p2,1) then 1
+		else 0;
+
+cnbrEnd= 0 -> pre (cnbrFired);
+
+
+
+(p1_C, p2_C) = ((cnbrFired * c_p1_rate_in), (cnbrFired * c_p2_rate_in));
+
+(ca_P, cb_P) = ((cnbrEnd * c_ca_rate_out), (cnbrEnd * c_cb_rate_out));
+
+tel;
+------------------
+node cDoFire(p1, p2 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p1>=  (times * c_p1_rate_in)) 
+	and  (p2>=  (times * c_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node d(p1, p2 :int) returns (p1_C, p2_C, da_P, db_P :int; dnbrFired: int );
+
+var
+dnbrEnd: int;
+let
+dnbrFired= if dDoFire(p1, p2,2) then 2
+		else if dDoFire(p1, p2,1) then 1
+		else 0;
+
+dnbrEnd= 0 -> pre (dnbrFired);
+
+
+
+(p1_C, p2_C) = ((dnbrFired * d_p1_rate_in), (dnbrFired * d_p2_rate_in));
+
+(da_P, db_P) = ((dnbrEnd * d_da_rate_out), (dnbrEnd * d_db_rate_out));
+
+tel;
+------------------
+node dDoFire(p1, p2 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p1>=  (times * d_p1_rate_in)) 
+	and  (p2>=  (times * d_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (_: bool) returns (ch1, ch2, ch3, ch4, ca, cb, da, db, anbrFired, bnbrFired, cnbrFired, dnbrFired: int);
+
+var
+
+ch1_C, ch1_P: int; 
+ch2_C, ch2_P: int; 
+ch3_C, ch3_P: int; 
+ch4_C, ch4_P: int; 
+ca_C, ca_P: int; 
+cb_C, cb_P: int; 
+da_C, da_P: int; 
+db_C, db_P: int; 
+noDeadlock : bool;
+
+let
+
+ch1 = ch1_I -> pre ( ch1-ch1_C)+ ch1_P;
+ch2 = ch2_I -> pre ( ch2-ch2_C)+ ch2_P;
+ch3 = ch3_I -> pre ( ch3-ch3_C)+ ch3_P;
+ch4 = ch4_I -> pre ( ch4-ch4_C)+ ch4_P;
+ca = ca_I -> pre ( ca-ca_C)+ ca_P;
+cb = cb_I -> pre ( cb-cb_C)+ cb_P;
+da = da_I -> pre ( da-da_C)+ da_P;
+db = db_I -> pre ( db-db_C)+ db_P;
+
+
+
+(ch1_P, ch2_P, ca_C, da_C, anbrFired) = a(ca, da);
+(ch3_P, ch4_P, cb_C, db_C, bnbrFired) = b(cb, db);
+(ch1_C, ch3_C, ca_P, cb_P, cnbrFired) = c(ch1, ch3);
+(ch2_C, ch4_C, da_P, db_P, dnbrFired) = d(ch2, ch4);
+
+
+noDeadlock = ( anbrFired >= 1) 
+	or  ( bnbrFired >= 1) 
+	or  ( cnbrFired >= 1) 
+	or  ( dnbrFired >= 1);
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+
+tel;
+
+

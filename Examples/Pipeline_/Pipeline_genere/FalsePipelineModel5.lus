@@ -1,0 +1,153 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [0,0,0,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const Wait_A_rate_in = [1,0,0,0,0,0,0,0];
+const Wait_W_rate_in = [1,0,0,0,0,0,0,0];
+const Wait_Vin_rate_in = [1,0,0,0,0,0,0,0];
+const Wait_Vout_rate_out = [1,0,0,0,0,0,0,0];
+const Wait_Z_rate_out = [1,0,0,0,0,0,0,0];
+const Ta_Z_rate_in = [1,0,0,0,0,0,0,0];
+const Ta_W_rate_out = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const V_I = [1,0,0,0,0,0,0,0];
+const W_I = [1,1,0,0,0,0,0,0];
+const Z_I = [0,0,0,0,0,0,0,0];
+
+const A_I = [0,0,0,0,0,0,0,0];
+
+--**************** Nodes Declaration ****************--
+
+node Wait(A, W, Vin :UsrInt) returns (A_C, W_C, Vin_C, Vout_P, Z_P :UsrInt; WaitnbrFired: UsrInt );
+
+var
+Vout_PD, Z_PD :UsrInt;
+let
+WaitnbrFired= if WaitDoFire(A, W, Vin,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(A_C, W_C, Vin_C,Vout_PD, Z_PD) = (UsrIntMult(WaitnbrFired, Wait_A_rate_in),UsrIntMult(WaitnbrFired, Wait_W_rate_in),UsrIntMult(WaitnbrFired, Wait_Vin_rate_in),UsrIntMult(WaitnbrFired, Wait_Vout_rate_out),UsrIntMult(WaitnbrFired, Wait_Z_rate_out));
+
+Vout_P = UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (Vout_PD)))))));
+
+Z_P = UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (Z_PD)))))));
+
+
+tel;
+------------------
+node WaitDoFire(A, W, Vin,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(A, UsrIntMult(times, Wait_A_rate_in)) 
+	and UsrIntGte(W, UsrIntMult(times, Wait_W_rate_in)) 
+	and UsrIntGte(Vin, UsrIntMult(times, Wait_Vin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node Ta(Z :UsrInt) returns (Z_C, W_P :UsrInt; TanbrFired: UsrInt );
+
+var
+W_PD :UsrInt;
+let
+TanbrFired= if TaDoFire(Z,UsrInt_3) then UsrInt_3
+		else if TaDoFire(Z,UsrInt_2) then UsrInt_2
+		else if TaDoFire(Z,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(Z_C,W_PD) = (UsrIntMult(TanbrFired, Ta_Z_rate_in),UsrIntMult(TanbrFired, Ta_W_rate_out));
+
+W_P = UsrInt_0 -> pre (W_PD);
+
+
+tel;
+------------------
+node TaDoFire(Z,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(Z, UsrIntMult(times, Ta_Z_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (A_P: UsrInt) returns (V, W, Z, A, WaitnbrFired, TanbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+V_C, V_P: UsrInt; 
+W_C, W_P: UsrInt; 
+Z_C, Z_P: UsrInt; 
+A_C : UsrInt;
+
+let
+
+V = V_I -> pre UsrIntPlus( UsrIntMinus( V,V_C), V_P);
+W = W_I -> pre UsrIntPlus( UsrIntMinus( W,W_C), W_P);
+Z = Z_I -> pre UsrIntPlus( UsrIntMinus( Z,Z_C), Z_P);
+
+A = A_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( A,A_C), A_P), maxValue) 
+				then UsrIntPlus( UsrIntMinus( A,A_C), A_P)
+				else UsrIntMinus( A,A_C);
+
+
+(A_C, W_C, V_C, V_P, Z_P, WaitnbrFired) = Wait(A, W, V);
+(Z_C, W_P, TanbrFired) = Ta(Z);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (A_P: UsrInt) returns (noError :bool)
+
+var
+
+V, W, Z, A, WaitnbrFired, TanbrFired:UsrInt;
+
+positiveValues,P1bis, P2bis, P3bis, P4bis, P1, P2, P3, P4: bool;
+
+let
+
+(V, W, Z, A, WaitnbrFired, TanbrFired) = top(A_P);
+
+positiveValues = UsrIntGte( V, UsrInt_0) 
+	and UsrIntGte( W, UsrInt_0) 
+	and UsrIntGte( Z, UsrInt_0) 
+	and UsrIntGte( A, UsrInt_0) 
+	and UsrIntGte( WaitnbrFired , UsrInt_0) 
+	and UsrIntGte( TanbrFired , UsrInt_0) ;
+
+P1bis= UsrIntGte (WaitnbrFired, UsrInt_1) => UsrIntEq (WaitnbrFired, UsrInt_1)  and  UsrIntEq (pre WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre pre WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre pre pre   WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre pre pre pre WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre pre pre pre pre pre WaitnbrFired, UsrInt_0) and UsrIntEq (pre pre pre pre pre pre pre pre WaitnbrFired, UsrInt_0);
+
+P2bis=  UsrIntEq ( WaitnbrFired, UsrInt_0) => UsrIntEq( A, UsrInt_0)  or  UsrIntEq ( W,  UsrInt_0) or    UsrIntGte (pre WaitnbrFired, UsrInt_1)  or    UsrIntGte (pre  pre WaitnbrFired, UsrInt_1) or    UsrIntGte (pre pre pre  WaitnbrFired, UsrInt_1) or    UsrIntGte (pre pre pre pre  WaitnbrFired, UsrInt_1) or    UsrIntGte (pre  pre pre pre pre pre WaitnbrFired, UsrInt_1) or    UsrIntGte (pre pre pre pre pre pre pre WaitnbrFired, UsrInt_1);
+
+P3bis= UsrIntGte (W,  UsrInt_0) ; 
+
+P4bis= UsrIntEq (TanbrFired, UsrInt_0) => UsrIntEq (pre pre pre pre pre pre pre pre WaitnbrFired, UsrInt_0 );
+
+----------
+--P1 true, P2 False, P3 true, P4 true
+P1= UsrIntGte (TanbrFired, UsrInt_1) => UsrIntEq (TanbrFired, UsrInt_1)  and  UsrIntEq (pre TanbrFired, UsrInt_0);
+P2=  UsrIntEq ( TanbrFired, UsrInt_0) => UsrIntEq(pre pre A, UsrInt_0)  or  UsrIntEq (pre pre W,  UsrInt_0) or    UsrIntGte (pre TanbrFired, UsrInt_1)  ;
+
+P3= UsrIntGte (W,  UsrInt_0) ;
+
+P4= UsrIntEq (TanbrFired, UsrInt_0) => UsrIntEq (pre pre  pre pre pre pre pre pre WaitnbrFired, UsrInt_0 );
+-------------
+noError= positiveValues and P1;
+
+assert UsrIntLte(A_P, UsrInt_4) and UsrIntGte(A_P, UsrInt_0);
+
+tel

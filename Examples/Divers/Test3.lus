@@ -1,0 +1,13 @@
+ 
+
+node top (x: bool) returns (blocage:bool);
+
+var  a, b: bool;
+
+
+let
+   a= if x then x else pre x;
+   b = not a;
+
+   blocage= a or b ;
+tel

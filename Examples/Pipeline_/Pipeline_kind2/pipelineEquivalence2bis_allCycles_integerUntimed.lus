@@ -1,0 +1,243 @@
+--** This lustre code is generated automatically on 16 sept. 2020 11:07:58 PM
+--**It corresponds to a translation to Lustre of the Untimed SDFG model  of the design "example" 
+
+
+
+
+--**************** Const Rates ****************--
+
+const Wait_A_rate_in = 1 ;
+const Wait_W_rate_in = 1 ;
+const Wait_Vin_rate_in = 1 ;
+const Wait_Vout_rate_out = 1 ;
+const Wait_Z_rate_out = 1 ;
+const Ta_Z_rate_in = 1 ;
+const Ta_W_rate_out = 1 ;
+const WaitBis_A_rate_in = 1 ;
+const WaitBis_W_rate_in = 1 ;
+const WaitBis_Z_rate_out = 1 ;
+const TaBis_Z_rate_in = 1 ;
+const TaBis_W_rate_out = 1 ;
+const TaBis_Vin_rate_in = 1 ;
+const TaBis_Vout_rate_out = 1 ;
+const inActor_input_rate_in = 1 ;
+const inActor_out1_rate_out = 1 ;
+const inActor_out2_rate_out = 1 ;
+
+--**************** Init Channel ****************--
+
+const drive1_I = 0 ;
+const V_I = 1 ;
+const W_I = 8 ;
+const Z_I = 0 ;
+const drive2_I = 0 ;
+const Vbis_I = 1 ;
+const Wbis_I = 8 ;
+const Zbis_I = 0 ;
+
+const In_I = 0; 
+
+--**************** Nodes Declaration ****************--
+
+node Wait(A, W, Vin :int) returns (A_C, W_C, Vin_C, Vout_P, Z_P :int; WaitnbrFired: int );
+
+var
+WaitnbrEnd: int;
+let
+WaitnbrFired= if WaitDoFire(A, W, Vin,3) then 3
+		else if WaitDoFire(A, W, Vin,2) then 2
+		else if WaitDoFire(A, W, Vin,1) then 1
+		else 0;
+
+WaitnbrEnd= 0 -> pre (WaitnbrFired);
+
+
+
+(A_C, W_C, Vin_C) = ((WaitnbrFired * Wait_A_rate_in), (WaitnbrFired * Wait_W_rate_in), (WaitnbrFired * Wait_Vin_rate_in));
+
+(Vout_P, Z_P) = ((WaitnbrEnd * Wait_Vout_rate_out), (WaitnbrEnd * Wait_Z_rate_out));
+
+tel;
+------------------
+node WaitDoFire(A, W, Vin :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (A>=  (times * Wait_A_rate_in)) 
+	and  (W>=  (times * Wait_W_rate_in)) 
+	and  (Vin>=  (times * Wait_Vin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node Ta(Z :int) returns (Z_C, W_P :int; TanbrFired: int );
+
+var
+TanbrEnd: int;
+let
+TanbrFired= if TaDoFire(Z,3) then 3
+		else if TaDoFire(Z,2) then 2
+		else if TaDoFire(Z,1) then 1
+		else 0;
+
+TanbrEnd= 0 -> pre (TanbrFired);
+
+
+
+(Z_C) = ((TanbrFired * Ta_Z_rate_in));
+
+(W_P) = ((TanbrEnd * Ta_W_rate_out));
+
+tel;
+------------------
+node TaDoFire(Z :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (Z>=  (times * Ta_Z_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node WaitBis(A, W :int) returns (A_C, W_C, Z_P :int; WaitBisnbrFired: int );
+
+var
+WaitBisnbrEnd: int;
+let
+WaitBisnbrFired= if WaitBisDoFire(A, W,3) then 3
+		else if WaitBisDoFire(A, W,2) then 2
+		else if WaitBisDoFire(A, W,1) then 1
+		else 0;
+
+WaitBisnbrEnd= 0 -> pre (WaitBisnbrFired);
+
+
+
+(A_C, W_C) = ((WaitBisnbrFired * WaitBis_A_rate_in), (WaitBisnbrFired * WaitBis_W_rate_in));
+
+(Z_P) = ((WaitBisnbrEnd * WaitBis_Z_rate_out));
+
+tel;
+------------------
+node WaitBisDoFire(A, W :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (A>=  (times * WaitBis_A_rate_in)) 
+	and  (W>=  (times * WaitBis_W_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node TaBis(Z, Vin :int) returns (Z_C, W_P, Vin_C, Vout_P :int; TaBisnbrFired: int );
+
+var
+TaBisnbrEnd: int;
+let
+TaBisnbrFired= if TaBisDoFire(Z, Vin,3) then 3
+		else if TaBisDoFire(Z, Vin,2) then 2
+		else if TaBisDoFire(Z, Vin,1) then 1
+		else 0;
+
+TaBisnbrEnd= 0 -> pre (TaBisnbrFired);
+
+
+
+(Z_C, Vin_C) = ((TaBisnbrFired * TaBis_Z_rate_in), (TaBisnbrFired * TaBis_Vin_rate_in));
+
+(W_P, Vout_P) = ((TaBisnbrEnd * TaBis_W_rate_out), (TaBisnbrEnd * TaBis_Vout_rate_out));
+
+tel;
+------------------
+node TaBisDoFire(Z, Vin :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (Z>=  (times * TaBis_Z_rate_in)) 
+	and  (Vin>=  (times * TaBis_Vin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node inActor(input :int) returns (input_C, out1_P, out2_P :int; inActornbrFired: int );
+
+var
+inActornbrEnd: int;
+let
+inActornbrFired= if inActorDoFire(input,1) then 1
+		else 0;
+
+inActornbrEnd= 0 -> pre (inActornbrFired);
+
+
+
+(input_C) = ((inActornbrFired * inActor_input_rate_in));
+
+(out1_P, out2_P) = ((inActornbrEnd * inActor_out1_rate_out), (inActornbrEnd * inActor_out2_rate_out));
+
+tel;
+------------------
+node inActorDoFire(input :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (input>=  (times * inActor_input_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (In_P : int)
+returns (drive1, V, W, Z, drive2, Vbis, Wbis, Zbis, In, WaitnbrFired, TanbrFired, WaitBisnbrFired, TaBisnbrFired, inActornbrFired: int);
+
+var
+
+drive1_C, drive1_P: int; 
+V_C, V_P: int; 
+W_C, W_P: int; 
+Z_C, Z_P: int; 
+drive2_C, drive2_P: int; 
+Vbis_C, Vbis_P: int; 
+Wbis_C, Wbis_P: int; 
+Zbis_C, Zbis_P: int; 
+In_C : int;
+noDeadlock : bool;
+
+let
+
+assert In_P  = 1; 
+ 
+drive1 = drive1_I -> pre ( drive1-drive1_C)+ drive1_P;
+V = V_I -> pre ( V-V_C)+ V_P;
+W = W_I -> pre ( W-W_C)+ W_P;
+Z = Z_I -> pre ( Z-Z_C)+ Z_P;
+drive2 = drive2_I -> pre ( drive2-drive2_C)+ drive2_P;
+Vbis = Vbis_I -> pre ( Vbis-Vbis_C)+ Vbis_P;
+Wbis = Wbis_I -> pre ( Wbis-Wbis_C)+ Wbis_P;
+Zbis = Zbis_I -> pre ( Zbis-Zbis_C)+ Zbis_P;
+
+In = In_P -> pre  ( In-In_C)+ In_P ;
+
+
+(drive1_C, W_C, V_C, V_P, Z_P, WaitnbrFired) = Wait(drive1, W, V);
+(Z_C, W_P, TanbrFired) = Ta(Z);
+(drive2_C, Wbis_C, Zbis_P, WaitBisnbrFired) = WaitBis(drive2, Wbis);
+(Zbis_C, Wbis_P, Vbis_C, Vbis_P, TaBisnbrFired) = TaBis(Zbis, Vbis);
+(In_C, drive1_P, drive2_P, inActornbrFired) = inActor(In);
+
+
+noDeadlock = ( WaitnbrFired >= 1) 
+	or  ( TanbrFired >= 1) 
+	or  ( WaitBisnbrFired >= 1) 
+	or  ( TaBisnbrFired >= 1) 
+	or  ( inActornbrFired >= 1);
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+
+tel;
+
+

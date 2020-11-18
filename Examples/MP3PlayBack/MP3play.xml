@@ -1,0 +1,48 @@
+
+ <sdf name="MP3 ">
+
+
+      <actor name="MP3" duration="1" maxAutoConcurrences="1"  maxStages="1">
+        <port name="e1in" type="in" rate="1"/>
+        <port name="e1out" type="out" rate="1"/>
+        <port name="e2" type="in" rate="470"/>
+        <port name="e3" type="out" rate="470"/>
+      </actor>
+
+
+ <actor name="src" duration="1" maxAutoConcurrences="1"  maxStages="1">
+        <port name="e4in" type="in" rate="1"/>
+        <port name="e4out" type="out" rate="1"/>
+        <port name="e3" type="in" rate="6"/> 
+ 
+        <port name="e8" type="in" rate="8"/>
+        <port name="e2" type="out" rate="6"/>
+ 
+      <port name="e9" type="out" rate="8"/>
+ 
+      </actor>
+
+
+    
+
+      <actor name="dac" duration="1" maxAutoConcurrences="1"  maxStages="1">
+        <port name="e10in" type="in" rate="1"/>
+        <port name="e10out" type="out" rate="1"/>
+        <port name="e9" type="in" rate="1"/>
+        <port name="e8" type="out" rate="1"/>
+      </actor>
+
+
+   <channel name="e1" srcActor="MP3" srcPort="e1out" dstActor="MP3" dstPort="e1in" initialTokens="1"/>
+   <channel name="e4" srcActor="src" srcPort="e4out" dstActor="src" dstPort="e4in" initialTokens="1"/>
+
+   <channel name="e10" srcActor="dac" srcPort="e10out" dstActor="dac" dstPort="e10in" initialTokens="1"/>
+
+   <channel name="e2" srcActor="src" srcPort="e2" dstActor="MP3" dstPort="e2" initialTokens="520"/>
+   <channel name="e3" srcActor="MP3" srcPort="e3" dstActor="src" dstPort="e3" initialTokens="0"/>
+ 
+   <channel name="e8" srcActor="dac" srcPort="e8" dstActor="src" dstPort="e8" initialTokens="190"/>
+   <channel name="e9" srcActor="src" srcPort="e9" dstActor="dac" dstPort="e9" initialTokens="0"/>
+
+   </sdf>
+   

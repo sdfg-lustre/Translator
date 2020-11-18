@@ -1,0 +1,531 @@
+--** This lustre code is generated automatically on 27 août 2020 01:00:00 PM
+--**It corresponds to a translation to Lustre of the Untimed SDFG model  of the design "Sobel" 
+
+
+
+
+--**************** Const Rates ****************--
+
+const get_pixels_e1_rate_out = 6 ;
+const get_pixels_e2_rate_in = 6 ;
+const get_pixels_e24_rate_out = 6 ;
+const get_pixels_e23_rate_in = 6 ;
+const ca_0a_e1_rate_in = 1 ;
+const ca_0a_e4_rate_in = 1 ;
+const ca_0a_e2_rate_out = 1 ;
+const ca_0a_e3_rate_out = 1 ;
+const ca_1a_e3_rate_in = 1 ;
+const ca_1a_e6_rate_in = 1 ;
+const ca_1a_e4_rate_out = 1 ;
+const ca_1a_e5_rate_out = 1 ;
+const GX_e5_rate_in = 6 ;
+const GX_e8_rate_in = 1 ;
+const GX_e6_rate_out = 6 ;
+const GX_e7_rate_out = 1 ;
+const ca_1b_e7_rate_in = 1 ;
+const ca_1b_e10_rate_in = 1 ;
+const ca_1b_e8_rate_out = 1 ;
+const ca_1b_e9_rate_out = 1 ;
+const ca_3a_e9_rate_in = 1 ;
+const ca_3a_e12_rate_in = 1 ;
+const ca_3a_e10_rate_out = 1 ;
+const ca_3a_e11_rate_out = 1 ;
+const ABS_e11_rate_in = 1 ;
+const ABS_e14_rate_in = 1 ;
+const ABS_e12_rate_out = 1 ;
+const ABS_e13_rate_out = 1 ;
+const ca_3b_e13_rate_in = 1 ;
+const ca_3b_e16_rate_in = 1 ;
+const ca_3b_e14_rate_out = 1 ;
+const ca_3b_e15_rate_out = 1 ;
+const ca_2b_e15_rate_in = 1 ;
+const ca_2b_e18_rate_in = 1 ;
+const ca_2b_e16_rate_out = 1 ;
+const ca_2b_e17_rate_out = 1 ;
+const GY_e17_rate_in = 1 ;
+const GY_e18_rate_out = 1 ;
+const GY_e20_rate_in = 6 ;
+const GY_e19_rate_out = 6 ;
+const ca_2a_e19_rate_in = 1 ;
+const ca_2a_e22_rate_in = 1 ;
+const ca_2a_e20_rate_out = 1 ;
+const ca_2a_e21_rate_out = 1 ;
+const ca_0b_e21_rate_in = 1 ;
+const ca_0b_e24_rate_in = 1 ;
+const ca_0b_e22_rate_out = 1 ;
+const ca_0b_e23_rate_out = 1 ;
+
+--**************** Init Channel ****************--
+
+const e1_I = 0 ;
+const e2_I = 8 ;
+const e3_I = 0 ;
+const e4_I = 1 ;
+const e5_I = 0 ;
+const e6_I = 8 ;
+const e7_I = 0 ;
+const e8_I = 1 ;
+const e9_I = 0 ;
+const e10_I = 1 ;
+const e11_I = 0 ;
+const e12_I = 1 ;
+const e13_I = 1 ;
+const e14_I = 0 ;
+const e15_I = 1 ;
+const e16_I = 0 ;
+const e17_I = 1 ;
+const e18_I = 0 ;
+const e19_I = 8 ;
+const e20_I = 0 ;
+const e21_I = 1 ;
+const e22_I = 0 ;
+const e23_I = 8 ;
+const e24_I = 0 ;
+
+
+--**************** Nodes Declaration ****************--
+
+node get_pixels(e2, e23 :int) returns (e1_P, e2_C, e24_P, e23_C :int; get_pixelsnbrFired: int );
+
+var
+get_pixelsnbrEnd: int;
+let
+get_pixelsnbrFired= if get_pixelsDoFire(e2, e23,2) then 2
+		else if get_pixelsDoFire(e2, e23,1) then 1
+		else 0;
+
+get_pixelsnbrEnd= 0 -> pre (get_pixelsnbrFired);
+
+
+
+(e2_C, e23_C) = ((get_pixelsnbrFired * get_pixels_e2_rate_in), (get_pixelsnbrFired * get_pixels_e23_rate_in));
+
+(e1_P, e24_P) = ((get_pixelsnbrEnd * get_pixels_e1_rate_out), (get_pixelsnbrEnd * get_pixels_e24_rate_out));
+
+tel;
+------------------
+node get_pixelsDoFire(e2, e23 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e2>=  (times * get_pixels_e2_rate_in)) 
+	and  (e23>=  (times * get_pixels_e23_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_0a(e1, e4 :int) returns (e1_C, e4_C, e2_P, e3_P :int; ca_0anbrFired: int );
+
+var
+ca_0anbrEnd: int;
+let
+ca_0anbrFired= if ca_0aDoFire(e1, e4,2) then 2
+		else if ca_0aDoFire(e1, e4,1) then 1
+		else 0;
+
+ca_0anbrEnd= 0 -> pre (ca_0anbrFired);
+
+
+
+(e1_C, e4_C) = ((ca_0anbrFired * ca_0a_e1_rate_in), (ca_0anbrFired * ca_0a_e4_rate_in));
+
+(e2_P, e3_P) = ((ca_0anbrEnd * ca_0a_e2_rate_out), (ca_0anbrEnd * ca_0a_e3_rate_out));
+
+tel;
+------------------
+node ca_0aDoFire(e1, e4 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e1>=  (times * ca_0a_e1_rate_in)) 
+	and  (e4>=  (times * ca_0a_e4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_1a(e3, e6 :int) returns (e3_C, e6_C, e4_P, e5_P :int; ca_1anbrFired: int );
+
+var
+ca_1anbrEnd: int;
+let
+ca_1anbrFired= if ca_1aDoFire(e3, e6,2) then 2
+		else if ca_1aDoFire(e3, e6,1) then 1
+		else 0;
+
+ca_1anbrEnd= 0 -> pre (ca_1anbrFired);
+
+
+
+(e3_C, e6_C) = ((ca_1anbrFired * ca_1a_e3_rate_in), (ca_1anbrFired * ca_1a_e6_rate_in));
+
+(e4_P, e5_P) = ((ca_1anbrEnd * ca_1a_e4_rate_out), (ca_1anbrEnd * ca_1a_e5_rate_out));
+
+tel;
+------------------
+node ca_1aDoFire(e3, e6 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e3>=  (times * ca_1a_e3_rate_in)) 
+	and  (e6>=  (times * ca_1a_e6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node GX(e5, e8 :int) returns (e5_C, e8_C, e6_P, e7_P :int; GXnbrFired: int );
+
+var
+GXnbrEnd: int;
+let
+GXnbrFired= if GXDoFire(e5, e8,2) then 2
+		else if GXDoFire(e5, e8,1) then 1
+		else 0;
+
+GXnbrEnd= 0 -> pre (GXnbrFired);
+
+
+
+(e5_C, e8_C) = ((GXnbrFired * GX_e5_rate_in), (GXnbrFired * GX_e8_rate_in));
+
+(e6_P, e7_P) = ((GXnbrEnd * GX_e6_rate_out), (GXnbrEnd * GX_e7_rate_out));
+
+tel;
+------------------
+node GXDoFire(e5, e8 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e5>=  (times * GX_e5_rate_in)) 
+	and  (e8>=  (times * GX_e8_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_1b(e7, e10 :int) returns (e7_C, e10_C, e8_P, e9_P :int; ca_1bnbrFired: int );
+
+var
+ca_1bnbrEnd: int;
+let
+ca_1bnbrFired= if ca_1bDoFire(e7, e10,2) then 2
+		else if ca_1bDoFire(e7, e10,1) then 1
+		else 0;
+
+ca_1bnbrEnd= 0 -> pre (ca_1bnbrFired);
+
+
+
+(e7_C, e10_C) = ((ca_1bnbrFired * ca_1b_e7_rate_in), (ca_1bnbrFired * ca_1b_e10_rate_in));
+
+(e8_P, e9_P) = ((ca_1bnbrEnd * ca_1b_e8_rate_out), (ca_1bnbrEnd * ca_1b_e9_rate_out));
+
+tel;
+------------------
+node ca_1bDoFire(e7, e10 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e7>=  (times * ca_1b_e7_rate_in)) 
+	and  (e10>=  (times * ca_1b_e10_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_3a(e9, e12 :int) returns (e9_C, e12_C, e10_P, e11_P :int; ca_3anbrFired: int );
+
+var
+ca_3anbrEnd: int;
+let
+ca_3anbrFired= if ca_3aDoFire(e9, e12,2) then 2
+		else if ca_3aDoFire(e9, e12,1) then 1
+		else 0;
+
+ca_3anbrEnd= 0 -> pre (ca_3anbrFired);
+
+
+
+(e9_C, e12_C) = ((ca_3anbrFired * ca_3a_e9_rate_in), (ca_3anbrFired * ca_3a_e12_rate_in));
+
+(e10_P, e11_P) = ((ca_3anbrEnd * ca_3a_e10_rate_out), (ca_3anbrEnd * ca_3a_e11_rate_out));
+
+tel;
+------------------
+node ca_3aDoFire(e9, e12 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e9>=  (times * ca_3a_e9_rate_in)) 
+	and  (e12>=  (times * ca_3a_e12_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ABS(e11, e14 :int) returns (e11_C, e14_C, e12_P, e13_P :int; ABSnbrFired: int );
+
+var
+ABSnbrEnd: int;
+let
+ABSnbrFired= if ABSDoFire(e11, e14,2) then 2
+		else if ABSDoFire(e11, e14,1) then 1
+		else 0;
+
+ABSnbrEnd= 0 -> pre (ABSnbrFired);
+
+
+
+(e11_C, e14_C) = ((ABSnbrFired * ABS_e11_rate_in), (ABSnbrFired * ABS_e14_rate_in));
+
+(e12_P, e13_P) = ((ABSnbrEnd * ABS_e12_rate_out), (ABSnbrEnd * ABS_e13_rate_out));
+
+tel;
+------------------
+node ABSDoFire(e11, e14 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e11>=  (times * ABS_e11_rate_in)) 
+	and  (e14>=  (times * ABS_e14_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_3b(e13, e16 :int) returns (e13_C, e16_C, e14_P, e15_P :int; ca_3bnbrFired: int );
+
+var
+ca_3bnbrEnd: int;
+let
+ca_3bnbrFired= if ca_3bDoFire(e13, e16,2) then 2
+		else if ca_3bDoFire(e13, e16,1) then 1
+		else 0;
+
+ca_3bnbrEnd= 0 -> pre (ca_3bnbrFired);
+
+
+
+(e13_C, e16_C) = ((ca_3bnbrFired * ca_3b_e13_rate_in), (ca_3bnbrFired * ca_3b_e16_rate_in));
+
+(e14_P, e15_P) = ((ca_3bnbrEnd * ca_3b_e14_rate_out), (ca_3bnbrEnd * ca_3b_e15_rate_out));
+
+tel;
+------------------
+node ca_3bDoFire(e13, e16 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e13>=  (times * ca_3b_e13_rate_in)) 
+	and  (e16>=  (times * ca_3b_e16_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_2b(e15, e18 :int) returns (e15_C, e18_C, e16_P, e17_P :int; ca_2bnbrFired: int );
+
+var
+ca_2bnbrEnd: int;
+let
+ca_2bnbrFired= if ca_2bDoFire(e15, e18,2) then 2
+		else if ca_2bDoFire(e15, e18,1) then 1
+		else 0;
+
+ca_2bnbrEnd= 0 -> pre (ca_2bnbrFired);
+
+
+
+(e15_C, e18_C) = ((ca_2bnbrFired * ca_2b_e15_rate_in), (ca_2bnbrFired * ca_2b_e18_rate_in));
+
+(e16_P, e17_P) = ((ca_2bnbrEnd * ca_2b_e16_rate_out), (ca_2bnbrEnd * ca_2b_e17_rate_out));
+
+tel;
+------------------
+node ca_2bDoFire(e15, e18 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e15>=  (times * ca_2b_e15_rate_in)) 
+	and  (e18>=  (times * ca_2b_e18_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node GY(e17, e20 :int) returns (e17_C, e18_P, e20_C, e19_P :int; GYnbrFired: int );
+
+var
+GYnbrEnd: int;
+let
+GYnbrFired= if GYDoFire(e17, e20,2) then 2
+		else if GYDoFire(e17, e20,1) then 1
+		else 0;
+
+GYnbrEnd= 0 -> pre (GYnbrFired);
+
+
+
+(e17_C, e20_C) = ((GYnbrFired * GY_e17_rate_in), (GYnbrFired * GY_e20_rate_in));
+
+(e18_P, e19_P) = ((GYnbrEnd * GY_e18_rate_out), (GYnbrEnd * GY_e19_rate_out));
+
+tel;
+------------------
+node GYDoFire(e17, e20 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e17>=  (times * GY_e17_rate_in)) 
+	and  (e20>=  (times * GY_e20_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_2a(e19, e22 :int) returns (e19_C, e22_C, e20_P, e21_P :int; ca_2anbrFired: int );
+
+var
+ca_2anbrEnd: int;
+let
+ca_2anbrFired= if ca_2aDoFire(e19, e22,2) then 2
+		else if ca_2aDoFire(e19, e22,1) then 1
+		else 0;
+
+ca_2anbrEnd= 0 -> pre (ca_2anbrFired);
+
+
+
+(e19_C, e22_C) = ((ca_2anbrFired * ca_2a_e19_rate_in), (ca_2anbrFired * ca_2a_e22_rate_in));
+
+(e20_P, e21_P) = ((ca_2anbrEnd * ca_2a_e20_rate_out), (ca_2anbrEnd * ca_2a_e21_rate_out));
+
+tel;
+------------------
+node ca_2aDoFire(e19, e22 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e19>=  (times * ca_2a_e19_rate_in)) 
+	and  (e22>=  (times * ca_2a_e22_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ca_0b(e21, e24 :int) returns (e21_C, e24_C, e22_P, e23_P :int; ca_0bnbrFired: int );
+
+var
+ca_0bnbrEnd: int;
+let
+ca_0bnbrFired= if ca_0bDoFire(e21, e24,2) then 2
+		else if ca_0bDoFire(e21, e24,1) then 1
+		else 0;
+
+ca_0bnbrEnd= 0 -> pre (ca_0bnbrFired);
+
+
+
+(e21_C, e24_C) = ((ca_0bnbrFired * ca_0b_e21_rate_in), (ca_0bnbrFired * ca_0b_e24_rate_in));
+
+(e22_P, e23_P) = ((ca_0bnbrEnd * ca_0b_e22_rate_out), (ca_0bnbrEnd * ca_0b_e23_rate_out));
+
+tel;
+------------------
+node ca_0bDoFire(e21, e24 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e21>=  (times * ca_0b_e21_rate_in)) 
+	and  (e24>=  (times * ca_0b_e24_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (_: bool) returns (e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, get_pixelsnbrFired, ca_0anbrFired, ca_1anbrFired, GXnbrFired, ca_1bnbrFired, ca_3anbrFired, ABSnbrFired, ca_3bnbrFired, ca_2bnbrFired, GYnbrFired, ca_2anbrFired, ca_0bnbrFired: int);
+
+var
+
+e1_C, e1_P: int; 
+e2_C, e2_P: int; 
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e5_C, e5_P: int; 
+e6_C, e6_P: int; 
+e7_C, e7_P: int; 
+e8_C, e8_P: int; 
+e9_C, e9_P: int; 
+e10_C, e10_P: int; 
+e11_C, e11_P: int; 
+e12_C, e12_P: int; 
+e13_C, e13_P: int; 
+e14_C, e14_P: int; 
+e15_C, e15_P: int; 
+e16_C, e16_P: int; 
+e17_C, e17_P: int; 
+e18_C, e18_P: int; 
+e19_C, e19_P: int; 
+e20_C, e20_P: int; 
+e21_C, e21_P: int; 
+e22_C, e22_P: int; 
+e23_C, e23_P: int; 
+e24_C, e24_P: int; 
+noDeadlock : bool;
+
+let
+
+e1 = e1_I -> pre ( e1-e1_C)+ e1_P;
+e2 = e2_I -> pre ( e2-e2_C)+ e2_P;
+e3 = e3_I -> pre ( e3-e3_C)+ e3_P;
+e4 = e4_I -> pre ( e4-e4_C)+ e4_P;
+e5 = e5_I -> pre ( e5-e5_C)+ e5_P;
+e6 = e6_I -> pre ( e6-e6_C)+ e6_P;
+e7 = e7_I -> pre ( e7-e7_C)+ e7_P;
+e8 = e8_I -> pre ( e8-e8_C)+ e8_P;
+e9 = e9_I -> pre ( e9-e9_C)+ e9_P;
+e10 = e10_I -> pre ( e10-e10_C)+ e10_P;
+e11 = e11_I -> pre ( e11-e11_C)+ e11_P;
+e12 = e12_I -> pre ( e12-e12_C)+ e12_P;
+e13 = e13_I -> pre ( e13-e13_C)+ e13_P;
+e14 = e14_I -> pre ( e14-e14_C)+ e14_P;
+e15 = e15_I -> pre ( e15-e15_C)+ e15_P;
+e16 = e16_I -> pre ( e16-e16_C)+ e16_P;
+e17 = e17_I -> pre ( e17-e17_C)+ e17_P;
+e18 = e18_I -> pre ( e18-e18_C)+ e18_P;
+e19 = e19_I -> pre ( e19-e19_C)+ e19_P;
+e20 = e20_I -> pre ( e20-e20_C)+ e20_P;
+e21 = e21_I -> pre ( e21-e21_C)+ e21_P;
+e22 = e22_I -> pre ( e22-e22_C)+ e22_P;
+e23 = e23_I -> pre ( e23-e23_C)+ e23_P;
+e24 = e24_I -> pre ( e24-e24_C)+ e24_P;
+
+
+
+(e1_P, e2_C, e24_P, e23_C, get_pixelsnbrFired) = get_pixels(e2, e23);
+(e1_C, e4_C, e2_P, e3_P, ca_0anbrFired) = ca_0a(e1, e4);
+(e3_C, e6_C, e4_P, e5_P, ca_1anbrFired) = ca_1a(e3, e6);
+(e5_C, e8_C, e6_P, e7_P, GXnbrFired) = GX(e5, e8);
+(e7_C, e10_C, e8_P, e9_P, ca_1bnbrFired) = ca_1b(e7, e10);
+(e9_C, e12_C, e10_P, e11_P, ca_3anbrFired) = ca_3a(e9, e12);
+(e11_C, e14_C, e12_P, e13_P, ABSnbrFired) = ABS(e11, e14);
+(e13_C, e16_C, e14_P, e15_P, ca_3bnbrFired) = ca_3b(e13, e16);
+(e15_C, e18_C, e16_P, e17_P, ca_2bnbrFired) = ca_2b(e15, e18);
+(e17_C, e18_P, e20_C, e19_P, GYnbrFired) = GY(e17, e20);
+(e19_C, e22_C, e20_P, e21_P, ca_2anbrFired) = ca_2a(e19, e22);
+(e21_C, e24_C, e22_P, e23_P, ca_0bnbrFired) = ca_0b(e21, e24);
+
+
+noDeadlock = ( get_pixelsnbrFired >= 1) 
+	or  ( ca_0anbrFired >= 1) 
+	or  ( ca_1anbrFired >= 1) 
+	or  ( GXnbrFired >= 1) 
+	or  ( ca_1bnbrFired >= 1) 
+	or  ( ca_3anbrFired >= 1) 
+	or  ( ABSnbrFired >= 1) 
+	or  ( ca_3bnbrFired >= 1) 
+	or  ( ca_2bnbrFired >= 1) 
+	or  ( GYnbrFired >= 1) 
+	or  ( ca_2anbrFired >= 1) 
+	or  ( ca_0bnbrFired >= 1);
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+
+tel;
+
+

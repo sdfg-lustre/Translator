@@ -1,0 +1,858 @@
+--** This lustre code is generated automatically on 05 août 2020 06:48:48 PM
+--**It corresponds to a translation to Lustre of the  SDFG model  of the design "Memory Access equivalence" 
+
+
+
+--**************** Const Rates ****************--
+
+const di_ein_rate_in = 1;
+const di_out1_rate_out = 1;
+const di_out2_rate_out = 1;
+const ri_e1_rate_out = 3;
+const ri_e8_rate_in = 3;
+const ri_out1_rate_in = 1;
+const m1_e8_rate_out = 1;
+const m1_e1_rate_in = 1;
+const m1_e2_rate_out = 1;
+const m1_e12_rate_in = 1;
+const m1_e7_rate_out = 1;
+const m1_e4_rate_in = 1;
+const m2_e2_rate_in = 1;
+const m2_e12_rate_out = 1;
+const m2_e3_rate_out = 1;
+const m2_e6_rate_in = 1;
+const a1_e3_rate_in = 1;
+const a1_e7_rate_in = 1;
+const a1_e4_rate_out = 1;
+const a1_e9_rate_in = 1;
+const a1_e10_rate_out = 1;
+const a2_e6_rate_out = 1;
+const a2_e10_rate_in = 1;
+const a2_e9_rate_out = 1;
+const a2_e11_rate_in = 1;
+const a2_e5_rate_out = 1;
+const r0_e11_rate_out = 3;
+const r0_e5_rate_in = 3;
+const a11_ea11x_rate_out = 1;
+const a11_ea11y_rate_out = 1;
+const a11_ea32x_rate_in = 1;
+const a11_em31x_rate_in = 1;
+const a11_em32x_rate_in = 1;
+const a12_ea12x_rate_out = 1;
+const a12_ea12y_rate_out = 1;
+const a12_ea11x_rate_in = 1;
+const a21_ea21x_rate_out = 1;
+const a21_ea21y_rate_out = 1;
+const a21_ea12x_rate_in = 1;
+const a21_em11x_rate_in = 1;
+const a21_em12x_rate_in = 1;
+const a22_ea22x_rate_out = 1;
+const a22_ea22y_rate_out = 1;
+const a22_ea21x_rate_in = 1;
+const a31_ea31x_rate_out = 1;
+const a31_ea31y_rate_out = 1;
+const a31_ea22x_rate_in = 1;
+const a31_em21x_rate_in = 1;
+const a31_em22x_rate_in = 1;
+const a32_ea32x_rate_out = 1;
+const a32_ea32y_rate_out = 1;
+const a32_ea31x_rate_in = 1;
+const m11_em11x_rate_out = 1;
+const m11_em11y_rate_out = 1;
+const m11_ea11y_rate_in = 1;
+const m11_em32y_rate_in = 1;
+const m11_out2_rate_in = 1;
+const m12_em12x_rate_out = 1;
+const m12_em12y_rate_out = 1;
+const m12_ea12y_rate_in = 1;
+const m12_em11y_rate_in = 1;
+const m21_em21x_rate_out = 1;
+const m21_em21y_rate_out = 1;
+const m21_ea21y_rate_in = 1;
+const m21_em12y_rate_in = 1;
+const m22_em22x_rate_out = 1;
+const m22_em22y_rate_out = 1;
+const m22_ea22y_rate_in = 1;
+const m22_em21y_rate_in = 1;
+const m31_em31x_rate_out = 1;
+const m31_em31y_rate_out = 1;
+const m31_ea31y_rate_in = 1;
+const m31_em22y_rate_in = 1;
+const m32_em32x_rate_out = 1;
+const m32_em32y_rate_out = 1;
+const m32_ea32y_rate_in = 1;
+const m32_em31y_rate_in = 1;
+
+--**************** Init Channel ****************--
+
+const e1_I = 0 ;
+const e8_I = 3 ;
+const e2_I = 0 ;
+const e12_I = 1 ;
+const e3_I = 1 ;
+const e6_I = 0 ;
+const e7_I = 1 ;
+const e4_I = 0 ;
+const e9_I = 1 ;
+const e10_I = 0 ;
+const e11_I = 3 ;
+const e5_I = 0 ;
+const ea11x_I = 0 ;
+const ea11y_I = 0 ;
+const ea12x_I = 0 ;
+const ea12y_I = 0 ;
+const ea21x_I = 0 ;
+const ea21y_I = 0 ;
+const ea22x_I = 0 ;
+const ea22y_I = 0 ;
+const ea31x_I = 0 ;
+const ea31y_I = 0 ;
+const ea32x_I = 1 ;
+const ea32y_I = 0 ;
+const em11x_I = 0 ;
+const em11y_I = 0 ;
+const em12x_I = 0 ;
+const em12y_I = 0 ;
+const em21x_I = 0 ;
+const em21y_I = 0 ;
+const em22x_I = 0 ;
+const em22y_I = 0 ;
+const em31x_I = 1 ;
+const em31y_I = 0 ;
+const em32x_I = 1 ;
+const em32y_I = 1 ;
+const out1_I = 0 ;
+const out2_I = 0 ;
+
+const ein_I = 0 ;
+
+--**************** Actors Translation ****************--
+
+node di(ein :int) returns (ein_C, out1_P, out2_P :int; dinbrFired: int );
+
+var
+dinbrEnd: int;
+let
+dinbrFired= if diDoFire(ein,1) then 1
+		else 0;
+
+dinbrEnd= 0 -> pre (dinbrFired);
+
+
+
+(ein_C) = ((dinbrFired * di_ein_rate_in));
+
+(out1_P, out2_P) = ((dinbrEnd * di_out1_rate_out), (dinbrEnd * di_out2_rate_out));
+
+tel;
+------------------
+node diDoFire(ein :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ein>=  (times * di_ein_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ri(e8, out1 :int) returns (e1_P, e8_C, out1_C :int; rinbrFired: int );
+
+var
+rinbrEnd: int;
+let
+rinbrFired= if riDoFire(e8, out1,3) then 3
+		else if riDoFire(e8, out1,2) then 2
+		else if riDoFire(e8, out1,1) then 1
+		else 0;
+
+rinbrEnd= 0 -> pre (rinbrFired);
+
+
+
+(e8_C, out1_C) = ((rinbrFired * ri_e8_rate_in), (rinbrFired * ri_out1_rate_in));
+
+(e1_P) = ((rinbrEnd * ri_e1_rate_out));
+
+tel;
+------------------
+node riDoFire(e8, out1 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e8>=  (times * ri_e8_rate_in)) 
+	and  (out1>=  (times * ri_out1_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m1(e1, e12, e4 :int) returns (e8_P, e1_C, e2_P, e12_C, e7_P, e4_C :int; m1nbrFired: int );
+
+var
+m1nbrEnd: int;
+let
+m1nbrFired= if m1DoFire(e1, e12, e4,3) then 3
+		else if m1DoFire(e1, e12, e4,2) then 2
+		else if m1DoFire(e1, e12, e4,1) then 1
+		else 0;
+
+m1nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (m1nbrFired))));
+
+
+
+(e1_C, e12_C, e4_C) = ((m1nbrFired * m1_e1_rate_in), (m1nbrFired * m1_e12_rate_in), (m1nbrFired * m1_e4_rate_in));
+
+(e8_P, e2_P, e7_P) = ((m1nbrEnd * m1_e8_rate_out), (m1nbrEnd * m1_e2_rate_out), (m1nbrEnd * m1_e7_rate_out));
+
+tel;
+------------------
+node m1DoFire(e1, e12, e4 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e1>=  (times * m1_e1_rate_in)) 
+	and  (e12>=  (times * m1_e12_rate_in)) 
+	and  (e4>=  (times * m1_e4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m2(e2, e6 :int) returns (e2_C, e12_P, e3_P, e6_C :int; m2nbrFired: int );
+
+var
+m2nbrEnd: int;
+let
+m2nbrFired= if m2DoFire(e2, e6,3) then 3
+		else if m2DoFire(e2, e6,2) then 2
+		else if m2DoFire(e2, e6,1) then 1
+		else 0;
+
+m2nbrEnd= 0 -> pre (0 -> pre (m2nbrFired));
+
+
+
+(e2_C, e6_C) = ((m2nbrFired * m2_e2_rate_in), (m2nbrFired * m2_e6_rate_in));
+
+(e12_P, e3_P) = ((m2nbrEnd * m2_e12_rate_out), (m2nbrEnd * m2_e3_rate_out));
+
+tel;
+------------------
+node m2DoFire(e2, e6 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e2>=  (times * m2_e2_rate_in)) 
+	and  (e6>=  (times * m2_e6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a1(e3, e7, e9 :int) returns (e3_C, e7_C, e4_P, e9_C, e10_P :int; a1nbrFired: int );
+
+var
+a1nbrEnd: int;
+let
+a1nbrFired= if a1DoFire(e3, e7, e9,3) then 3
+		else if a1DoFire(e3, e7, e9,2) then 2
+		else if a1DoFire(e3, e7, e9,1) then 1
+		else 0;
+
+a1nbrEnd= 0 -> pre (0 -> pre (0 -> pre (a1nbrFired)));
+
+
+
+(e3_C, e7_C, e9_C) = ((a1nbrFired * a1_e3_rate_in), (a1nbrFired * a1_e7_rate_in), (a1nbrFired * a1_e9_rate_in));
+
+(e4_P, e10_P) = ((a1nbrEnd * a1_e4_rate_out), (a1nbrEnd * a1_e10_rate_out));
+
+tel;
+------------------
+node a1DoFire(e3, e7, e9 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e3>=  (times * a1_e3_rate_in)) 
+	and  (e7>=  (times * a1_e7_rate_in)) 
+	and  (e9>=  (times * a1_e9_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a2(e10, e11 :int) returns (e6_P, e10_C, e9_P, e11_C, e5_P :int; a2nbrFired: int );
+
+var
+a2nbrEnd: int;
+let
+a2nbrFired= if a2DoFire(e10, e11,3) then 3
+		else if a2DoFire(e10, e11,2) then 2
+		else if a2DoFire(e10, e11,1) then 1
+		else 0;
+
+a2nbrEnd= 0 -> pre (0 -> pre (a2nbrFired));
+
+
+
+(e10_C, e11_C) = ((a2nbrFired * a2_e10_rate_in), (a2nbrFired * a2_e11_rate_in));
+
+(e6_P, e9_P, e5_P) = ((a2nbrEnd * a2_e6_rate_out), (a2nbrEnd * a2_e9_rate_out), (a2nbrEnd * a2_e5_rate_out));
+
+tel;
+------------------
+node a2DoFire(e10, e11 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e10>=  (times * a2_e10_rate_in)) 
+	and  (e11>=  (times * a2_e11_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node r0(e5 :int) returns (e11_P, e5_C :int; r0nbrFired: int );
+
+var
+r0nbrEnd: int;
+let
+r0nbrFired= if r0DoFire(e5,3) then 3
+		else if r0DoFire(e5,2) then 2
+		else if r0DoFire(e5,1) then 1
+		else 0;
+
+r0nbrEnd= 0 -> pre (r0nbrFired);
+
+
+
+(e5_C) = ((r0nbrFired * r0_e5_rate_in));
+
+(e11_P) = ((r0nbrEnd * r0_e11_rate_out));
+
+tel;
+------------------
+node r0DoFire(e5 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e5>=  (times * r0_e5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a11(ea32x, em31x, em32x :int) returns (ea11x_P, ea11y_P, ea32x_C, em31x_C, em32x_C :int; a11nbrFired: int );
+
+var
+a11nbrEnd: int;
+let
+a11nbrFired= if a11DoFire(ea32x, em31x, em32x,1) then 1
+		else 0;
+
+a11nbrEnd= 0 -> pre (0 -> pre (0 -> pre (a11nbrFired)));
+
+
+
+(ea32x_C, em31x_C, em32x_C) = ((a11nbrFired * a11_ea32x_rate_in), (a11nbrFired * a11_em31x_rate_in), (a11nbrFired * a11_em32x_rate_in));
+
+(ea11x_P, ea11y_P) = ((a11nbrEnd * a11_ea11x_rate_out), (a11nbrEnd * a11_ea11y_rate_out));
+
+tel;
+------------------
+node a11DoFire(ea32x, em31x, em32x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea32x>=  (times * a11_ea32x_rate_in)) 
+	and  (em31x>=  (times * a11_em31x_rate_in)) 
+	and  (em32x>=  (times * a11_em32x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a12(ea11x :int) returns (ea12x_P, ea12y_P, ea11x_C :int; a12nbrFired: int );
+
+var
+a12nbrEnd: int;
+let
+a12nbrFired= if a12DoFire(ea11x,1) then 1
+		else 0;
+
+a12nbrEnd= 0 -> pre (0 -> pre (a12nbrFired));
+
+
+
+(ea11x_C) = ((a12nbrFired * a12_ea11x_rate_in));
+
+(ea12x_P, ea12y_P) = ((a12nbrEnd * a12_ea12x_rate_out), (a12nbrEnd * a12_ea12y_rate_out));
+
+tel;
+------------------
+node a12DoFire(ea11x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea11x>=  (times * a12_ea11x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a21(ea12x, em11x, em12x :int) returns (ea21x_P, ea21y_P, ea12x_C, em11x_C, em12x_C :int; a21nbrFired: int );
+
+var
+a21nbrEnd: int;
+let
+a21nbrFired= if a21DoFire(ea12x, em11x, em12x,1) then 1
+		else 0;
+
+a21nbrEnd= 0 -> pre (0 -> pre (0 -> pre (a21nbrFired)));
+
+
+
+(ea12x_C, em11x_C, em12x_C) = ((a21nbrFired * a21_ea12x_rate_in), (a21nbrFired * a21_em11x_rate_in), (a21nbrFired * a21_em12x_rate_in));
+
+(ea21x_P, ea21y_P) = ((a21nbrEnd * a21_ea21x_rate_out), (a21nbrEnd * a21_ea21y_rate_out));
+
+tel;
+------------------
+node a21DoFire(ea12x, em11x, em12x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea12x>=  (times * a21_ea12x_rate_in)) 
+	and  (em11x>=  (times * a21_em11x_rate_in)) 
+	and  (em12x>=  (times * a21_em12x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a22(ea21x :int) returns (ea22x_P, ea22y_P, ea21x_C :int; a22nbrFired: int );
+
+var
+a22nbrEnd: int;
+let
+a22nbrFired= if a22DoFire(ea21x,1) then 1
+		else 0;
+
+a22nbrEnd= 0 -> pre (0 -> pre (a22nbrFired));
+
+
+
+(ea21x_C) = ((a22nbrFired * a22_ea21x_rate_in));
+
+(ea22x_P, ea22y_P) = ((a22nbrEnd * a22_ea22x_rate_out), (a22nbrEnd * a22_ea22y_rate_out));
+
+tel;
+------------------
+node a22DoFire(ea21x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea21x>=  (times * a22_ea21x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a31(ea22x, em21x, em22x :int) returns (ea31x_P, ea31y_P, ea22x_C, em21x_C, em22x_C :int; a31nbrFired: int );
+
+var
+a31nbrEnd: int;
+let
+a31nbrFired= if a31DoFire(ea22x, em21x, em22x,1) then 1
+		else 0;
+
+a31nbrEnd= 0 -> pre (0 -> pre (0 -> pre (a31nbrFired)));
+
+
+
+(ea22x_C, em21x_C, em22x_C) = ((a31nbrFired * a31_ea22x_rate_in), (a31nbrFired * a31_em21x_rate_in), (a31nbrFired * a31_em22x_rate_in));
+
+(ea31x_P, ea31y_P) = ((a31nbrEnd * a31_ea31x_rate_out), (a31nbrEnd * a31_ea31y_rate_out));
+
+tel;
+------------------
+node a31DoFire(ea22x, em21x, em22x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea22x>=  (times * a31_ea22x_rate_in)) 
+	and  (em21x>=  (times * a31_em21x_rate_in)) 
+	and  (em22x>=  (times * a31_em22x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a32(ea31x :int) returns (ea32x_P, ea32y_P, ea31x_C :int; a32nbrFired: int );
+
+var
+a32nbrEnd: int;
+let
+a32nbrFired= if a32DoFire(ea31x,1) then 1
+		else 0;
+
+a32nbrEnd= 0 -> pre (0 -> pre (a32nbrFired));
+
+
+
+(ea31x_C) = ((a32nbrFired * a32_ea31x_rate_in));
+
+(ea32x_P, ea32y_P) = ((a32nbrEnd * a32_ea32x_rate_out), (a32nbrEnd * a32_ea32y_rate_out));
+
+tel;
+------------------
+node a32DoFire(ea31x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea31x>=  (times * a32_ea31x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m11(ea11y, em32y, out2 :int) returns (em11x_P, em11y_P, ea11y_C, em32y_C, out2_C :int; m11nbrFired: int );
+
+var
+m11nbrEnd: int;
+let
+m11nbrFired= if m11DoFire(ea11y, em32y, out2,1) then 1
+		else 0;
+
+m11nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (m11nbrFired))));
+
+
+
+(ea11y_C, em32y_C, out2_C) = ((m11nbrFired * m11_ea11y_rate_in), (m11nbrFired * m11_em32y_rate_in), (m11nbrFired * m11_out2_rate_in));
+
+(em11x_P, em11y_P) = ((m11nbrEnd * m11_em11x_rate_out), (m11nbrEnd * m11_em11y_rate_out));
+
+tel;
+------------------
+node m11DoFire(ea11y, em32y, out2 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea11y>=  (times * m11_ea11y_rate_in)) 
+	and  (em32y>=  (times * m11_em32y_rate_in)) 
+	and  (out2>=  (times * m11_out2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m12(ea12y, em11y :int) returns (em12x_P, em12y_P, ea12y_C, em11y_C :int; m12nbrFired: int );
+
+var
+m12nbrEnd: int;
+let
+m12nbrFired= if m12DoFire(ea12y, em11y,1) then 1
+		else 0;
+
+m12nbrEnd= 0 -> pre (0 -> pre (m12nbrFired));
+
+
+
+(ea12y_C, em11y_C) = ((m12nbrFired * m12_ea12y_rate_in), (m12nbrFired * m12_em11y_rate_in));
+
+(em12x_P, em12y_P) = ((m12nbrEnd * m12_em12x_rate_out), (m12nbrEnd * m12_em12y_rate_out));
+
+tel;
+------------------
+node m12DoFire(ea12y, em11y :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea12y>=  (times * m12_ea12y_rate_in)) 
+	and  (em11y>=  (times * m12_em11y_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m21(ea21y, em12y :int) returns (em21x_P, em21y_P, ea21y_C, em12y_C :int; m21nbrFired: int );
+
+var
+m21nbrEnd: int;
+let
+m21nbrFired= if m21DoFire(ea21y, em12y,1) then 1
+		else 0;
+
+m21nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (m21nbrFired))));
+
+
+
+(ea21y_C, em12y_C) = ((m21nbrFired * m21_ea21y_rate_in), (m21nbrFired * m21_em12y_rate_in));
+
+(em21x_P, em21y_P) = ((m21nbrEnd * m21_em21x_rate_out), (m21nbrEnd * m21_em21y_rate_out));
+
+tel;
+------------------
+node m21DoFire(ea21y, em12y :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea21y>=  (times * m21_ea21y_rate_in)) 
+	and  (em12y>=  (times * m21_em12y_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m22(ea22y, em21y :int) returns (em22x_P, em22y_P, ea22y_C, em21y_C :int; m22nbrFired: int );
+
+var
+m22nbrEnd: int;
+let
+m22nbrFired= if m22DoFire(ea22y, em21y,1) then 1
+		else 0;
+
+m22nbrEnd= 0 -> pre (0 -> pre (m22nbrFired));
+
+
+
+(ea22y_C, em21y_C) = ((m22nbrFired * m22_ea22y_rate_in), (m22nbrFired * m22_em21y_rate_in));
+
+(em22x_P, em22y_P) = ((m22nbrEnd * m22_em22x_rate_out), (m22nbrEnd * m22_em22y_rate_out));
+
+tel;
+------------------
+node m22DoFire(ea22y, em21y :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea22y>=  (times * m22_ea22y_rate_in)) 
+	and  (em21y>=  (times * m22_em21y_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m31(ea31y, em22y :int) returns (em31x_P, em31y_P, ea31y_C, em22y_C :int; m31nbrFired: int );
+
+var
+m31nbrEnd: int;
+let
+m31nbrFired= if m31DoFire(ea31y, em22y,1) then 1
+		else 0;
+
+m31nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (m31nbrFired))));
+
+
+
+(ea31y_C, em22y_C) = ((m31nbrFired * m31_ea31y_rate_in), (m31nbrFired * m31_em22y_rate_in));
+
+(em31x_P, em31y_P) = ((m31nbrEnd * m31_em31x_rate_out), (m31nbrEnd * m31_em31y_rate_out));
+
+tel;
+------------------
+node m31DoFire(ea31y, em22y :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea31y>=  (times * m31_ea31y_rate_in)) 
+	and  (em22y>=  (times * m31_em22y_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node m32(ea32y, em31y :int) returns (em32x_P, em32y_P, ea32y_C, em31y_C :int; m32nbrFired: int );
+
+var
+m32nbrEnd: int;
+let
+m32nbrFired= if m32DoFire(ea32y, em31y,1) then 1
+		else 0;
+
+m32nbrEnd= 0 -> pre (0 -> pre (m32nbrFired));
+
+
+
+(ea32y_C, em31y_C) = ((m32nbrFired * m32_ea32y_rate_in), (m32nbrFired * m32_em31y_rate_in));
+
+(em32x_P, em32y_P) = ((m32nbrEnd * m32_em32x_rate_out), (m32nbrEnd * m32_em32y_rate_out));
+
+tel;
+------------------
+node m32DoFire(ea32y, em31y :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (ea32y>=  (times * m32_ea32y_rate_in)) 
+	and  (em31y>=  (times * m32_em31y_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node top (ein_P: int) returns (e1, e8, e2, e12, e3, e6, e7, e4, e9, e10, e11, e5, ea11x, ea11y, ea12x, ea12y, ea21x, ea21y, ea22x, ea22y, ea31x, ea31y, ea32x, ea32y, em11x, em11y, em12x, em12y, em21x, em21y, em22x, em22y, em31x, em31y, em32x, em32y, out1, out2, ein, dinbrFired, rinbrFired, m1nbrFired, m2nbrFired, a1nbrFired, a2nbrFired, r0nbrFired, a11nbrFired, a12nbrFired, a21nbrFired, a22nbrFired, a31nbrFired, a32nbrFired, m11nbrFired, m12nbrFired, m21nbrFired, m22nbrFired, m31nbrFired, m32nbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+e1_C, e1_P: int; 
+e8_C, e8_P: int; 
+e2_C, e2_P: int; 
+e12_C, e12_P: int; 
+e3_C, e3_P: int; 
+e6_C, e6_P: int; 
+e7_C, e7_P: int; 
+e4_C, e4_P: int; 
+e9_C, e9_P: int; 
+e10_C, e10_P: int; 
+e11_C, e11_P: int; 
+e5_C, e5_P: int; 
+ea11x_C, ea11x_P: int; 
+ea11y_C, ea11y_P: int; 
+ea12x_C, ea12x_P: int; 
+ea12y_C, ea12y_P: int; 
+ea21x_C, ea21x_P: int; 
+ea21y_C, ea21y_P: int; 
+ea22x_C, ea22x_P: int; 
+ea22y_C, ea22y_P: int; 
+ea31x_C, ea31x_P: int; 
+ea31y_C, ea31y_P: int; 
+ea32x_C, ea32x_P: int; 
+ea32y_C, ea32y_P: int; 
+em11x_C, em11x_P: int; 
+em11y_C, em11y_P: int; 
+em12x_C, em12x_P: int; 
+em12y_C, em12y_P: int; 
+em21x_C, em21x_P: int; 
+em21y_C, em21y_P: int; 
+em22x_C, em22x_P: int; 
+em22y_C, em22y_P: int; 
+em31x_C, em31x_P: int; 
+em31y_C, em31y_P: int; 
+em32x_C, em32x_P: int; 
+em32y_C, em32y_P: int; 
+out1_C, out1_P: int; 
+out2_C, out2_P: int; 
+ein_C : int;
+positiveValues: bool;
+
+
+let
+
+assert ein_P  >=0; 
+ 
+e1 = e1_I -> pre  (   e1-e1_C)+ e1_P;
+e8 = e8_I -> pre  (   e8-e8_C)+ e8_P;
+e2 = e2_I -> pre  (   e2-e2_C)+ e2_P;
+e12 = e12_I -> pre  (   e12-e12_C)+ e12_P;
+e3 = e3_I -> pre  (   e3-e3_C)+ e3_P;
+e6 = e6_I -> pre  (   e6-e6_C)+ e6_P;
+e7 = e7_I -> pre  (   e7-e7_C)+ e7_P;
+e4 = e4_I -> pre  (   e4-e4_C)+ e4_P;
+e9 = e9_I -> pre  (   e9-e9_C)+ e9_P;
+e10 = e10_I -> pre  (   e10-e10_C)+ e10_P;
+e11 = e11_I -> pre  (   e11-e11_C)+ e11_P;
+e5 = e5_I -> pre  (   e5-e5_C)+ e5_P;
+ea11x = ea11x_I -> pre  (   ea11x-ea11x_C)+ ea11x_P;
+ea11y = ea11y_I -> pre  (   ea11y-ea11y_C)+ ea11y_P;
+ea12x = ea12x_I -> pre  (   ea12x-ea12x_C)+ ea12x_P;
+ea12y = ea12y_I -> pre  (   ea12y-ea12y_C)+ ea12y_P;
+ea21x = ea21x_I -> pre  (   ea21x-ea21x_C)+ ea21x_P;
+ea21y = ea21y_I -> pre  (   ea21y-ea21y_C)+ ea21y_P;
+ea22x = ea22x_I -> pre  (   ea22x-ea22x_C)+ ea22x_P;
+ea22y = ea22y_I -> pre  (   ea22y-ea22y_C)+ ea22y_P;
+ea31x = ea31x_I -> pre  (   ea31x-ea31x_C)+ ea31x_P;
+ea31y = ea31y_I -> pre  (   ea31y-ea31y_C)+ ea31y_P;
+ea32x = ea32x_I -> pre  (   ea32x-ea32x_C)+ ea32x_P;
+ea32y = ea32y_I -> pre  (   ea32y-ea32y_C)+ ea32y_P;
+em11x = em11x_I -> pre  (   em11x-em11x_C)+ em11x_P;
+em11y = em11y_I -> pre  (   em11y-em11y_C)+ em11y_P;
+em12x = em12x_I -> pre  (   em12x-em12x_C)+ em12x_P;
+em12y = em12y_I -> pre  (   em12y-em12y_C)+ em12y_P;
+em21x = em21x_I -> pre  (   em21x-em21x_C)+ em21x_P;
+em21y = em21y_I -> pre  (   em21y-em21y_C)+ em21y_P;
+em22x = em22x_I -> pre  (   em22x-em22x_C)+ em22x_P;
+em22y = em22y_I -> pre  (   em22y-em22y_C)+ em22y_P;
+em31x = em31x_I -> pre  (   em31x-em31x_C)+ em31x_P;
+em31y = em31y_I -> pre  (   em31y-em31y_C)+ em31y_P;
+em32x = em32x_I -> pre  (   em32x-em32x_C)+ em32x_P;
+em32y = em32y_I -> pre  (   em32y-em32y_C)+ em32y_P;
+out1 = out1_I -> pre  (   out1-out1_C)+ out1_P;
+out2 = out2_I -> pre  (   out2-out2_C)+ out2_P;
+
+ein = ein_P -> pre  ( ein-ein_C)+ ein_P ;
+
+
+(ein_C, out1_P, out2_P, dinbrFired) = di(ein);
+(e1_P, e8_C, out1_C, rinbrFired) = ri(e8, out1);
+(e8_P, e1_C, e2_P, e12_C, e7_P, e4_C, m1nbrFired) = m1(e1, e12, e4);
+(e2_C, e12_P, e3_P, e6_C, m2nbrFired) = m2(e2, e6);
+(e3_C, e7_C, e4_P, e9_C, e10_P, a1nbrFired) = a1(e3, e7, e9);
+(e6_P, e10_C, e9_P, e11_C, e5_P, a2nbrFired) = a2(e10, e11);
+(e11_P, e5_C, r0nbrFired) = r0(e5);
+(ea11x_P, ea11y_P, ea32x_C, em31x_C, em32x_C, a11nbrFired) = a11(ea32x, em31x, em32x);
+(ea12x_P, ea12y_P, ea11x_C, a12nbrFired) = a12(ea11x);
+(ea21x_P, ea21y_P, ea12x_C, em11x_C, em12x_C, a21nbrFired) = a21(ea12x, em11x, em12x);
+(ea22x_P, ea22y_P, ea21x_C, a22nbrFired) = a22(ea21x);
+(ea31x_P, ea31y_P, ea22x_C, em21x_C, em22x_C, a31nbrFired) = a31(ea22x, em21x, em22x);
+(ea32x_P, ea32y_P, ea31x_C, a32nbrFired) = a32(ea31x);
+(em11x_P, em11y_P, ea11y_C, em32y_C, out2_C, m11nbrFired) = m11(ea11y, em32y, out2);
+(em12x_P, em12y_P, ea12y_C, em11y_C, m12nbrFired) = m12(ea12y, em11y);
+(em21x_P, em21y_P, ea21y_C, em12y_C, m21nbrFired) = m21(ea21y, em12y);
+(em22x_P, em22y_P, ea22y_C, em21y_C, m22nbrFired) = m22(ea22y, em21y);
+(em31x_P, em31y_P, ea31y_C, em22y_C, m31nbrFired) = m31(ea31y, em22y);
+(em32x_P, em32y_P, ea32y_C, em31y_C, m32nbrFired) = m32(ea32y, em31y);
+
+
+positiveValues = ( e1>=   0) 
+	and  ( e8>=   0) 
+	and  ( e2>=   0) 
+	and  ( e12>=   0) 
+	and  ( e3>=   0) 
+	and  ( e6>=   0) 
+	and  ( e7>=   0) 
+	and  ( e4>=   0) 
+	and  ( e9>=   0) 
+	and  ( e10>=   0) 
+	and  ( e11>=   0) 
+	and  ( e5>=   0) 
+	and  ( ea11x>=   0) 
+	and  ( ea11y>=   0) 
+	and  ( ea12x>=   0) 
+	and  ( ea12y>=   0) 
+	and  ( ea21x>=   0) 
+	and  ( ea21y>=   0) 
+	and  ( ea22x>=   0) 
+	and  ( ea22y>=   0) 
+	and  ( ea31x>=   0) 
+	and  ( ea31y>=   0) 
+	and  ( ea32x>=   0) 
+	and  ( ea32y>=   0) 
+	and  ( em11x>=   0) 
+	and  ( em11y>=   0) 
+	and  ( em12x>=   0) 
+	and  ( em12y>=   0) 
+	and  ( em21x>=   0) 
+	and  ( em21y>=   0) 
+	and  ( em22x>=   0) 
+	and  ( em22y>=   0) 
+	and  ( em31x>=   0) 
+	and  ( em31y>=   0) 
+	and  ( em32x>=   0) 
+	and  ( em32y>=   0) 
+	and  ( out1>=   0) 
+	and  ( out2>=   0) 
+	and  ( ein>=  0) 
+	and  ( dinbrFired >= 0) 
+	and  ( rinbrFired >= 0) 
+	and  ( m1nbrFired >= 0) 
+	and  ( m2nbrFired >= 0) 
+	and  ( a1nbrFired >= 0) 
+	and  ( a2nbrFired >= 0) 
+	and  ( r0nbrFired >= 0) 
+	and  ( a11nbrFired >= 0) 
+	and  ( a12nbrFired >= 0) 
+	and  ( a21nbrFired >= 0) 
+	and  ( a22nbrFired >= 0) 
+	and  ( a31nbrFired >= 0) 
+	and  ( a32nbrFired >= 0) 
+	and  ( m11nbrFired >= 0) 
+	and  ( m12nbrFired >= 0) 
+	and  ( m21nbrFired >= 0) 
+	and  ( m22nbrFired >= 0) 
+	and  ( m31nbrFired >= 0) 
+	and  ( m32nbrFired >= 0) ;
+
+--%MAIN;
+assert ein_P =1; 
+
+--%PROPERTY  "equiva, "  (r0nbrFired >0) =>  (pre pre a32nbrFired) >0  ;
+
+---%PROPERTY  "equiva, "  (r0nbrFired >0) =>  (pre pre a32nbrFired) >0 or (pre pre pre a32nbrFired) >0  ;
+
+tel;
+

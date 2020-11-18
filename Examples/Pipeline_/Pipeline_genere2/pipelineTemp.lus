@@ -1,0 +1,168 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [0,0,0,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const a1bis_e1bis_rate_in = [1,0,0,0,0,0,0,0];
+const a1bis_e3bis_rate_in = [1,0,0,0,0,0,0,0];
+const a1bis_e4bis_rate_out = [1,0,0,0,0,0,0,0];
+const a2bis_e4bis_rate_in = [1,0,0,0,0,0,0,0];
+const a2bis_e5bisin_rate_in = [1,0,0,0,0,0,0,0];
+const a2bis_e5bisout_rate_out = [1,0,0,0,0,0,0,0];
+const a2bis_e2bis_rate_out = [1,0,0,0,0,0,0,0];
+const a2bis_e3bis_rate_out = [1,0,0,0,0,0,0,0];
+const endbis_e2bis_rate_in = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const e2bis_I = [0,0,0,0,0,0,0,0];
+const e3bis_I = [1,1,0,0,0,0,0,0];
+const e4bis_I = [0,0,0,0,0,0,0,0];
+const e5bis_I = [1,0,0,0,0,0,0,0];
+
+const e1bis_I = [0,0,0,0,0,0,0,0];
+
+--**************** Nodes Declaration ****************--
+
+node a1bis(e1bis, e3bis :UsrInt) returns (e1bis_C, e3bis_C, e4bis_P :UsrInt; a1bisnbrFired: UsrInt );
+
+var
+e4bis_PD :UsrInt;
+let
+a1bisnbrFired= if a1bisDoFire(e1bis, e3bis,UsrInt_4) then UsrInt_4
+		else if a1bisDoFire(e1bis, e3bis,UsrInt_3) then UsrInt_3
+		else if a1bisDoFire(e1bis, e3bis,UsrInt_2) then UsrInt_2
+		else if a1bisDoFire(e1bis, e3bis,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e1bis_C, e3bis_C,e4bis_PD) = (UsrIntMult(a1bisnbrFired, a1bis_e1bis_rate_in),UsrIntMult(a1bisnbrFired, a1bis_e3bis_rate_in),UsrIntMult(a1bisnbrFired, a1bis_e4bis_rate_out));
+
+e4bis_P = UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (UsrInt_0 -> pre (e4bis_PD)))))));
+
+
+tel;
+------------------
+node a1bisDoFire(e1bis, e3bis,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e1bis, UsrIntMult(times, a1bis_e1bis_rate_in)) 
+	and UsrIntGte(e3bis, UsrIntMult(times, a1bis_e3bis_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a2bis(e4bis, e5bisin :UsrInt) returns (e4bis_C, e5bisin_C, e5bisout_P, e2bis_P, e3bis_P :UsrInt; a2bisnbrFired: UsrInt );
+
+var
+e5bisout_PD, e2bis_PD, e3bis_PD :UsrInt;
+let
+a2bisnbrFired= if a2bisDoFire(e4bis, e5bisin,UsrInt_4) then UsrInt_4
+		else if a2bisDoFire(e4bis, e5bisin,UsrInt_3) then UsrInt_3
+		else if a2bisDoFire(e4bis, e5bisin,UsrInt_2) then UsrInt_2
+		else if a2bisDoFire(e4bis, e5bisin,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e4bis_C, e5bisin_C,e5bisout_PD, e2bis_PD, e3bis_PD) = (UsrIntMult(a2bisnbrFired, a2bis_e4bis_rate_in),UsrIntMult(a2bisnbrFired, a2bis_e5bisin_rate_in),UsrIntMult(a2bisnbrFired, a2bis_e5bisout_rate_out),UsrIntMult(a2bisnbrFired, a2bis_e2bis_rate_out),UsrIntMult(a2bisnbrFired, a2bis_e3bis_rate_out));
+
+e5bisout_P = UsrInt_0 -> pre (e5bisout_PD);
+
+e2bis_P = UsrInt_0 -> pre (e2bis_PD);
+
+e3bis_P = UsrInt_0 -> pre (e3bis_PD);
+
+
+tel;
+------------------
+node a2bisDoFire(e4bis, e5bisin,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e4bis, UsrIntMult(times, a2bis_e4bis_rate_in)) 
+	and UsrIntGte(e5bisin, UsrIntMult(times, a2bis_e5bisin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node endbis(e2bis :UsrInt) returns (e2bis_C :UsrInt; endbisnbrFired: UsrInt );
+
+let
+endbisnbrFired= if endbisDoFire(e2bis,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e2bis_C,) = (UsrIntMult(endbisnbrFired, endbis_e2bis_rate_in));
+
+tel;
+------------------
+node endbisDoFire(e2bis,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e2bis, UsrIntMult(times, endbis_e2bis_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (e1bis_P: UsrInt) returns (e2bis, e3bis, e4bis, e5bis, e1bis, a1bisnbrFired, a2bisnbrFired, endbisnbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+e2bis_C, e2bis_P: UsrInt; 
+e3bis_C, e3bis_P: UsrInt; 
+e4bis_C, e4bis_P: UsrInt; 
+e5bis_C, e5bis_P: UsrInt; 
+e1bis_C : UsrInt;
+
+let
+
+e2bis = e2bis_I -> pre UsrIntPlus( UsrIntMinus( e2bis,e2bis_C), e2bis_P);
+e3bis = e3bis_I -> pre UsrIntPlus( UsrIntMinus( e3bis,e3bis_C), e3bis_P);
+e4bis = e4bis_I -> pre UsrIntPlus( UsrIntMinus( e4bis,e4bis_C), e4bis_P);
+e5bis = e5bis_I -> pre UsrIntPlus( UsrIntMinus( e5bis,e5bis_C), e5bis_P);
+e1bis = e1bis_I -> pre UsrIntPlus( UsrIntMinus( e1bis,e1bis_C), e1bis_P);
+
+--e1bis = e1bis_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( e1bis,e1bis_C), e1bis_P), maxValue) 
+--				then UsrIntPlus( UsrIntMinus( e1bis,e1bis_C), e1bis_P)
+--				else UsrIntMinus( e1bis,e1bis_C);
+
+
+(e1bis_C, e3bis_C, e4bis_P, a1bisnbrFired) = a1bis(e1bis, e3bis);
+(e4bis_C, e5bis_C, e5bis_P, e2bis_P, e3bis_P, a2bisnbrFired) = a2bis(e4bis, e5bis);
+(e2bis_C, endbisnbrFired) = endbis(e2bis);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (e1bis_P: UsrInt) returns (noError :bool)
+
+var
+
+e2bis, e3bis, e4bis, e5bis, e1bis, a1bisnbrFired, a2bisnbrFired, endbisnbrFired:UsrInt;
+
+positiveValues: bool;
+
+let
+
+(e2bis, e3bis, e4bis, e5bis, e1bis, a1bisnbrFired, a2bisnbrFired, endbisnbrFired) = top(e1bis_P);
+
+positiveValues = UsrIntGte( e2bis, UsrInt_0) 
+	and UsrIntGte( e3bis, UsrInt_0) 
+	and UsrIntGte( e4bis, UsrInt_0) 
+	and UsrIntGte( e5bis, UsrInt_0) 
+	and UsrIntGte( e1bis, UsrInt_0) 
+	and UsrIntGte( a1bisnbrFired , UsrInt_0) 
+	and UsrIntGte( a2bisnbrFired , UsrInt_0) 
+	and UsrIntGte( endbisnbrFired , UsrInt_0) ;
+
+noError= positiveValues and true;
+
+tel

@@ -1,0 +1,19 @@
+
+node MinMax (X:int) returns (min , max:int; step:bool; pas: int)
+
+let
+min=X->if(X <pre min)  then X else  pre min;
+max=X->if(X >pre  max) then X else  pre max;
+step= true -> pre (true -> false);
+
+ 
+assert true -> if step then true else not ((X > pre X) and (pre X > pre pre X));
+
+
+--%MAIN;
+--%PROPERTY  "min <= max " min <= max  ;
+---%PROPERTY  " max not increase twice successively" if pas <=2 then true else not ((max > pre max) and (pre max > pre pre max));
+--%PROPERTY  " max not increase twice successively" true -> if step  then true else not ((max > pre max) and (pre max > pre pre max));
+
+tel;
+

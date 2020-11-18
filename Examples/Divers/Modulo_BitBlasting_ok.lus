@@ -1,0 +1,134 @@
+--include "log_tmp.lus"
+--to be included BEFORE binary . lus
+--signed binary on 4 bits
+-- ( range [ -7 , 7 ] + nan ( 0 0 1 )
+--const BIN_SZ =4;
+const UsrInt_0 = [0 , 0 , 0 , 0];
+const UsrInt_1 = [1 , 0 , 0 , 0];
+const UsrInt_2=[0 , 1 , 0 , 0];
+const UsrInt_3=[1 , 1 , 0 , 0];
+const  UsrInt_4=[0 , 0 , 1 , 0];
+const  UsrInt_5=[1 , 0 , 1 , 0];
+const UsrInt_6=[0 , 1 , 1 , 0];
+const UsrInt_7=[1 , 1 , 1 , 0];
+const UsrInt_m7=[1 , 0 , 0 , 1];
+const UsrInt_m6=[0 , 1 , 0 , 1];
+const UsrInt_m5=[1 , 1 , 0 , 1];
+const UsrInt_m4=[0 , 0 , 1 , 1];
+const UsrInt_m3=[1 , 0 , 1 , 1];
+const UsrInt_m2=[0 , 1 , 1 , 1];
+const UsrInt_m1=[1 , 1 , 1 , 1];
+
+------------------------
+const BIN_SZ =4;
+type UsrInt = bool^BIN_SZ ;
+
+node UsrIntIf (c : bool ; x : UsrInt ; y : UsrInt) returns (s : UsrInt);
+let
+s = if c^BIN_SZ then x else y ;
+tel
+-----
+
+node UsrIntPlus ( x : UsrInt ; y : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = false ;
+--c [ 1..BIN_SZ ] = if c [ 0..BIN_SZ -1] then ( x or y ) else ( x and y ) ;
+c[1..BIN_SZ]= if c [0..BIN_SZ -1] then (x or y) else (x and y);
+
+--s = x xor y xor c[0..BIN_SZ-1] ;
+s= x xor y xor c[0..BIN_SZ -1];
+
+tel
+-----
+
+
+node UsrIntChs ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = false ;
+c [1..BIN_SZ]= c [0..BIN_SZ -1] or x ;
+ s = c [0..BIN_SZ -1] xor x ;
+ tel
+
+node UsrIntIncr ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = true ;
+c [ 1..BIN_SZ ] = c [ 0..BIN_SZ -1] and x ;
+s = c [ 0..BIN_SZ -1] xor x ;
+tel
+--------
+
+node UsrIntDecr ( x : UsrInt ) returns ( s : UsrInt ) ;
+var c : bool ^( BIN_SZ +1) ;
+let
+c [ 0 ] = true ;
+c [ 1..BIN_SZ ] = c [ 0..BIN_SZ -1] and not x ;
+s = c [ 0..BIN_SZ -1] xor x ;
+tel
+node UsrIntMinus ( x : UsrInt ; y : UsrInt ) returns ( s : UsrInt ) ;
+let
+s = UsrIntPlus ( x , UsrIntChs ( y ) ) ;
+tel
+-------
+
+node UsrIntGt ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+var
+z : UsrInt ;
+let
+-- x > y <=> y - x < 0
+z = UsrIntPlus ( y , UsrIntChs ( x ) ) ;
+o = z [ BIN_SZ - 1 ] ;
+tel
+
+---------
+node UsrIntLt ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x < y <=> y > x
+o = UsrIntGt ( y , x ) ;
+tel
+-----------
+
+node UsrIntGte ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x >= y <=> not y > x
+o = not UsrIntGt ( y , x ) ;
+tel
+------
+
+node UsrIntLte ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+let
+-- x <= y <=> not x > y
+o = not UsrIntGt ( x , y ) ;
+tel
+-----
+
+
+node UsrIntEq ( x : UsrInt ; y : UsrInt ) returns ( o : bool ) ;
+var
+a : bool^BIN_SZ +1;
+let
+a [ 0 ] = true ;
+a [ 1..BIN_SZ ] = a [ 0..BIN_SZ -1] and ( x = y ) ;
+o = a [ BIN_SZ - 1 ] ;
+tel
+
+--------------
+
+node modulo ( val : UsrInt ) returns ( cpt : UsrInt ) ;
+let
+
+cpt = UsrInt_0 -> if UsrIntLt ( UsrIntPlus ( pre ( cpt ) , UsrInt_1 )  , val ) then UsrIntPlus ( pre ( cpt ) , UsrInt_1 ) else UsrInt_0;
+
+tel
+----
+
+node verif ( reset : bool ) returns ( ok : bool; cpt2 , cpt4 : UsrInt ; ) ;
+ 
+let
+cpt2 = modulo ( UsrInt_2 ) ;
+cpt4 = modulo ( UsrInt_4 ) ;
+ 
+ok = ( UsrIntEq ( cpt4, UsrInt_0 ) => UsrIntEq ( cpt2, UsrInt_0 ) ) ;
+tel

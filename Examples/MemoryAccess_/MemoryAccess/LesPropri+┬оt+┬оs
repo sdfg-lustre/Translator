@@ -1,0 +1,136 @@
+ code pour MemoryAccess3_bis2.lus
+--**************** Node Harness Declaration ****************--
+
+node Harness (in: UsrInt) returns (noError :bool)
+
+var
+
+e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, r1nbrFired, m1nbrFired, m2nbrFired, a1nbrFired, a2nbrFired, r0nbrFired:UsrInt;
+
+positiveValues, P1, P2, P3, P4: bool;
+
+let
+
+(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, r1nbrFired, m1nbrFired, m2nbrFired, a1nbrFired, a2nbrFired, r0nbrFired) = top(in);
+
+positiveValues = UsrIntGte( e1, UsrInt_0) 
+	and UsrIntGte( e2, UsrInt_0) 
+	and UsrIntGte( e3, UsrInt_0) 
+	and UsrIntGte( e4, UsrInt_0) 
+	and UsrIntGte( e5, UsrInt_0) 
+	and UsrIntGte( e6, UsrInt_0) 
+	and UsrIntGte( e7, UsrInt_0) 
+	and UsrIntGte( e8, UsrInt_0) 
+	and UsrIntGte( e9, UsrInt_0) 
+	and UsrIntGte( e10, UsrInt_0) 
+	and UsrIntGte( e11, UsrInt_0) 
+	and UsrIntGte( e12, UsrInt_0) 
+	and UsrIntGte( r1nbrFired , UsrInt_0) 
+	and UsrIntGte( m1nbrFired , UsrInt_0) 
+	and UsrIntGte( m2nbrFired , UsrInt_0) 
+	and UsrIntGte( a1nbrFired , UsrInt_0) 
+	and UsrIntGte( a2nbrFired , UsrInt_0) 
+	and UsrIntGte( r0nbrFired , UsrInt_0) ;
+
+--P1 pas d'autoconcurrenc: not P1
+P1=  not UsrIntGte( r1nbrFired , UsrInt_2) and not  UsrIntGte( m1nbrFired , UsrInt_2) and not UsrIntGte( m2nbrFired , UsrInt_2)  and not UsrIntGte( a1nbrFired , UsrInt_2) 	and not  UsrIntGte( a2nbrFired , UsrInt_2) and	not UsrIntGte( r0nbrFired , UsrInt_2) ;
+
+--P2: la durée de la latence: 23 ou 25
+P2= UsrIntEq(r0nbrFired , UsrInt_1) => 
+UsrIntEq(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre            r1nbrFired , UsrInt_1) or 
+UsrIntEq(pre pre pre pre pre         pre pre pre pre pre  
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre                 r1nbrFired , UsrInt_1);  
+
+
+
+--P3: m1 et a2 sont // 
+P3= (UsrIntEq(m1nbrFired , UsrInt_1) => UsrIntEq(a2nbrFired , UsrInt_1)) and (UsrIntEq(a2nbrFired , UsrInt_1) => UsrIntEq(m1nbrFired , UsrInt_1));
+--P4: m1 et a1 ne sont pas en  //
+--P4= (UsrIntEq(m1nbrFired , UsrInt_1) => not UsrIntEq(a1nbrFired , UsrInt_1)) and (UsrIntEq(a1nbrFired , UsrInt_1) => not UsrIntEq(m1nbrFired , UsrInt_1));
+--P4: m2 et a1 ne sont pas en  //
+P4= (UsrIntEq(m2nbrFired , UsrInt_1) => not UsrIntEq(a1nbrFired , UsrInt_1)) and (UsrIntEq(a1nbrFired , UsrInt_1) => not UsrIntEq(m2nbrFired , UsrInt_1));
+
+noError= P3;
+tel
+
+
+====================
+
+
+ code pour MemoryAccess3_bis2_prime.lus
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (in: UsrInt) returns (noError :bool)
+
+var
+
+e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, r1nbrFired, m1nbrFired, m2nbrFired, a1nbrFired, a2nbrFired, r0nbrFired:UsrInt;
+
+positiveValues, P1, P2, P3, P4: bool;
+
+let
+
+(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, r1nbrFired, m1nbrFired, m2nbrFired, a1nbrFired, a2nbrFired, r0nbrFired) = top(in);
+
+positiveValues = UsrIntGte( e1, UsrInt_0) 
+	and UsrIntGte( e2, UsrInt_0) 
+	and UsrIntGte( e3, UsrInt_0) 
+	and UsrIntGte( e4, UsrInt_0) 
+	and UsrIntGte( e5, UsrInt_0) 
+	and UsrIntGte( e6, UsrInt_0) 
+	and UsrIntGte( e7, UsrInt_0) 
+	and UsrIntGte( e8, UsrInt_0) 
+	and UsrIntGte( e9, UsrInt_0) 
+	and UsrIntGte( e10, UsrInt_0) 
+	and UsrIntGte( e11, UsrInt_0) 
+	and UsrIntGte( e12, UsrInt_0) 
+	and UsrIntGte( r1nbrFired , UsrInt_0) 
+	and UsrIntGte( m1nbrFired , UsrInt_0) 
+	and UsrIntGte( m2nbrFired , UsrInt_0) 
+	and UsrIntGte( a1nbrFired , UsrInt_0) 
+	and UsrIntGte( a2nbrFired , UsrInt_0) 
+	and UsrIntGte( r0nbrFired , UsrInt_0) ;
+
+--P1 pas d'autoconcurrenc: not P1
+P1=  not UsrIntGte( r1nbrFired , UsrInt_2) and not  UsrIntGte( m1nbrFired , UsrInt_2) and not UsrIntGte( m2nbrFired , UsrInt_2)  and not UsrIntGte( a1nbrFired , UsrInt_2) 	and not  UsrIntGte( a2nbrFired , UsrInt_2) and	not UsrIntGte( r0nbrFired , UsrInt_2) ;
+
+--P2: la durée de la latence: 23 ou 25
+P2= UsrIntEq(r0nbrFired , UsrInt_1) => 
+UsrIntEq(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre	     pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre 
+	pre pre pre pre pre	     pre pre pre pre pre
+	pre pre pre pre pre	     pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre 
+	pre pre pre pre pre	     pre pre pre pre pre
+	pre pre pre pre pre	     pre pre pre pre pre
+				     r1nbrFired , UsrInt_1) or 
+UsrIntEq(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre	     pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre 
+	pre pre pre pre pre	     pre pre pre pre pre
+	pre pre pre  pre pre         pre pre pre pre pre
+	 pre pre pre pre pre	     pre pre pre pre pre 
+	pre pre pre pre pre	     pre pre pre pre pre
+	pre pre pre pre pre	     pre pre pre pre pre
+	pre pre pre pre			     r1nbrFired , UsrInt_1);  
+
+
+
+--P3: m1 et a2 sont // 
+P3= (UsrIntEq(m1nbrFired , UsrInt_1) => UsrIntEq(a2nbrFired , UsrInt_1)) and (UsrIntEq(a2nbrFired , UsrInt_1) => UsrIntEq(m1nbrFired , UsrInt_1));
+--P4: m1 et a1 ne sont pas en  //
+--P4= (UsrIntEq(m1nbrFired , UsrInt_1) => not UsrIntEq(a1nbrFired , UsrInt_1)) and (UsrIntEq(a1nbrFired , UsrInt_1) => not UsrIntEq(m1nbrFired , UsrInt_1));
+--P4: m2 et a1 ne sont pas en  //
+P4= (UsrIntEq(m2nbrFired , UsrInt_1) => not UsrIntEq(a1nbrFired , UsrInt_1)) and (UsrIntEq(a1nbrFired , UsrInt_1) => not UsrIntEq(m2nbrFired , UsrInt_1));
+
+noError= P2;
+tel

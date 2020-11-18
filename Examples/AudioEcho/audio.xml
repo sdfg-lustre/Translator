@@ -1,0 +1,52 @@
+
+    <sdf name="audioEcho">
+      <actor name="out" duration="1" maxAutoConcurrences="2"  maxStages="1">
+        <port name="e1in" type="in" rate="1"/>
+        <port name="e1out" type="out" rate="1"/>
+        <port name="e2" type="in" rate="1"/>
+        <port name="e3" type="out" rate="1"/>
+      </actor>
+
+
+ <actor name="abc" duration="1" maxAutoConcurrences="2"  maxStages="1">
+        <port name="e4in" type="in" rate="1"/>
+        <port name="e4out" type="out" rate="1"/>
+        <port name="e3" type="in" rate="23"/> 
+       <port name="e6" type="in" rate="23"/>  
+        <port name="e8" type="in" rate="23"/>
+        <port name="e2" type="out" rate="23"/>
+        <port name="e5" type="out" rate="23"/>
+      <port name="e9" type="out" rate="23"/>
+ 
+      </actor>
+
+
+      <actor name="src" duration="1" maxAutoConcurrences="2"  maxStages="1">
+        <port name="e7in" type="in" rate="1"/>
+        <port name="e7out" type="out" rate="1"/>
+        <port name="e5" type="in" rate="1"/>
+        <port name="e6" type="out" rate="1"/>
+      </actor>
+
+      <actor name="adc" duration="1" maxAutoConcurrences="2"  maxStages="1">
+        <port name="e10in" type="in" rate="1"/>
+        <port name="e10out" type="out" rate="1"/>
+        <port name="e9" type="in" rate="1"/>
+        <port name="e8" type="out" rate="1"/>
+      </actor>
+
+
+   <channel name="e1" srcActor="out" srcPort="e1out" dstActor="out" dstPort="e1in" initialTokens="1"/>
+   <channel name="e4" srcActor="abc" srcPort="e4out" dstActor="abc" dstPort="e4in" initialTokens="1"/>
+   <channel name="e7" srcActor="src" srcPort="e7out" dstActor="src" dstPort="e7in" initialTokens="1"/>
+   <channel name="e10" srcActor="adc" srcPort="e10out" dstActor="adc" dstPort="e10in" initialTokens="1"/>
+
+   <channel name="e2" srcActor="abc" srcPort="e2" dstActor="out" dstPort="e2" initialTokens="0"/>
+   <channel name="e3" srcActor="out" srcPort="e3" dstActor="abc" dstPort="e3" initialTokens="44"/>
+   <channel name="e5" srcActor="abc" srcPort="e5" dstActor="src" dstPort="e5" initialTokens="44"/>
+   <channel name="e6" srcActor="src" srcPort="e6" dstActor="abc" dstPort="e6" initialTokens="0"/>
+   <channel name="e8" srcActor="adc" srcPort="e8" dstActor="abc" dstPort="e8" initialTokens="0"/>
+   <channel name="e9" srcActor="abc" srcPort="e9" dstActor="adc" dstPort="e9" initialTokens="44"/>
+
+    </sdf>
+   

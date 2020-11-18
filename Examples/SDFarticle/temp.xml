@@ -1,0 +1,33 @@
+<sdf name="example" nberBit="8" maxValue="8">
+  
+   <actor name="a" duration="4" maxAutoConcurrences="1" maxStages="1">
+        <port name="e4" type="in" rate="3"/>
+        <port name="e1" type="out"  rate="3" />
+  
+    </actor>
+
+ <actor name="b" duration="4" maxAutoConcurrences="2" maxStages="1">
+        <port name="e1" type="in" rate="1"/>
+        <port name="e3" type="in"  rate="1" />
+        <port name="e2" type="out"  rate="1" />
+  
+    </actor>
+
+ <actor name="c" duration="4" maxAutoConcurrences="1" maxStages="1">
+        <port name="e2" type="in" rate="1"/>
+        <port name="e5in" type="in" rate="1"/>
+        <port name="e5out" type="out" rate="1"/>
+        <port name="e3" type="out"  rate="1" />
+        <port name="e4" type="out"  rate="1" />
+  
+    </actor>
+
+    <channel name = "e1" srcActor="a" srcPort="e1" dstActor="b" dstPort="e1" initialTokens="0"/>    
+ 
+    <channel name = "e2" srcActor="b" srcPort="e2" dstActor="c" dstPort="e2" initialTokens="0"/>  
+    <channel name = "e3" srcActor="c" srcPort="e3" dstActor="b" dstPort="e3" initialTokens="1"/>  
+    <channel name = "e4" srcActor="c" srcPort="e4" dstActor="a" dstPort="e4" initialTokens="5"/>  
+    <channel name = "e5" srcActor="c" srcPort="e5out" dstActor="c" dstPort="e5in" initialTokens="1"/>    
+   
+ 
+ </sdf>

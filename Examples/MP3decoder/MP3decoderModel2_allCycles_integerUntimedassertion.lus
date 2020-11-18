@@ -1,0 +1,452 @@
+--** This lustre code is generated automatically. 
+--**It corresponds to a translation of Untimed SDFG model to Lustre
+--     24 mai 2020 08:20:10 PM
+
+
+
+const maxValue = 15;
+
+--**************** Const Rates ****************--
+
+const huffman_p0_rate_out = 2 ;
+const huffman_p1_rate_out = 2 ;
+const huffman_p2_rate_in = 1 ;
+const huffman_p3_rate_out = 1 ;
+const huffman_p4_rate_in = 2 ;
+const huffman_p5_rate_in = 2 ;
+const req0_p0_rate_in = 1 ;
+const req0_p1_rate_out = 1 ;
+const req0_p2_rate_in = 1 ;
+const req0_p3_rate_out = 1 ;
+const reorder0_p0_rate_in = 1 ;
+const reorder0_p1_rate_out = 1 ;
+const req1_p0_rate_in = 1 ;
+const req1_p1_rate_out = 1 ;
+const req1_p2_rate_in = 1 ;
+const req1_p3_rate_out = 1 ;
+const reorder1_p0_rate_in = 1 ;
+const reorder1_p1_rate_out = 1 ;
+const stereo_p0_rate_in = 1 ;
+const stereo_p1_rate_in = 1 ;
+const stereo_p2_rate_out = 1 ;
+const stereo_p3_rate_out = 1 ;
+const antialias0_p0_rate_in = 1 ;
+const antialias0_p1_rate_out = 1 ;
+const hybridsynth0_p0_rate_in = 1 ;
+const hybridsynth0_p1_rate_out = 1 ;
+const freqinv0_p0_rate_in = 1 ;
+const freqinv0_p1_rate_out = 1 ;
+const subbinv0_p0_rate_in = 1 ;
+const subbinv0_p1_rate_out = 1 ;
+const antialias1_p0_rate_in = 1 ;
+const antialias1_p1_rate_out = 1 ;
+const hybridsynth1_p0_rate_in = 1 ;
+const hybridsynth1_p1_rate_out = 1 ;
+const freqinv1_p0_rate_in = 1 ;
+const freqinv1_p1_rate_out = 1 ;
+const subbinv1_p0_rate_in = 1 ;
+const subbinv1_p1_rate_out = 1 ;
+
+--**************** Init Channel ****************--
+
+const ch0_I = 0 ;
+const ch1_I = 0 ;
+const ch2_I = 0 ;
+const ch3_I = 0 ;
+const ch4_I = 0 ;
+const ch5_I = 0 ;
+const ch6_I = 0 ;
+const ch7_I = 0 ;
+const ch8_I = 0 ;
+const ch9_I = 0 ;
+const ch10_I = 0 ;
+const ch11_I = 0 ;
+const ch12_I = 0 ;
+const ch13_I = 0 ;
+const ch14_I = 1 ;
+const ch15_I = 1 ;
+const ch16_I = 1 ;
+const ch17_I = 2 ;
+const ch18_I = 2 ;
+
+
+--**************** Nodes Declaration ****************--
+
+node huffman(p2, p4, p5 :int) returns (p0_P, p1_P, p2_C, p3_P, p4_C, p5_C :int; huffmannbrFired: int );
+
+let
+huffmannbrFired= if huffmanDoFire(p2, p4, p5,1) then 1
+		else 0;
+
+(p2_C, p4_C, p5_C,p0_P, p1_P, p3_P) = ((huffmannbrFired * huffman_p2_rate_in), (huffmannbrFired * huffman_p4_rate_in), (huffmannbrFired * huffman_p5_rate_in), (huffmannbrFired * huffman_p0_rate_out), (huffmannbrFired * huffman_p1_rate_out), (huffmannbrFired * huffman_p3_rate_out));
+
+tel;
+------------------
+node huffmanDoFire(p2, p4, p5 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p2>=  (times * huffman_p2_rate_in)) 
+	and  (p4>=  (times * huffman_p4_rate_in)) 
+	and  (p5>=  (times * huffman_p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node req0(p0, p2 :int) returns (p0_C, p1_P, p2_C, p3_P :int; req0nbrFired: int );
+
+let
+req0nbrFired= if req0DoFire(p0, p2,1) then 1
+		else 0;
+
+(p0_C, p2_C,p1_P, p3_P) = ((req0nbrFired * req0_p0_rate_in), (req0nbrFired * req0_p2_rate_in), (req0nbrFired * req0_p1_rate_out), (req0nbrFired * req0_p3_rate_out));
+
+tel;
+------------------
+node req0DoFire(p0, p2 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * req0_p0_rate_in)) 
+	and  (p2>=  (times * req0_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node reorder0(p0 :int) returns (p0_C, p1_P :int; reorder0nbrFired: int );
+
+let
+reorder0nbrFired= if reorder0DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((reorder0nbrFired * reorder0_p0_rate_in), (reorder0nbrFired * reorder0_p1_rate_out));
+
+tel;
+------------------
+node reorder0DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * reorder0_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node req1(p0, p2 :int) returns (p0_C, p1_P, p2_C, p3_P :int; req1nbrFired: int );
+
+let
+req1nbrFired= if req1DoFire(p0, p2,1) then 1
+		else 0;
+
+(p0_C, p2_C,p1_P, p3_P) = ((req1nbrFired * req1_p0_rate_in), (req1nbrFired * req1_p2_rate_in), (req1nbrFired * req1_p1_rate_out), (req1nbrFired * req1_p3_rate_out));
+
+tel;
+------------------
+node req1DoFire(p0, p2 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * req1_p0_rate_in)) 
+	and  (p2>=  (times * req1_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node reorder1(p0 :int) returns (p0_C, p1_P :int; reorder1nbrFired: int );
+
+let
+reorder1nbrFired= if reorder1DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((reorder1nbrFired * reorder1_p0_rate_in), (reorder1nbrFired * reorder1_p1_rate_out));
+
+tel;
+------------------
+node reorder1DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * reorder1_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node stereo(p0, p1 :int) returns (p0_C, p1_C, p2_P, p3_P :int; stereonbrFired: int );
+
+let
+stereonbrFired= if stereoDoFire(p0, p1,1) then 1
+		else 0;
+
+(p0_C, p1_C,p2_P, p3_P) = ((stereonbrFired * stereo_p0_rate_in), (stereonbrFired * stereo_p1_rate_in), (stereonbrFired * stereo_p2_rate_out), (stereonbrFired * stereo_p3_rate_out));
+
+tel;
+------------------
+node stereoDoFire(p0, p1 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * stereo_p0_rate_in)) 
+	and  (p1>=  (times * stereo_p1_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node antialias0(p0 :int) returns (p0_C, p1_P :int; antialias0nbrFired: int );
+
+let
+antialias0nbrFired= if antialias0DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((antialias0nbrFired * antialias0_p0_rate_in), (antialias0nbrFired * antialias0_p1_rate_out));
+
+tel;
+------------------
+node antialias0DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * antialias0_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node hybridsynth0(p0 :int) returns (p0_C, p1_P :int; hybridsynth0nbrFired: int );
+
+let
+hybridsynth0nbrFired= if hybridsynth0DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((hybridsynth0nbrFired * hybridsynth0_p0_rate_in), (hybridsynth0nbrFired * hybridsynth0_p1_rate_out));
+
+tel;
+------------------
+node hybridsynth0DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * hybridsynth0_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node freqinv0(p0 :int) returns (p0_C, p1_P :int; freqinv0nbrFired: int );
+
+let
+freqinv0nbrFired= if freqinv0DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((freqinv0nbrFired * freqinv0_p0_rate_in), (freqinv0nbrFired * freqinv0_p1_rate_out));
+
+tel;
+------------------
+node freqinv0DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * freqinv0_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node subbinv0(p0 :int) returns (p0_C, p1_P :int; subbinv0nbrFired: int );
+
+let
+subbinv0nbrFired= if subbinv0DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((subbinv0nbrFired * subbinv0_p0_rate_in), (subbinv0nbrFired * subbinv0_p1_rate_out));
+
+tel;
+------------------
+node subbinv0DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * subbinv0_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node antialias1(p0 :int) returns (p0_C, p1_P :int; antialias1nbrFired: int );
+
+let
+antialias1nbrFired= if antialias1DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((antialias1nbrFired * antialias1_p0_rate_in), (antialias1nbrFired * antialias1_p1_rate_out));
+
+tel;
+------------------
+node antialias1DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * antialias1_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node hybridsynth1(p0 :int) returns (p0_C, p1_P :int; hybridsynth1nbrFired: int );
+
+let
+hybridsynth1nbrFired= if hybridsynth1DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((hybridsynth1nbrFired * hybridsynth1_p0_rate_in), (hybridsynth1nbrFired * hybridsynth1_p1_rate_out));
+
+tel;
+------------------
+node hybridsynth1DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * hybridsynth1_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node freqinv1(p0 :int) returns (p0_C, p1_P :int; freqinv1nbrFired: int );
+
+let
+freqinv1nbrFired= if freqinv1DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((freqinv1nbrFired * freqinv1_p0_rate_in), (freqinv1nbrFired * freqinv1_p1_rate_out));
+
+tel;
+------------------
+node freqinv1DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * freqinv1_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node subbinv1(p0 :int) returns (p0_C, p1_P :int; subbinv1nbrFired: int );
+
+let
+subbinv1nbrFired= if subbinv1DoFire(p0,1) then 1
+		else 0;
+
+(p0_C,p1_P) = ((subbinv1nbrFired * subbinv1_p0_rate_in), (subbinv1nbrFired * subbinv1_p1_rate_out));
+
+tel;
+------------------
+node subbinv1DoFire(p0 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (p0>=  (times * subbinv1_p0_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (_: bool) returns (ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13, ch14, ch15, ch16, ch17, ch18, huffmannbrFired, req0nbrFired, reorder0nbrFired, req1nbrFired, reorder1nbrFired, stereonbrFired, antialias0nbrFired, hybridsynth0nbrFired, freqinv0nbrFired, subbinv0nbrFired, antialias1nbrFired, hybridsynth1nbrFired, freqinv1nbrFired, subbinv1nbrFired: int);
+
+var
+
+ch0_C, ch0_P: int; 
+ch1_C, ch1_P: int; 
+ch2_C, ch2_P: int; 
+ch3_C, ch3_P: int; 
+ch4_C, ch4_P: int; 
+ch5_C, ch5_P: int; 
+ch6_C, ch6_P: int; 
+ch7_C, ch7_P: int; 
+ch8_C, ch8_P: int; 
+ch9_C, ch9_P: int; 
+ch10_C, ch10_P: int; 
+ch11_C, ch11_P: int; 
+ch12_C, ch12_P: int; 
+ch13_C, ch13_P: int; 
+ch14_C, ch14_P: int; 
+ch15_C, ch15_P: int; 
+ch16_C, ch16_P: int; 
+ch17_C, ch17_P: int; 
+ch18_C, ch18_P: int; 
+
+let
+
+ch0 = ch0_I -> pre  (  ( ch0-ch0_C)+ ch0_P);
+ch1 = ch1_I -> pre  (  ( ch1-ch1_C)+ ch1_P);
+ch2 = ch2_I -> pre  (  ( ch2-ch2_C)+ ch2_P);
+ch3 = ch3_I -> pre  (  ( ch3-ch3_C)+ ch3_P);
+ch4 = ch4_I -> pre  (  ( ch4-ch4_C)+ ch4_P);
+ch5 = ch5_I -> pre  (  ( ch5-ch5_C)+ ch5_P);
+ch6 = ch6_I -> pre  (  ( ch6-ch6_C)+ ch6_P);
+ch7 = ch7_I -> pre  (  ( ch7-ch7_C)+ ch7_P);
+ch8 = ch8_I -> pre  (  ( ch8-ch8_C)+ ch8_P);
+ch9 = ch9_I -> pre  (  ( ch9-ch9_C)+ ch9_P);
+ch10 = ch10_I -> pre  (  ( ch10-ch10_C)+ ch10_P);
+ch11 = ch11_I -> pre  (  ( ch11-ch11_C)+ ch11_P);
+ch12 = ch12_I -> pre  (  ( ch12-ch12_C)+ ch12_P);
+ch13 = ch13_I -> pre  (  ( ch13-ch13_C)+ ch13_P);
+ch14 = ch14_I -> pre  (  ( ch14-ch14_C)+ ch14_P);
+ch15 = ch15_I -> pre  (  ( ch15-ch15_C)+ ch15_P);
+ch16 = ch16_I -> pre  (  ( ch16-ch16_C)+ ch16_P);
+ch17 = ch17_I -> pre  (  ( ch17-ch17_C)+ ch17_P);
+ch18 = ch18_I -> pre  (  ( ch18-ch18_C)+ ch18_P);
+
+
+
+(ch0_P, ch1_P, ch14_C, ch14_P, ch17_C, ch18_C, huffmannbrFired) = huffman(ch14, ch17, ch18);
+(ch0_C, ch2_P, ch15_C, ch15_P, req0nbrFired) = req0(ch0, ch15);
+(ch2_C, ch4_P, reorder0nbrFired) = reorder0(ch2);
+(ch1_C, ch3_P, ch16_C, ch16_P, req1nbrFired) = req1(ch1, ch16);
+(ch3_C, ch5_P, reorder1nbrFired) = reorder1(ch3);
+(ch4_C, ch5_C, ch6_P, ch7_P, stereonbrFired) = stereo(ch4, ch5);
+(ch6_C, ch8_P, antialias0nbrFired) = antialias0(ch6);
+(ch8_C, ch10_P, hybridsynth0nbrFired) = hybridsynth0(ch8);
+(ch10_C, ch12_P, freqinv0nbrFired) = freqinv0(ch10);
+(ch12_C, ch17_P, subbinv0nbrFired) = subbinv0(ch12);
+(ch7_C, ch9_P, antialias1nbrFired) = antialias1(ch7);
+(ch9_C, ch11_P, hybridsynth1nbrFired) = hybridsynth1(ch9);
+(ch11_C, ch13_P, freqinv1nbrFired) = freqinv1(ch11);
+(ch13_C, ch18_P, subbinv1nbrFired) = subbinv1(ch13);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (_: bool ) returns (noError :bool)
+
+var
+
+ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13, ch14, ch15, ch16, ch17, ch18, huffmannbrFired, req0nbrFired, reorder0nbrFired, req1nbrFired, reorder1nbrFired, stereonbrFired, antialias0nbrFired, hybridsynth0nbrFired, freqinv0nbrFired, subbinv0nbrFired, antialias1nbrFired, hybridsynth1nbrFired, freqinv1nbrFired, subbinv1nbrFired: int;
+
+noDeadlock : bool;
+
+let
+
+assert ch0<=6 and ch1<=6 and  ch2<=6 and ch3<=6 and ch4<=6 and ch5<=6 and ch7<=6 and ch8<=6 and ch9<=6 and ch10<=6 and ch11<=6 and ch12<=6 and ch13<=6 and ch14<=6 and ch15<=6 and ch16<=6 and ch17<=6 and ch18<=6 ;
+
+(ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13, ch14, ch15, ch16, ch17, ch18, huffmannbrFired, req0nbrFired, reorder0nbrFired, req1nbrFired, reorder1nbrFired, stereonbrFired, antialias0nbrFired, hybridsynth0nbrFired, freqinv0nbrFired, subbinv0nbrFired, antialias1nbrFired, hybridsynth1nbrFired, freqinv1nbrFired, subbinv1nbrFired)=top(_); 
+
+
+noDeadlock = ( huffmannbrFired >= 1) 
+	or  ( req0nbrFired >= 1) 
+	or  ( reorder0nbrFired >= 1) 
+	or  ( req1nbrFired >= 1) 
+	or  ( reorder1nbrFired >= 1) 
+	or  ( stereonbrFired >= 1) 
+	or  ( antialias0nbrFired >= 1) 
+	or  ( hybridsynth0nbrFired >= 1) 
+	or  ( freqinv0nbrFired >= 1) 
+	or  ( subbinv0nbrFired >= 1) 
+	or  ( antialias1nbrFired >= 1) 
+	or  ( hybridsynth1nbrFired >= 1) 
+	or  ( freqinv1nbrFired >= 1) 
+	or  ( subbinv1nbrFired >= 1);
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+tel 
+

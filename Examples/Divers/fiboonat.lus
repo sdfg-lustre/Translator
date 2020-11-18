@@ -1,0 +1,17 @@
+--const inx=3;const outx=2; 
+--const iny=1;const outy=1;
+
+node top (in:bool) returns (f2: int);
+var f0 , f1: int ;
+
+let
+--f2= if (pre f2 > 40) then (f0+f1) else 3;
+f2= f0+f1;
+f1= 5->pre f2;
+f0= 3->pre f1;
+
+--   var e0: bool;
+--   (eO, out) = if (in and (pred (e0)) and (not pred (e1))) then (0,0,0);
+
+--  assert (y < 3);
+tel

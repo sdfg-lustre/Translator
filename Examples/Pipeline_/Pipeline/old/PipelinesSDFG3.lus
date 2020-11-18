@@ -1,0 +1,49 @@
+const IN_X=1;	const OUT_X=1; const X0=0; 
+const IN_Y=1;	const OUT_Y=1; const Y0=0;
+const IN_Z=1;	const OUT_Z=1; const Z0=1;
+const IN_V=1;	const OUT_V=1; const V0=1;
+const IN_W=1;	const OUT_W=1; const W0=3;
+const IN_Wbis=1;	const OUT_Wbis=1; const Wbis0=30;
+const IN_A=1;
+const OUT_B=1; const B0=0;
+
+node top1 (A:bool) returns (X, Y, Z, V, W, B, Wbis: int; preTa,  Ta, start, wait: bool);
+
+var  prodX, consX, prodY, consY, 
+ prodZ, consZ, delayedZ, 
+prodV, consV, delayedV,  
+prodW, consW, delayedW, 
+prodWbis, consWbis, delayedWbis, 
+prodB,  delayedB, 
+X1, Y1, Z1, V1, W1, B1, Wbis1: int;
+ 
+
+let
+
+  start=A and (Wbis>=IN_Wbis);
+  (prodX, prodY, consWbis) =  if  start then (OUT_X,OUT_Y, IN_Wbis) else (0,0,0);
+
+  wait=(X >=IN_X and V >=IN_V);
+  (consX, consV, delayedV, delayedZ) =  if  wait then (IN_X, IN_V, OUT_V, OUT_Z) else (0,0,0,0);
+   prodV= 0->(pre delayedV);
+   prodZ= 0->(pre delayedZ);
+
+  Ta=(Y>= IN_Y and Z >=IN_Z and W >=IN_W );
+preTa= false -> pre Ta;
+   (consZ, consY, consW, delayedW, delayedB, delayedWbis) =  if  Ta then (IN_Z, IN_Y, IN_W, OUT_W,OUT_B, OUT_Wbis) else (0,0,0,0,0,0);
+  prodW= 0->(pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre delayedW)))))))))));
+  prodB= 0->(pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre delayedB)))))))))));
+  prodWbis= 0->(pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre (0-> (pre delayedWbis)))))))))));
+ -- prodB= 0->(pre (0-> (pre (0-> (pre (0-> (pre delayedB)))))));  
+
+
+X1= (X- consX+ prodX);   X= X0-> (pre X1);
+Y1= (Y- consY+ prodY);   Y= Y0-> (pre Y1);
+Z1= (Z- consZ+ prodZ);   Z= Z0-> (pre Z1);
+V1= (V- consV+ prodV);     V= V0-> (pre V1);
+W1= (W- consW+ prodW);     W= W0-> (pre W1);
+B1= (B + prodB);           B= B0-> (pre B1);
+Wbis1= (Wbis - consWbis+ prodWbis);           Wbis= Wbis0-> (pre Wbis1);
+
+--blocage= (Ta=0) and (start=0) and ((pre delayedY)=0) and ((pre delayedX)=0);
+tel

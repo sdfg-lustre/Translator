@@ -1,0 +1,17 @@
+Fifo sizing:
+
+Figure ? presents an SDFG of a producer-consumer in which the edge from consumer to producer with 2 tokens models a FIFO with a  capacity of two tokens. Figure ? models both  the producer-consumer system and its   environment, where So and Si are respectivly the source and the sink actors.  These actors are given a WCET equal to the length of their strict periodic clock (2ms); the self edge with one initial token ensures that the next execution  of the source and the sink actor cannot start before the next execution is finished.  The input (output) FIFO has three (four) buffers. 
+Does this model garanteed that 
+ To guaranteed that in the system implementation no data is lost due to overflow or underflow of the buffers between the system and the enviroenemt, the model should  verify that the time between successive executions of the  source as well  as the sink actor is equal to the WCET of theses actors: 
+
+If the model  verifies that the time between successive executions of the  source as well  as the sink actor is equal to the WCET of theses actors: 
+
+noError=   UsrIntEq(SonbrFired, UsrInt_0)=> UsrIntEq(pre  SonbrFired, UsrInt_1);
+
+noError=  (if  UsrIntLte(x, UsrInt_5) then true else ( UsrIntEq(SinbrFired, UsrInt_1)=> UsrIntEq(pre pre SinbrFired, UsrInt_1)));
+
+
+
+-consumer model where the the capacity  of two actors
+Properties:
+-

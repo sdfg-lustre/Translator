@@ -1,0 +1,13 @@
+const inx=3;const outx=2; 
+const iny=1;const outy=1;
+
+node top1 (y0:int) returns (y: int; x: bool);
+
+
+let
+   
+   y= 2-> (if ((pre y)= 2 )then 1 else 2);
+   x= true -> (if (y>0) then true else false) ;
+
+--  assert (y < 3);
+tel

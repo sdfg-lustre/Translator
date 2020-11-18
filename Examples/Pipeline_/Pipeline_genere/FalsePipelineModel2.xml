@@ -1,0 +1,25 @@
+<sdf name="example" nberBit="8" maxValue="8">
+  
+   <actor name="Wait" duration="8" maxAutoConcurrences="1">
+        <port name="A" type="in" rate="1"/>
+       <port name="W" type="in"  rate="1" />
+        <port name="Vin" type="in"  rate="1" />
+        <port name="Vout" type="out"  rate="1" />
+        <port name="Z" type="out"  rate="1" />
+    </actor>
+
+  <actor name="Ta" duration="2" maxAutoConcurrences="3">
+        <port name="Z" type="in" rate="1"/>
+       <port name="W" type="out"  rate="1" />
+    </actor>
+  
+ 
+    <channel name = "V" srcActor="Wait" srcPort="Vout" dstActor="Wait" dstPort="Vin" initialTokens="1"/>    
+ 
+    <channel name = "W" srcActor="Ta" srcPort="W" dstActor="Wait" dstPort="W" initialTokens="3"/>  
+    <channel name = "Z" srcActor="Wait" srcPort="Z" dstActor="Ta" dstPort="Z" initialTokens="0"/>  
+    <driver name="A" actorDest="Wait" portDest="A"/>
+     
+   
+ 
+ </sdf>

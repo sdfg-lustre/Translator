@@ -1,0 +1,68 @@
+<sdf name="example" nberBit="8" maxValue="15">
+  
+   <actor name="F" duration="1" maxAutoConcurrences="1" maxStages="1" >
+ 
+        <port name="RF" type="in"  rate="1" />
+        <port name="FR" type="out"  rate="1" />
+        <port name="FM" type="out"  rate="1" />
+        <port name="FV" type="out"  rate="5" />
+        <port name="FI" type="out"  rate="5" />
+    </actor>
+
+ <actor name="R" duration="1" maxAutoConcurrences="1" maxStages="1">
+ 
+        <port name="FR" type="in"  rate="1" />
+        <port name="MR" type="in"  rate="1" />
+        <port name="IR" type="in"  rate="5" />
+        <port name="RF" type="out"  rate="1" />
+        <port name="RM" type="out"  rate="1" />
+  
+</actor>
+
+
+<actor name="M" duration="1" maxAutoConcurrences="1" maxStages="1">
+ 
+        <port name="FM" type="in"  rate="1" />
+        <port name="VM" type="in"  rate="5" />    
+        <port name="RM" type="in"  rate="1" />
+        <port name="MR" type="out"  rate="1" />
+
+</actor>
+
+<actor name="V" duration="1" maxAutoConcurrences="1" maxStages="1">
+ 
+       <port name="FV" type="in"  rate="1" />
+       <port name="VM" type="out"  rate="1" />    
+       <port name="VI" type="out"  rate="1" />
+        
+</actor>
+
+ 
+
+<actor name="I" duration="1" maxAutoConcurrences="1" maxStages="1">
+ 
+    <port name="FI" type="in"  rate="1" />
+    <port name="VI" type="in"  rate="1" />    
+    <port name="IR" type="out"  rate="1" />
+        
+</actor>
+
+
+    
+     <channel name = "FR" srcActor="F" srcPort="FR" dstActor="R" dstPort="FR" initialTokens="0"/>
+     <channel name = "FM" srcActor="F" srcPort="FM" dstActor="M" dstPort="FM" initialTokens="0"/>
+     <channel name = "FV" srcActor="F" srcPort="FV" dstActor="V" dstPort="FV" initialTokens="0"/>
+     <channel name = "FI" srcActor="F" srcPort="FI" dstActor="I" dstPort="FI" initialTokens="0"/>
+
+
+     <channel name = "RF" srcActor="R" srcPort="RF" dstActor="F" dstPort="RF" initialTokens="3"/>
+     <channel name = "RM" srcActor="R" srcPort="RM" dstActor="M" dstPort="RM" initialTokens="1"/>
+
+     <channel name = "MR" srcActor="M" srcPort="MR" dstActor="R" dstPort="MR" initialTokens="0"/>
+
+     <channel name = "VM" srcActor="V" srcPort="VM" dstActor="M" dstPort="VM" initialTokens="0"/>
+     <channel name = "VI" srcActor="V" srcPort="VI" dstActor="I" dstPort="VI" initialTokens="0"/>
+   
+     <channel name = "IR" srcActor="I" srcPort="IR" dstActor="R" dstPort="IR" initialTokens="0"/>
+
+ </sdf>

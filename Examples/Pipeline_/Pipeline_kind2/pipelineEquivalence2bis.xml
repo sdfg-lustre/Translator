@@ -1,0 +1,52 @@
+<sdf name="example" >
+  
+     <actor name="Wait" duration="3" maxAutoConcurrences="3" maxStages="3">
+        <port name="A" type="in" rate="1"/>
+       <port name="W" type="in"  rate="1" />
+        <port name="Vin" type="in"  rate="1" />
+        <port name="Vout" type="out"  rate="1" />
+        <port name="Z" type="out"  rate="1" />
+    </actor>
+
+  <actor name="Ta" duration="27" maxAutoConcurrences="3" maxStages="3">
+        <port name="Z" type="in" rate="1"/>
+       <port name="W" type="out"  rate="1" />
+    </actor>
+  
+   <actor name="WaitBis" duration="27" maxAutoConcurrences="3" maxStages="3">
+        <port name="A" type="in" rate="1"/>
+       <port name="W" type="in"  rate="1" />
+      
+        <port name="Z" type="out"  rate="1" />
+    </actor>
+
+  <actor name="TaBis" duration="3" maxAutoConcurrences="3" maxStages="3">
+        <port name="Z" type="in" rate="1"/>
+       <port name="W" type="out"  rate="1" />  
+      <port name="Vin" type="in"  rate="1" />
+        <port name="Vout" type="out"  rate="1" />
+    </actor>
+  
+ <actor name="inActor" duration="1" maxAutoConcurrences="1" maxStages="1">
+        <port name="input" type="in" rate="1"/>
+       <port name="out1" type="out"  rate="1" />  
+      <port name="out2" type="out"  rate="1" />
+ 
+    </actor>
+  
+     <channel name = "drive1" srcActor="inActor" srcPort="out1" dstActor="Wait" dstPort="A" initialTokens="0"/>  
+   <channel name = "V" srcActor="Wait" srcPort="Vout" dstActor="Wait" dstPort="Vin" initialTokens="1"/>    
+    <channel name = "W" srcActor="Ta" srcPort="W" dstActor="Wait" dstPort="W" initialTokens="8"/>  
+    <channel name = "Z" srcActor="Wait" srcPort="Z" dstActor="Ta" dstPort="Z" initialTokens="0"/>  
+
+
+     <channel name = "drive2" srcActor="inActor" srcPort="out2" dstActor="WaitBis" dstPort="A" initialTokens="0"/>  
+    <channel name = "Vbis" srcActor="TaBis" srcPort="Vout" dstActor="TaBis" dstPort="Vin" initialTokens="1"/>    
+ 
+    <channel name = "Wbis" srcActor="TaBis" srcPort="W" dstActor="WaitBis" dstPort="W" initialTokens="8"/>  
+    <channel name = "Zbis" srcActor="WaitBis" srcPort="Z" dstActor="TaBis" dstPort="Z" initialTokens="0"/>  
+    
+
+    <driver name="In" dstActor="inActor" dstPort="input"/>
+ 
+ </sdf>

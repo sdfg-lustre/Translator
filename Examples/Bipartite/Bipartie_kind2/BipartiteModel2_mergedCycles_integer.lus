@@ -1,0 +1,248 @@
+--** This lustre code is generated automatically on 22 août 2020 10:24:42 AM
+--** It corresponds to the translation of an SDFG model (bipartite)  to Lustre. This version produce a Lustre code having a reduced number of steps.
+
+
+
+
+--**************** Const Rates ****************--
+
+const a_p1_rate_out = 3;
+const a_p2_rate_out = 4;
+const a_ca_rate_in = 3;
+const a_da_rate_in = 4;
+const b_p1_rate_out = 1;
+const b_p2_rate_out = 4;
+const b_cb_rate_in = 1;
+const b_db_rate_in = 4;
+const c_p1_rate_in = 4;
+const c_p2_rate_in = 4;
+const c_ca_rate_out = 4;
+const c_cb_rate_out = 4;
+const d_p1_rate_in = 3;
+const d_p2_rate_in = 9;
+const d_da_rate_out = 3;
+const d_db_rate_out = 9;
+
+--****************  Actors' durations ****************--
+
+const a_maxStages  = 1;
+const a_duration  = 1;
+const b_maxStages  = 1;
+const b_duration  = 1;
+const c_maxStages  = 1;
+const c_duration  = 1;
+const d_maxStages  = 1;
+const d_duration  = 1;
+const  maxDuration  = 1;
+
+--**************** Init Channel ****************--
+
+const ch1_I = 0;
+const ch2_I = 0;
+const ch3_I = 0;
+const ch4_I = 0;
+const ca_I = 6;
+const cb_I = 4;
+const da_I = 6;
+const db_I = 12;
+
+
+--************************************************--
+--******* Translation of Actor: a***************--
+--************************************************--
+node a(clock, ca, da :int) returns (nextClock, p1_P, p2_P, ca_C, da_C :int; nbrFired, nbrRuns: int );
+
+var
+nbrEnd: int;
+let
+nbrFired= if aDoFire(ca, da,2) then 2
+		else if aDoFire(ca, da,1) then 1
+		else 0;
+
+(ca_C, da_C) = ((nbrFired * a_ca_rate_in), (nbrFired * a_da_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(p1_P, p2_P) = ((nbrEnd * a_p1_rate_out), (nbrEnd * a_p2_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+nbrRuns= nbrFired  -> (pre nbrRuns) + nbrFired - nbrEnd ; 
+
+tel;
+------------------subnode Dofire of Actora-----------------
+node aDoFire(ca, da,times:int) returns ( yes: bool);
+let
+
+yes = if (ca>=  (times * a_ca_rate_in)) 
+	and (da>=  (times * a_da_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: b***************--
+--************************************************--
+node b(clock, cb, db :int) returns (nextClock, p1_P, p2_P, cb_C, db_C :int; nbrFired, nbrRuns: int );
+
+var
+nbrEnd: int;
+let
+nbrFired= if bDoFire(cb, db,2) then 2
+		else if bDoFire(cb, db,1) then 1
+		else 0;
+
+(cb_C, db_C) = ((nbrFired * b_cb_rate_in), (nbrFired * b_db_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(p1_P, p2_P) = ((nbrEnd * b_p1_rate_out), (nbrEnd * b_p2_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+nbrRuns= nbrFired  -> (pre nbrRuns) + nbrFired - nbrEnd ; 
+
+tel;
+------------------subnode Dofire of Actorb-----------------
+node bDoFire(cb, db,times:int) returns ( yes: bool);
+let
+
+yes = if (cb>=  (times * b_cb_rate_in)) 
+	and (db>=  (times * b_db_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: c***************--
+--************************************************--
+node c(clock, p1, p2 :int) returns (nextClock, p1_C, p2_C, ca_P, cb_P :int; nbrFired, nbrRuns: int );
+
+var
+nbrEnd: int;
+let
+nbrFired= if cDoFire(p1, p2,2) then 2
+		else if cDoFire(p1, p2,1) then 1
+		else 0;
+
+(p1_C, p2_C) = ((nbrFired * c_p1_rate_in), (nbrFired * c_p2_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(ca_P, cb_P) = ((nbrEnd * c_ca_rate_out), (nbrEnd * c_cb_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+nbrRuns= nbrFired  -> (pre nbrRuns) + nbrFired - nbrEnd ; 
+
+tel;
+------------------subnode Dofire of Actorc-----------------
+node cDoFire(p1, p2,times:int) returns ( yes: bool);
+let
+
+yes = if (p1>=  (times * c_p1_rate_in)) 
+	and (p2>=  (times * c_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: d***************--
+--************************************************--
+node d(clock, p1, p2 :int) returns (nextClock, p1_C, p2_C, da_P, db_P :int; nbrFired, nbrRuns: int );
+
+var
+nbrEnd: int;
+let
+nbrFired= if dDoFire(p1, p2,2) then 2
+		else if dDoFire(p1, p2,1) then 1
+		else 0;
+
+(p1_C, p2_C) = ((nbrFired * d_p1_rate_in), (nbrFired * d_p2_rate_in));
+
+nbrEnd = 0 -> pre nbrFired  ;
+(da_P, db_P) = ((nbrEnd * d_da_rate_out), (nbrEnd * d_db_rate_out));
+
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+nbrRuns= nbrFired  -> (pre nbrRuns) + nbrFired - nbrEnd ; 
+
+tel;
+------------------subnode Dofire of Actord-----------------
+node dDoFire(p1, p2,times:int) returns ( yes: bool);
+let
+
+yes = if (p1>=  (times * d_p1_rate_in)) 
+	and (p2>=  (times * d_p2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (_: bool) returns ( clock, ch1, ch2, ch3, ch4, ca, cb, da, db, anbrFired, bnbrFired, cnbrFired, dnbrFired:int);
+
+var
+
+ch1_C, ch1_P: int; 
+ch2_C, ch2_P: int; 
+ch3_C, ch3_P: int; 
+ch4_C, ch4_P: int; 
+ca_C, ca_P: int; 
+cb_C, cb_P: int; 
+da_C, da_P: int; 
+db_C, db_P: int; 
+anextClock : int;  
+bnextClock : int;  
+cnextClock : int;  
+dnextClock : int;  
+anbrRuns, bnbrRuns, cnbrRuns, dnbrRuns : int; 
+
+positiveValues: bool; 
+
+let
+
+ch1 = ch1_I ->  ( pre ( ch1 - ch1_C) + ch1_P);
+ch2 = ch2_I ->  ( pre ( ch2 - ch2_C) + ch2_P);
+ch3 = ch3_I ->  ( pre ( ch3 - ch3_C) + ch3_P);
+ch4 = ch4_I ->  ( pre ( ch4 - ch4_C) + ch4_P);
+ca = ca_I ->  ( pre ( ca - ca_C) + ca_P);
+cb = cb_I ->  ( pre ( cb - cb_C) + cb_P);
+da = da_I ->  ( pre ( da - da_C) + da_P);
+db = db_I ->  ( pre ( db - db_C) + db_P);
+
+
+
+
+(anextClock, ch1_P, ch2_P, ca_C, da_C, anbrFired, anbrRuns ) = a(clock, ca, da);
+(bnextClock, ch3_P, ch4_P, cb_C, db_C, bnbrFired, bnbrRuns ) = b(clock, cb, db);
+(cnextClock, ch1_C, ch3_C, ca_P, cb_P, cnbrFired, cnbrRuns ) = c(clock, ch1, ch3);
+(dnextClock, ch2_C, ch4_C, da_P, db_P, dnbrFired, dnbrRuns ) = d(clock, ch2, ch4);
+
+clock= Min(anextClock , Min(bnextClock , Min(cnextClock , dnextClock)));
+
+
+
+positiveValues = ( ch1 >= 0) 
+	and ( ch2 >= 0) 
+	and ( ch3 >= 0) 
+	and ( ch4 >= 0) 
+	and ( ca >= 0) 
+	and ( cb >= 0) 
+	and ( da >= 0) 
+	and ( db >= 0) 
+	and ( anbrFired  >=  0) 
+	and ( bnbrFired  >=  0) 
+	and ( cnbrFired  >=  0) 
+	and ( dnbrFired  >=  0) ;
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+
+
+tel;
+
+

@@ -1,0 +1,33 @@
+<sdf name="example" >
+  
+   <actor name="a" duration="2" maxAutoConcurrences="1" maxStages="2">
+        <port name="e1in" type="in" rate="1"/>
+        <port name="e1out" type="out" rate="1"/>
+        <port name="e2" type="out"  rate="1" />
+  
+    </actor>
+
+ <actor name="b" duration="1" maxAutoConcurrences="2" maxStages="1">
+        <port name="e2" type="in" rate="1"/>
+        <port name="e4" type="in"  rate="2" />
+        <port name="e3" type="out"  rate="2" />
+  
+    </actor>
+
+ <actor name="c" duration="1" maxAutoConcurrences="2" maxStages="1">
+        <port name="e3" type="in" rate="3"/>
+  
+        <port name="e4" type="out"  rate="3" />
+ 
+  
+    </actor>
+
+    <channel name = "e2" srcActor="a" srcPort="e2" dstActor="b" dstPort="e2" initialTokens="1"/>    
+ 
+    <channel name = "e3" srcActor="b" srcPort="e3" dstActor="c" dstPort="e3" initialTokens="3"/>  
+    <channel name = "e4" srcActor="c" srcPort="e4" dstActor="b" dstPort="e4" initialTokens="1"/>  
+    <channel name = "e1" srcActor="a" srcPort="e1out" dstActor="a" dstPort="e1in" initialTokens="1"/>  
+ 
+   
+ 
+ </sdf>

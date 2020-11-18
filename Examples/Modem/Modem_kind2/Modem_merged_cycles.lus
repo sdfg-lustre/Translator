@@ -1,0 +1,742 @@
+--** This lustre code is generated automatically on 18 nov. 2020 10:29:12 AM
+--** It corresponds to the translation of an SDFG model (modem)  to Lustre. This version produce a Lustre code having a reduced number of steps.
+
+
+
+
+--**************** Const Rates ****************--
+
+const fork1_p_in_rate_in = 1;
+const fork1_p_out1_rate_out = 1;
+const fork1_p_out2_rate_out = 1;
+const fork1__p4_rate_out = 1;
+const fork1__p5_rate_in = 1;
+const biq_p_in_rate_in = 1;
+const biq_p_out_rate_out = 1;
+const biq__p3_rate_out = 1;
+const biq__p4_rate_in = 1;
+const bi_p_in_rate_in = 1;
+const bi_p_out_rate_out = 1;
+const bi__p3_rate_out = 1;
+const bi__p4_rate_in = 1;
+const add_p_in1_rate_in = 1;
+const add_p_in2_rate_in = 1;
+const add_p_out_rate_out = 1;
+const add__p4_rate_out = 1;
+const add__p5_rate_in = 1;
+const ac_p_in_rate_in = 1;
+const ac_p_out_rate_out = 2;
+const ac__p3_rate_out = 1;
+const ac__p4_rate_in = 1;
+const fork2_p_in_rate_in = 1;
+const fork2_p_out1_rate_out = 1;
+const fork2_p_out2_rate_out = 1;
+const fork2__p4_rate_out = 1;
+const fork2__p5_rate_in = 1;
+const conj_p_in_rate_in = 2;
+const conj_p_out_rate_out = 2;
+const conj__p3_rate_out = 1;
+const conj__p4_rate_in = 1;
+const mul1_p_in1_rate_in = 2;
+const mul1_p_in2_rate_in = 2;
+const mul1_p_out_rate_out = 2;
+const mul1__p4_rate_out = 1;
+const mul1__p5_rate_in = 1;
+const in_p_out_rate_out = 1;
+const in__p2_rate_out = 1;
+const in__p3_rate_in = 1;
+const filt_p_in_rate_in = 1;
+const filt_p_out_rate_out = 1;
+const filt__p3_rate_out = 1;
+const filt__p4_rate_in = 1;
+const hil_p_in_rate_in = 8;
+const hil_p_out_rate_out = 2;
+const hil__p3_rate_out = 1;
+const hil__p4_rate_in = 1;
+const eq_p_in1_rate_in = 4;
+const eq_p_in2_rate_in = 2;
+const eq_p_out_rate_out = 2;
+const eq__p4_rate_out = 1;
+const eq__p5_rate_in = 1;
+const mul2_p_in1_rate_in = 2;
+const mul2_p_in2_rate_in = 2;
+const mul2_p_out_rate_out = 2;
+const mul2__p4_rate_out = 1;
+const mul2__p5_rate_in = 1;
+const deci_p_in_rate_in = 2;
+const deci_p_out1_rate_out = 2;
+const deci_p_out2_rate_out = 2;
+const deci_p_out3_rate_out = 1;
+const deci__p5_rate_out = 1;
+const deci__p6_rate_in = 1;
+const deco_p_in_rate_in = 2;
+const deco_p_out_rate_out = 1;
+const deco__p3_rate_out = 1;
+const deco__p4_rate_in = 1;
+const out_p_in_rate_in = 1;
+const out__p2_rate_out = 1;
+const out__p3_rate_in = 1;
+
+--****************  Actors' durations ****************--
+
+const fork1_maxStages  = 1;
+const fork1_duration  = 1;
+const biq_maxStages  = 1;
+const biq_duration  = 1;
+const bi_maxStages  = 1;
+const bi_duration  = 1;
+const add_maxStages  = 1;
+const add_duration  = 1;
+const ac_maxStages  = 1;
+const ac_duration  = 1;
+const fork2_maxStages  = 1;
+const fork2_duration  = 1;
+const conj_maxStages  = 1;
+const conj_duration  = 1;
+const mul1_maxStages  = 1;
+const mul1_duration  = 1;
+const in_maxStages  = 1;
+const in_duration  = 1;
+const filt_maxStages  = 1;
+const filt_duration  = 1;
+const hil_maxStages  = 1;
+const hil_duration  = 1;
+const eq_maxStages  = 1;
+const eq_duration  = 1;
+const mul2_maxStages  = 1;
+const mul2_duration  = 1;
+const deci_maxStages  = 1;
+const deci_duration  = 1;
+const deco_maxStages  = 1;
+const deco_duration  = 1;
+const out_maxStages  = 1;
+const out_duration  = 1;
+const  maxDuration  = 1;
+
+--**************** Init Channel ****************--
+
+const a_I = 0;
+const b_I = 0;
+const c_I = 0;
+const d_I = 0;
+const e_I = 0;
+const f_I = 0;
+const g_I = 0;
+const h_I = 0;
+const i_I = 0;
+const j_I = 0;
+const k_I = 2;
+const l_I = 0;
+const m_I = 0;
+const n_I = 0;
+const o_I = 0;
+const p_I = 0;
+const q_I = 0;
+const r_I = 0;
+const s_I = 1;
+const _ch20_I = 1;
+const _ch21_I = 1;
+const _ch22_I = 1;
+const _ch23_I = 1;
+const _ch24_I = 1;
+const _ch25_I = 1;
+const _ch26_I = 1;
+const _ch27_I = 1;
+const _ch28_I = 1;
+const _ch29_I = 1;
+const _ch30_I = 1;
+const _ch31_I = 1;
+const _ch32_I = 1;
+const _ch33_I = 1;
+const _ch34_I = 1;
+const _ch35_I = 1;
+
+
+--************************************************--
+--******* Translation of Actor: fork1***************--
+--************************************************--
+node fork1(clock, p_in, _p5 :int) returns (nextClock, p_in_C, p_out1_P, p_out2_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if fork1DoFire(p_in, _p5,1) then 1
+		else 0;
+
+(p_in_C, _p5_C) = ((nbrFired * fork1_p_in_rate_in), (nbrFired * fork1__p5_rate_in));
+
+(p_out1_P, p_out2_P, _p4_P) = ((nbrEnd * fork1_p_out1_rate_out), (nbrEnd * fork1_p_out2_rate_out), (nbrEnd * fork1__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorfork1-----------------
+node fork1DoFire(p_in, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * fork1_p_in_rate_in)) 
+	and (_p5>=  (times * fork1__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: biq***************--
+--************************************************--
+node biq(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if biqDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * biq_p_in_rate_in), (nbrFired * biq__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * biq_p_out_rate_out), (nbrEnd * biq__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorbiq-----------------
+node biqDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * biq_p_in_rate_in)) 
+	and (_p4>=  (times * biq__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: bi***************--
+--************************************************--
+node bi(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if biDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * bi_p_in_rate_in), (nbrFired * bi__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * bi_p_out_rate_out), (nbrEnd * bi__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorbi-----------------
+node biDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * bi_p_in_rate_in)) 
+	and (_p4>=  (times * bi__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: add***************--
+--************************************************--
+node add(clock, p_in1, p_in2, _p5 :int) returns (nextClock, p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if addDoFire(p_in1, p_in2, _p5,1) then 1
+		else 0;
+
+(p_in1_C, p_in2_C, _p5_C) = ((nbrFired * add_p_in1_rate_in), (nbrFired * add_p_in2_rate_in), (nbrFired * add__p5_rate_in));
+
+(p_out_P, _p4_P) = ((nbrEnd * add_p_out_rate_out), (nbrEnd * add__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actoradd-----------------
+node addDoFire(p_in1, p_in2, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in1>=  (times * add_p_in1_rate_in)) 
+	and (p_in2>=  (times * add_p_in2_rate_in)) 
+	and (_p5>=  (times * add__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: ac***************--
+--************************************************--
+node ac(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if acDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * ac_p_in_rate_in), (nbrFired * ac__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * ac_p_out_rate_out), (nbrEnd * ac__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorac-----------------
+node acDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * ac_p_in_rate_in)) 
+	and (_p4>=  (times * ac__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: fork2***************--
+--************************************************--
+node fork2(clock, p_in, _p5 :int) returns (nextClock, p_in_C, p_out1_P, p_out2_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if fork2DoFire(p_in, _p5,1) then 1
+		else 0;
+
+(p_in_C, _p5_C) = ((nbrFired * fork2_p_in_rate_in), (nbrFired * fork2__p5_rate_in));
+
+(p_out1_P, p_out2_P, _p4_P) = ((nbrEnd * fork2_p_out1_rate_out), (nbrEnd * fork2_p_out2_rate_out), (nbrEnd * fork2__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorfork2-----------------
+node fork2DoFire(p_in, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * fork2_p_in_rate_in)) 
+	and (_p5>=  (times * fork2__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: conj***************--
+--************************************************--
+node conj(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if conjDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * conj_p_in_rate_in), (nbrFired * conj__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * conj_p_out_rate_out), (nbrEnd * conj__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorconj-----------------
+node conjDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * conj_p_in_rate_in)) 
+	and (_p4>=  (times * conj__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: mul1***************--
+--************************************************--
+node mul1(clock, p_in1, p_in2, _p5 :int) returns (nextClock, p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if mul1DoFire(p_in1, p_in2, _p5,1) then 1
+		else 0;
+
+(p_in1_C, p_in2_C, _p5_C) = ((nbrFired * mul1_p_in1_rate_in), (nbrFired * mul1_p_in2_rate_in), (nbrFired * mul1__p5_rate_in));
+
+(p_out_P, _p4_P) = ((nbrEnd * mul1_p_out_rate_out), (nbrEnd * mul1__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actormul1-----------------
+node mul1DoFire(p_in1, p_in2, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in1>=  (times * mul1_p_in1_rate_in)) 
+	and (p_in2>=  (times * mul1_p_in2_rate_in)) 
+	and (_p5>=  (times * mul1__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: in***************--
+--************************************************--
+node in(clock, _p3 :int) returns (nextClock, p_out_P, _p2_P, _p3_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if inDoFire(_p3,1) then 1
+		else 0;
+
+(_p3_C) = ((nbrFired * in__p3_rate_in));
+
+(p_out_P, _p2_P) = ((nbrEnd * in_p_out_rate_out), (nbrEnd * in__p2_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorin-----------------
+node inDoFire(_p3,times:int) returns ( yes: bool);
+let
+
+yes = if (_p3>=  (times * in__p3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: filt***************--
+--************************************************--
+node filt(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if filtDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * filt_p_in_rate_in), (nbrFired * filt__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * filt_p_out_rate_out), (nbrEnd * filt__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorfilt-----------------
+node filtDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * filt_p_in_rate_in)) 
+	and (_p4>=  (times * filt__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: hil***************--
+--************************************************--
+node hil(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if hilDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * hil_p_in_rate_in), (nbrFired * hil__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * hil_p_out_rate_out), (nbrEnd * hil__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorhil-----------------
+node hilDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * hil_p_in_rate_in)) 
+	and (_p4>=  (times * hil__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: eq***************--
+--************************************************--
+node eq(clock, p_in1, p_in2, _p5 :int) returns (nextClock, p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if eqDoFire(p_in1, p_in2, _p5,1) then 1
+		else 0;
+
+(p_in1_C, p_in2_C, _p5_C) = ((nbrFired * eq_p_in1_rate_in), (nbrFired * eq_p_in2_rate_in), (nbrFired * eq__p5_rate_in));
+
+(p_out_P, _p4_P) = ((nbrEnd * eq_p_out_rate_out), (nbrEnd * eq__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actoreq-----------------
+node eqDoFire(p_in1, p_in2, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in1>=  (times * eq_p_in1_rate_in)) 
+	and (p_in2>=  (times * eq_p_in2_rate_in)) 
+	and (_p5>=  (times * eq__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: mul2***************--
+--************************************************--
+node mul2(clock, p_in1, p_in2, _p5 :int) returns (nextClock, p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if mul2DoFire(p_in1, p_in2, _p5,1) then 1
+		else 0;
+
+(p_in1_C, p_in2_C, _p5_C) = ((nbrFired * mul2_p_in1_rate_in), (nbrFired * mul2_p_in2_rate_in), (nbrFired * mul2__p5_rate_in));
+
+(p_out_P, _p4_P) = ((nbrEnd * mul2_p_out_rate_out), (nbrEnd * mul2__p4_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actormul2-----------------
+node mul2DoFire(p_in1, p_in2, _p5,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in1>=  (times * mul2_p_in1_rate_in)) 
+	and (p_in2>=  (times * mul2_p_in2_rate_in)) 
+	and (_p5>=  (times * mul2__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: deci***************--
+--************************************************--
+node deci(clock, p_in, _p6 :int) returns (nextClock, p_in_C, p_out1_P, p_out2_P, p_out3_P, _p5_P, _p6_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if deciDoFire(p_in, _p6,1) then 1
+		else 0;
+
+(p_in_C, _p6_C) = ((nbrFired * deci_p_in_rate_in), (nbrFired * deci__p6_rate_in));
+
+(p_out1_P, p_out2_P, p_out3_P, _p5_P) = ((nbrEnd * deci_p_out1_rate_out), (nbrEnd * deci_p_out2_rate_out), (nbrEnd * deci_p_out3_rate_out), (nbrEnd * deci__p5_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actordeci-----------------
+node deciDoFire(p_in, _p6,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * deci_p_in_rate_in)) 
+	and (_p6>=  (times * deci__p6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: deco***************--
+--************************************************--
+node deco(clock, p_in, _p4 :int) returns (nextClock, p_in_C, p_out_P, _p3_P, _p4_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if decoDoFire(p_in, _p4,1) then 1
+		else 0;
+
+(p_in_C, _p4_C) = ((nbrFired * deco_p_in_rate_in), (nbrFired * deco__p4_rate_in));
+
+(p_out_P, _p3_P) = ((nbrEnd * deco_p_out_rate_out), (nbrEnd * deco__p3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actordeco-----------------
+node decoDoFire(p_in, _p4,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * deco_p_in_rate_in)) 
+	and (_p4>=  (times * deco__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: out***************--
+--************************************************--
+node out(clock, p_in, _p3 :int) returns (nextClock, p_in_C, _p2_P, _p3_C :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if outDoFire(p_in, _p3,1) then 1
+		else 0;
+
+(p_in_C, _p3_C) = ((nbrFired * out_p_in_rate_in), (nbrFired * out__p3_rate_in));
+
+(_p2_P) = ((nbrEnd * out__p2_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorout-----------------
+node outDoFire(p_in, _p3,times:int) returns ( yes: bool);
+let
+
+yes = if (p_in>=  (times * out_p_in_rate_in)) 
+	and (_p3>=  (times * out__p3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (_: bool) returns ( adv, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, _ch20, _ch21, _ch22, _ch23, _ch24, _ch25, _ch26, _ch27, _ch28, _ch29, _ch30, _ch31, _ch32, _ch33, _ch34, _ch35, fork1nbrFired, biqnbrFired, binbrFired, addnbrFired, acnbrFired, fork2nbrFired, conjnbrFired, mul1nbrFired, innbrFired, filtnbrFired, hilnbrFired, eqnbrFired, mul2nbrFired, decinbrFired, deconbrFired, outnbrFired:int);
+
+var
+
+a_C, a_P: int; 
+b_C, b_P: int; 
+c_C, c_P: int; 
+d_C, d_P: int; 
+e_C, e_P: int; 
+f_C, f_P: int; 
+g_C, g_P: int; 
+h_C, h_P: int; 
+i_C, i_P: int; 
+j_C, j_P: int; 
+k_C, k_P: int; 
+l_C, l_P: int; 
+m_C, m_P: int; 
+n_C, n_P: int; 
+o_C, o_P: int; 
+p_C, p_P: int; 
+q_C, q_P: int; 
+r_C, r_P: int; 
+s_C, s_P: int; 
+_ch20_C, _ch20_P: int; 
+_ch21_C, _ch21_P: int; 
+_ch22_C, _ch22_P: int; 
+_ch23_C, _ch23_P: int; 
+_ch24_C, _ch24_P: int; 
+_ch25_C, _ch25_P: int; 
+_ch26_C, _ch26_P: int; 
+_ch27_C, _ch27_P: int; 
+_ch28_C, _ch28_P: int; 
+_ch29_C, _ch29_P: int; 
+_ch30_C, _ch30_P: int; 
+_ch31_C, _ch31_P: int; 
+_ch32_C, _ch32_P: int; 
+_ch33_C, _ch33_P: int; 
+_ch34_C, _ch34_P: int; 
+_ch35_C, _ch35_P: int; 
+fork1nextClock : int;  
+biqnextClock : int;  
+binextClock : int;  
+addnextClock : int;  
+acnextClock : int;  
+fork2nextClock : int;  
+conjnextClock : int;  
+mul1nextClock : int;  
+innextClock : int;  
+filtnextClock : int;  
+hilnextClock : int;  
+eqnextClock : int;  
+mul2nextClock : int;  
+decinextClock : int;  
+deconextClock : int;  
+outnextClock : int;  
+fork1nbrEnd, biqnbrEnd, binbrEnd, addnbrEnd, acnbrEnd, fork2nbrEnd, conjnbrEnd, mul1nbrEnd, innbrEnd, filtnbrEnd, hilnbrEnd, eqnbrEnd, mul2nbrEnd, decinbrEnd, deconbrEnd, outnbrEnd : int; 
+
+ noDeadlock: bool; 
+
+let
+
+a = a_I ->  ( pre ( a - a_C) + a_P);
+b = b_I ->  ( pre ( b - b_C) + b_P);
+c = c_I ->  ( pre ( c - c_C) + c_P);
+d = d_I ->  ( pre ( d - d_C) + d_P);
+e = e_I ->  ( pre ( e - e_C) + e_P);
+f = f_I ->  ( pre ( f - f_C) + f_P);
+g = g_I ->  ( pre ( g - g_C) + g_P);
+h = h_I ->  ( pre ( h - h_C) + h_P);
+i = i_I ->  ( pre ( i - i_C) + i_P);
+j = j_I ->  ( pre ( j - j_C) + j_P);
+k = k_I ->  ( pre ( k - k_C) + k_P);
+l = l_I ->  ( pre ( l - l_C) + l_P);
+m = m_I ->  ( pre ( m - m_C) + m_P);
+n = n_I ->  ( pre ( n - n_C) + n_P);
+o = o_I ->  ( pre ( o - o_C) + o_P);
+p = p_I ->  ( pre ( p - p_C) + p_P);
+q = q_I ->  ( pre ( q - q_C) + q_P);
+r = r_I ->  ( pre ( r - r_C) + r_P);
+s = s_I ->  ( pre ( s - s_C) + s_P);
+_ch20 = _ch20_I ->  ( pre ( _ch20 - _ch20_C) + _ch20_P);
+_ch21 = _ch21_I ->  ( pre ( _ch21 - _ch21_C) + _ch21_P);
+_ch22 = _ch22_I ->  ( pre ( _ch22 - _ch22_C) + _ch22_P);
+_ch23 = _ch23_I ->  ( pre ( _ch23 - _ch23_C) + _ch23_P);
+_ch24 = _ch24_I ->  ( pre ( _ch24 - _ch24_C) + _ch24_P);
+_ch25 = _ch25_I ->  ( pre ( _ch25 - _ch25_C) + _ch25_P);
+_ch26 = _ch26_I ->  ( pre ( _ch26 - _ch26_C) + _ch26_P);
+_ch27 = _ch27_I ->  ( pre ( _ch27 - _ch27_C) + _ch27_P);
+_ch28 = _ch28_I ->  ( pre ( _ch28 - _ch28_C) + _ch28_P);
+_ch29 = _ch29_I ->  ( pre ( _ch29 - _ch29_C) + _ch29_P);
+_ch30 = _ch30_I ->  ( pre ( _ch30 - _ch30_C) + _ch30_P);
+_ch31 = _ch31_I ->  ( pre ( _ch31 - _ch31_C) + _ch31_P);
+_ch32 = _ch32_I ->  ( pre ( _ch32 - _ch32_C) + _ch32_P);
+_ch33 = _ch33_I ->  ( pre ( _ch33 - _ch33_C) + _ch33_P);
+_ch34 = _ch34_I ->  ( pre ( _ch34 - _ch34_C) + _ch34_P);
+_ch35 = _ch35_I ->  ( pre ( _ch35 - _ch35_C) + _ch35_P);
+
+
+
+
+(fork1nextClock, s_C, a_P, b_P, _ch20_P, _ch20_C, fork1nbrFired, fork1nbrEnd ) = fork1(adv, s, _ch20);
+(biqnextClock, a_C, c_P, _ch21_P, _ch21_C, biqnbrFired, biqnbrEnd ) = biq(adv, a, _ch21);
+(binextClock, b_C, d_P, _ch22_P, _ch22_C, binbrFired, binbrEnd ) = bi(adv, b, _ch22);
+(addnextClock, c_C, d_C, e_P, _ch23_P, _ch23_C, addnbrFired, addnbrEnd ) = add(adv, c, d, _ch23);
+(acnextClock, e_C, f_P, _ch24_P, _ch24_C, acnbrFired, acnbrEnd ) = ac(adv, e, _ch24);
+(fork2nextClock, f_C, g_P, h_P, _ch25_P, _ch25_C, fork2nbrFired, fork2nbrEnd ) = fork2(adv, f, _ch25);
+(conjnextClock, g_C, i_P, _ch26_P, _ch26_C, conjnbrFired, conjnbrEnd ) = conj(adv, g, _ch26);
+(mul1nextClock, h_C, o_C, j_P, _ch27_P, _ch27_C, mul1nbrFired, mul1nbrEnd ) = mul1(adv, h, o, _ch27);
+(innextClock, l_P, _ch28_P, _ch28_C, innbrFired, innbrEnd ) = in(adv, _ch28);
+(filtnextClock, l_C, m_P, _ch29_P, _ch29_C, filtnbrFired, filtnbrEnd ) = filt(adv, l, _ch29);
+(hilnextClock, m_C, n_P, _ch30_P, _ch30_C, hilnbrFired, hilnbrEnd ) = hil(adv, m, _ch30);
+(eqnextClock, n_C, k_C, o_P, _ch31_P, _ch31_C, eqnbrFired, eqnbrEnd ) = eq(adv, n, k, _ch31);
+(mul2nextClock, i_C, p_C, k_P, _ch32_P, _ch32_C, mul2nbrFired, mul2nbrEnd ) = mul2(adv, i, p, _ch32);
+(decinextClock, j_C, p_P, q_P, s_P, _ch33_P, _ch33_C, decinbrFired, decinbrEnd ) = deci(adv, j, _ch33);
+(deconextClock, q_C, r_P, _ch34_P, _ch34_C, deconbrFired, deconbrEnd ) = deco(adv, q, _ch34);
+(outnextClock, r_C, _ch35_P, _ch35_C, outnbrFired, outnbrEnd ) = out(adv, r, _ch35);
+
+adv= Min(fork1nextClock , Min(biqnextClock , Min(binextClock , Min(addnextClock , Min(acnextClock , Min(fork2nextClock , Min(conjnextClock , Min(mul1nextClock , Min(innextClock , Min(filtnextClock , Min(hilnextClock , Min(eqnextClock , Min(mul2nextClock , Min(decinextClock , Min(deconextClock , outnextClock)))))))))))))));
+
+
+
+noDeadlock = ( fork1nbrRun >= 1) 
+	or  ( biqnbrRun >= 1) 
+	or  ( binbrRun >= 1) 
+	or  ( addnbrRun >= 1) 
+	or  ( acnbrRun >= 1) 
+	or  ( fork2nbrRun >= 1) 
+	or  ( conjnbrRun >= 1) 
+	or  ( mul1nbrRun >= 1) 
+	or  ( innbrRun >= 1) 
+	or  ( filtnbrRun >= 1) 
+	or  ( hilnbrRun >= 1) 
+	or  ( eqnbrRun >= 1) 
+	or  ( mul2nbrRun >= 1) 
+	or  ( decinbrRun >= 1) 
+	or  ( deconbrRun >= 1) 
+	or  ( outnbrRun >= 1);
+--%MAIN;
+
+--%PROPERTY  "no deadlock "  noDeadlock;
+
+
+tel;
+
+

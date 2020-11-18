@@ -1,0 +1,715 @@
+package SDFG2LUSTRE;
+
+/**
+ *
+ * Copyright 2020, Imed E. Bennour, National Engineering School at Sousse, All
+ * rights reserved
+ */
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+public class Translator {
+
+    public static void main(String[] args) throws IOException {
+        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try {
+            /*
+             * Step 1 : Parsing the XML file containing the SDFG"
+             */
+            final DocumentBuilder builder = factory.newDocumentBuilder();
+            final Document document = builder.parse(new File(args[0] + ".xml"));
+            final Element racine = document.getDocumentElement();
+            int nberBit = Integer.parseInt(racine.getAttribute("nberBit"));
+            String maxValue = racine.getAttribute("maxValue");
+            final NodeList racineNodes = racine.getChildNodes();
+            final int nbRacineNodes = racineNodes.getLength();
+            if (!BaliseErroné(racine)) {
+
+                int nbrActors = 0;
+                int nbrChannels = 0;
+                int nbrDriverActors = 0;
+                int nbrMonitorActors = 0;
+
+                for (int i = 0; i < nbRacineNodes; i++) {
+                    if (racineNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        if (racineNodes.item(i).getNodeName().equals("actor")) {
+                            nbrActors++;
+                        }
+                        if (racineNodes.item(i).getNodeName().equals("channel")) {
+                            nbrChannels++;
+                        }
+                        if (racineNodes.item(i).getNodeName().equals("driver")) {
+                            nbrDriverActors++;
+                        }
+                        if (racineNodes.item(i).getNodeName().equals("monitor")) {
+                            nbrMonitorActors++;
+                        }
+                    }
+                }
+
+                Actor[] actorsArray = new Actor[nbrActors];
+                Channel[] channelsArray = new Channel[nbrChannels];
+                DriverActor[] driversArray = new DriverActor[nbrDriverActors];
+                MonitorActor[] monitorsArray = new MonitorActor[nbrMonitorActors];
+
+                nbrActors = -1;
+                nbrChannels = -1;
+                nbrDriverActors = -1;
+                nbrMonitorActors = -1;
+
+                for (int i = 0; i < nbRacineNodes; i++) {
+                    if (racineNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        switch (racineNodes.item(i).getNodeName()) {
+                            case "actor":
+                                nbrActors++;
+                                NodeList Ports = racineNodes.item(i).getChildNodes();
+                                int nbrPorts = 0;
+                                for (int j = 0; j < Ports.getLength(); j++) {
+                                    if (Ports.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                        nbrPorts++;
+                                    }
+                                }
+                                Element p = (Element) racineNodes.item(i);
+                                actorsArray[nbrActors] = new Actor(p.getAttribute("name"), p.getAttribute("duration"), nbrPorts, Integer.parseInt(p.getAttribute("maxAutoConcurrences")), Integer.parseInt(p.getAttribute("maxStages")));
+                                for (int j = 0; j < Ports.getLength(); j++) {
+                                    if (Ports.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                        Element q = (Element) Ports.item(j);
+                                        actorsArray[nbrActors].addPort(q.getAttribute("name"), q.getAttribute("type"), q.getAttribute("rate"));
+                                    }
+                                }
+                                break;
+                            case "channel": {
+                                nbrChannels++;
+                                Element c = (Element) racineNodes.item(i);
+                                channelsArray[nbrChannels] = new Channel(c.getAttribute("name"), c.getAttribute("srcActor"),
+                                        c.getAttribute("srcPort"), c.getAttribute("dstActor"), c.getAttribute("dstPort"),
+                                        c.getAttribute("initialTokens"));
+                                break;
+                            }
+                            case "driver": {
+                                nbrDriverActors++;
+                                Element c = (Element) racineNodes.item(i);
+                                driversArray[nbrDriverActors] = new DriverActor(c.getAttribute("name"), c.getAttribute("actorDest"),
+                                        c.getAttribute("portDest"));
+                                break;
+                            }
+                            case "monitor": {
+                                nbrMonitorActors++;
+                                Element c = (Element) racineNodes.item(i);
+                                monitorsArray[nbrMonitorActors] = new MonitorActor(c.getAttribute("name"), c.getAttribute("srcActor"),
+                                        c.getAttribute("portSrc"));
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    }
+
+                }
+                /*
+                 * Step 2 : Checking  the XML file "
+                 */
+                int maxAutoConcurrences = Actor.getMaxAutoConcurrences();
+                VerifyXML verifyXML = new VerifyXML(channelsArray, actorsArray, driversArray, monitorsArray, racine);
+                if (verifyXML.fichierOK()) {
+                    System.out.println("fichier Ok");
+                    /*
+                     * Step 3 : starting the code generatig"
+                     */
+                    try {
+                        PrintWriter writer = new PrintWriter(args[0] +"_multiStep.lus", "UTF-8");
+                        /**
+                         *******Step 3.1: Generating all the constants*********
+                         */
+                        writer.println("include \"./toInclude_BitBlasting_ok.lus\"\n");
+                        writer.println("const maxValue = " + Actor.getBinaryRate(maxValue, nberBit));
+                        writer.println("\n--**************** Const Rates ****************--\n");
+                        for (int i = 0; i <= nbrActors; i++) {
+
+                            String[][] arrPort = actorsArray[i].getPortsArray();
+                            for (String[] s : arrPort) {
+                                writer.println("const " + actorsArray[i].getName() + "_" + s[0] + "_rate_" + s[1] + " = " + Actor.getBinaryRate(s[2], nberBit));
+                            }
+
+                        }
+
+                        writer.println("\n--****************  Actor'durations ****************--\n");
+                        int maxDuration = 0;
+                        for (int i = 0; i <= nbrActors; i++) {
+                            writer.println("const " + actorsArray[i].getName() + "_maxStages " + " = " + Actor.getBinaryRate(Integer.toString(actorsArray[i].getMaxStages()), nberBit));
+
+                            writer.println("const " + actorsArray[i].getName() + "_duration " + " = " + Actor.getBinaryRate(actorsArray[i].getDuration(), nberBit));
+                            if (maxDuration < Integer.parseInt(actorsArray[i].getDuration())) {
+                                maxDuration = Integer.parseInt(actorsArray[i].getDuration());
+                            }
+                        }
+                        Actor.maxDuration = Integer.toString(maxDuration);
+                        writer.println("const  maxDuration " + " = " + Actor.getBinaryRate(Actor.maxDuration, nberBit));
+
+                        writer.println("\n--**************** Init Channel ****************--\n");
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println("const " + channelsArray[i].getName() + "_I = " + Actor.getBinaryRate(channelsArray[i].getInitialTokens(), nberBit));
+                        }
+                        writer.println();
+                        for (DriverActor driver : driversArray) {
+                            writer.println("const " + driver.getName() + "_I = " + Actor.getBinaryRate("0", nberBit));
+                        }
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println("const " + monitor.getName() + "_I = " + Actor.getBinaryRate("0", nberBit));
+                        }
+
+                        /**
+                         ******************Step 3.2: Translation of Actors
+                         */
+                        for (int i = 0; i < nbrActors + 1; i++) {
+                            Actor actor = actorsArray[i];
+                            writer.println("\n--************************************************--");
+                            writer.println("--******* Translation of Actor: " + actor.getName() + "***************--");
+                            writer.println("--************************************************--");
+
+                            writer.print("node " + actor.getName() + "(clock, " + actor.getInput() + ")");
+                            writer.println(" returns (nextClock, " + actor.getOutput() + "; " + actor.getName() + "nbrFired: UsrInt );\n");
+
+                            // declaration of variables
+                            if (Integer.parseInt(actor.getDuration()) != 1) {
+                                //writer.println("const maxStages : " + Actor.getBinaryRate(Integer.toString(actor.getMaxStages()), nberBit));
+                                writer.println("var");
+                                writer.println("stage, last  :UsrInt;");
+                                writer.println(actor.getOutputProduceDelayed() + " :UsrInt;");
+                                for (int j = 1; j <= actor.getMaxStages(); j++) {
+                                    String st = "";
+                                    st += "rTime" + Integer.toString(j);
+                                    for (String[] s : actor.getPortsArray()) {
+                                        if (s[1].equals("out")) {
+                                            st += ", " + s[0] + "_P" + Integer.toString(j);
+                                        }
+                                    }
+                                    st += " : UsrInt; ";
+                                    writer.println(st);
+
+                                }
+                            }
+
+                            //generating the body of the actor
+                            writer.println("let");
+
+                            //the compting of the number of firings of the the actor
+                            String str = actor.getDoFireString(actor.getMaxAutoConc());
+
+                            writer.println(actor.getName() + "nbrFired= " + str + "\n");
+                            String st = actor.getOutputConsume();
+                            if (actor.getOutputConsume().equals("")) {
+                                st = actor.getOutputProduceDelayed();
+                            } else {
+                                if (Integer.parseInt(actor.getDuration()) != 1) {
+                                    st += "," + actor.getOutputProduceDelayed();
+                                } else {
+                                    st += "," + actor.getOutputProduce();
+                                }
+                            }
+                            writer.println("(" + st + ") = " + actor.getMultFired() + "\n");
+
+                            if (Integer.parseInt(actor.getDuration()) != 1) { //case of multi stage
+                                //the computing of the id of the next stage
+                                writer.println(actor.getNextstageString());
+
+                                //the calling of  the Stage nodes
+                                writer.println(actor.callStageNodesString());
+                            } else { //case of a single stage
+                                writer.println("nextClock = if UsrIntEq(" + actor.getName() + "nbrFired, UsrInt_0) then maxDuration else UsrInt_1;");
+                            }
+
+                            writer.println("tel;");
+
+                            /*
+                             ****************************************************************
+                             * **************** Generating subnode DoFire of the current  Actor
+                             ***************************************************************
+                             */
+                            writer.println("------------------subnode Dofire of Actor" + actor.getName() + "-----------------");
+                            writer.println("node " + actor.getName() + "DoFire("
+                                    + actor.getInput().replaceAll(" :UsrInt", ",") + "times:UsrInt) returns ( yes: bool);");
+                            writer.println("let\n");
+                            writer.println(actor.DoFireNodeString());
+                            writer.println("tel;");
+
+                            /* **************** Stages inner-nodes ********      */
+                            /* String s1= actor.getOutputProduceDelayed();
+                             if (!s1.equals("")) {
+                             for (int j = 0; j < actor.getMaxStages(); j++) { 
+                             writer.println("------------------");
+                             writer.print("node " + actor.getName() + "Stage"+ Integer.toString(j));
+
+                             String s=  "(clock, stage, " + s1 + ": UsrInt) returns (rTime, "+  actor.getOutputProduce()+ " : UsrInt);\n"  ;
+                             writer.println(s);
+
+                             writer.println(actor.StageNodesString(j));
+                             }*/
+                            /*
+                             ****************************************************************
+                             * **************** Generating subnode Stage 
+                             ***************************************************************
+                             */
+                            String s1 = actor.getOutputProduceDelayed();
+                            if (!s1.equals("") && (Integer.parseInt(actor.getDuration()) != 1)) {
+                                writer.println("------------------subnode Stage of Actor" + actor.getName() + "-----------------");
+                                writer.print("node " + actor.getName() + "Stage");
+
+                                String s = "(clock,  stage, numStage, " + s1 + ": UsrInt) returns (rTime, " + actor.getOutputProduce() + " : UsrInt);\n";
+                                writer.println(s);
+
+                                writer.println(actor.StageNodesString());
+
+                            }
+                        }
+
+                        /*
+                         ****************************************************************
+                         * **************** Generating node UsrIntMin 
+                         ***************************************************************
+                         */
+                        writer.println("--******* Node UsrIntMin***************--");
+                        writer.println("node UsrIntMin (x, y :UsrInt) returns ( r: UsrInt);");
+                        writer.println("let");
+                        writer.println("r= if UsrIntLt (x, y) then x else y;");
+                        writer.println("tel;");
+
+                        /*
+                         ****************************************************************
+                         * **************** Generating node Top 
+                         ***************************************************************
+                         */
+                        writer.println("\n--************************************************--");
+                        writer.println("--******* Node Top***************--");
+                        writer.println("--************************************************--");
+
+                        String topDriverInput = "";
+                        for (DriverActor driver : driversArray) {
+                            topDriverInput += driver.getName() + "_P";
+                        }
+                        deleteComma(topDriverInput);
+                        topDriverInput += ": UsrInt";
+                       String  s="";
+                       if (topDriverInput=="") s="in ";
+                        writer.println("node top (" +s + topDriverInput + ") returns ( clock, "
+                                + getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray) + ");\n");
+
+                        //******************declaration of variabes;
+                        writer.println("var\n");
+
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println(channelsArray[i].getName() + "_C, " + channelsArray[i].getName() + "_P: UsrInt; ");
+                        }
+
+                        for (DriverActor driver : driversArray) {
+                            writer.println(driver.getName() + "_C : UsrInt;");
+                        }
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println(monitor.getName() + "_P : UsrInt;");
+                        }
+                        for (Actor node : actorsArray) {
+                            writer.println(node.getName() + "nextClock : UsrInt;  ");
+                        }
+
+                        //******************generation the node body;
+                        //updating the channel value
+                        writer.println("\nlet\n");
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println(channelsArray[i].getName() + " = " + channelsArray[i].getName()
+                                    + "_I -> pre UsrIntPlus( UsrIntMinus( " + channelsArray[i].getName() + ","
+                                    + channelsArray[i].getName() + "_C), " + channelsArray[i].getName() + "_P);");
+                        }
+                        writer.println();
+                        for (DriverActor driver : driversArray) {
+                            writer.println(driver.getName() + " = " + driver.getName()
+                                    + "_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( "
+                                    + driver.getName() + "," + driver.getName() + "_C), "
+                                    + driver.getName() + "_P), maxValue) \n"
+                                    + "\t\t\t\tthen UsrIntPlus( UsrIntMinus( " + driver.getName() + ","
+                                    + driver.getName() + "_C), " + driver.getName() + "_P)\n"
+                                    + "\t\t\t\telse UsrIntMinus( " + driver.getName() + ","
+                                    + driver.getName() + "_C);");
+                        }
+                        writer.println();
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println(monitor.getName() + " = " + monitor.getName()
+                                    + "_I -> pre if UsrIntLt(UsrIntPlus(" + monitor.getName()
+                                    + ", " + monitor.getName() + "_P), maxValue) \n"
+                                    + "\t\t\t\tthen UsrIntPlus(" + monitor.getName() + ", " + monitor.getName() + "_P)\n"
+                                    + "\t\t\t\telse " + monitor.getName() + ";");
+                        }
+                        writer.println();
+
+                        //calling the Actor nodes
+                        for (Actor node : actorsArray) {
+                            String[][] arrPort = node.getPortsArray();
+                            String outputNode = "";
+                            String inputNode = "";
+                            for (String[] port : arrPort) {
+                                if (port[1].equals("out")) {
+                                    outputNode += searchOut(node.getName(), port[0], channelsArray, monitorsArray) + "_P, ";
+                                } else {
+                                    outputNode += searchIn(node.getName(), port[0], channelsArray, driversArray) + "_C, ";
+                                    inputNode += searchIn(node.getName(), port[0], channelsArray, driversArray) + ", ";
+                                }
+                            }
+
+                            writer.println("(" + node.getName() + "nextClock, " + outputNode + node.getName() + "nbrFired) = " + node.getName() + "(clock, " + deleteComma(inputNode) + ");");
+                        }
+                        writer.println();
+
+                        writer.print("clock=  ");
+                        for (int i = 0; i < nbrActors; i++) {
+                            writer.print("UsrIntMin(" + actorsArray[i].getName() + "nextClock, ");
+                        }
+                        writer.print(actorsArray[nbrActors].getName() + "nextClock");
+                        for (int i = 0; i < nbrActors; i++) {
+                            writer.print(")");
+                        }
+
+                        writer.println(";\n\n");
+
+                        writer.println("\ntel;");
+                        writer.println();
+                        writer.println();
+
+                        /*
+                         ****************************************************************
+                         * **************** Generating node Harness 
+                         ***************************************************************
+                         */
+                        writer.println("\n--************************************************--");
+                        writer.println("--******* Node Harness***************--");
+                        writer.println("--************************************************--");
+
+                        writer.println("node Harness (" + topDriverInput + ") returns (noError :bool)\n");
+                        writer.println("var");
+                        writer.println("clock : UsrInt;");
+
+                        writer.println();
+                        writer.println(getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray) + ";\n");
+                        writer.println("positiveValues: bool;\n\nlet\n");
+                        writer.println("(clock, " + getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray).replaceAll(":UsrInt", "")
+                                + ") = top(" + topDriverInput.replaceAll(": UsrInt", "") + ");");
+                        writer.println("\npositiveValues = " + positiveValuesString(channelsArray, actorsArray, driversArray, monitorsArray) + ";");
+                        writer.println("\nnoError= positiveValues and true;\n\ntel");
+
+                        /**
+                         *  **************** close writer ****************
+                         */
+                        writer.close();
+                    } catch (IOException e) {
+                        System.out.println("ERROR output.lus");
+                    }
+
+                    /**
+                     * ***********************************************************************************************
+                     ****************translation of untimed SDFG :Utimed.lus
+                     * *********************************************
+                     * **********************************************************************************************
+                     */
+                    try {
+                        PrintWriter writer = new PrintWriter(args[0] + "_Untimed.lus", "UTF-8");
+                        /**
+                         * **************** const ****************
+                         */
+                        writer.println("include \"./toInclude_BitBlasting_ok.lus\"\n");
+                        writer.println("const maxValue = " + Actor.getBinaryRate(maxValue, nberBit));
+                        writer.println("\n--**************** Const Rates ****************--\n");
+                        for (int i = 0; i <= nbrActors; i++) {
+
+                            String[][] arrPort = actorsArray[i].getPortsArray();
+                            for (String[] s : arrPort) {
+                                writer.println("const " + actorsArray[i].getName() + "_" + s[0] + "_rate_" + s[1] + " = " + Actor.getBinaryRate(s[2], nberBit));
+                            }
+
+                        }
+                        writer.println("\n--**************** Init Channel ****************--\n");
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println("const " + channelsArray[i].getName() + "_I = " + Actor.getBinaryRate(channelsArray[i].getInitialTokens(), nberBit));
+                        }
+                        writer.println();
+                        for (DriverActor driver : driversArray) {
+                            writer.println("const " + driver.getName() + "_I = " + Actor.getBinaryRate("0", nberBit));
+                        }
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println("const " + monitor.getName() + "_I = " + Actor.getBinaryRate("0", nberBit));
+                        }
+                        /**
+                         * **************** Nodes *****************
+                         */
+                        writer.println("\n--**************** Nodes Declaration ****************--\n");
+                        for (int i = 0; i < nbrActors + 1; i++) {
+                            Actor node = actorsArray[i];
+                            writer.print("node " + node.getName() + "(" + node.getInput() + ")");
+                            writer.println(" returns (" + node.getOutput() + "; " + node.getName() + "nbrFired: UsrInt );\n");
+
+                            writer.println("let");
+                            String str = node.getDoFireString(node.getMaxAutoConc());
+
+                            writer.println(node.getName() + "nbrFired= " + str + "\n");
+                            String st = node.getOutputConsume();
+                            if (node.getOutputConsume().equals("")) {
+                                st = node.getOutputProduceDelayed();
+                            } else {
+
+                                st += "," + node.getOutputProduce();
+
+                            }
+                            writer.println("(" + st + ") = " + node.getMultFired() + "\n");
+
+                            writer.println("tel;");
+
+                            writer.println("------------------");
+                            writer.println("node " + node.getName() + "DoFire("
+                                    + node.getInput().replaceAll(" :UsrInt", ",") + "times:UsrInt) returns ( yes: bool);");
+                            writer.println("let\n");
+                            writer.println(node.DoFireNodeString());
+                            writer.println("tel;");
+
+                            writer.println("------------------");
+
+                        }
+
+                        /*
+                         * **************** Node Top  * ****************
+                         */
+                        writer.println("\n--************************************************--");
+                        writer.println("--******* Node Top***************--");
+                        writer.println("--************************************************--");
+                        String topDriverInput = "";
+                        for (DriverActor driver : driversArray) {
+                            topDriverInput += driver.getName() + "_P";
+                        }
+                        deleteComma(topDriverInput);
+                        topDriverInput += ": UsrInt";
+                        writer.println("node top (in: UsrInt ) returns ("
+                                + getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray) + ");\n");
+                        writer.println("-------------- Les variables -------------- \n");
+                        writer.println("var\n");
+
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println(channelsArray[i].getName() + "_C, " + channelsArray[i].getName() + "_P: UsrInt; ");
+                        }
+
+                        for (DriverActor driver : driversArray) {
+                            writer.println(driver.getName() + "_C : UsrInt;");
+                        }
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println(monitor.getName() + "_P : UsrInt;");
+                        }
+
+                        writer.println("\nlet\n");
+                        for (int i = 0; i <= nbrChannels; i++) {
+                            writer.println(channelsArray[i].getName() + " = " + channelsArray[i].getName()
+                                    + "_I -> pre UsrIntPlus( UsrIntMinus( " + channelsArray[i].getName() + ","
+                                    + channelsArray[i].getName() + "_C), " + channelsArray[i].getName() + "_P);");
+                        }
+                        writer.println();
+                        for (DriverActor driver : driversArray) {
+                            writer.println(driver.getName() + " = " + driver.getName()
+                                    + "_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( "
+                                    + driver.getName() + "," + driver.getName() + "_C), "
+                                    + driver.getName() + "_P), maxValue) \n"
+                                    + "\t\t\t\tthen UsrIntPlus( UsrIntMinus( " + driver.getName() + ","
+                                    + driver.getName() + "_C), " + driver.getName() + "_P)\n"
+                                    + "\t\t\t\telse UsrIntMinus( " + driver.getName() + ","
+                                    + driver.getName() + "_C);");
+                        }
+                        writer.println();
+                        for (MonitorActor monitor : monitorsArray) {
+                            writer.println(monitor.getName() + " = " + monitor.getName()
+                                    + "_I -> pre if UsrIntLt(UsrIntPlus(" + monitor.getName()
+                                    + ", " + monitor.getName() + "_P), maxValue) \n"
+                                    + "\t\t\t\tthen UsrIntPlus(" + monitor.getName() + ", " + monitor.getName() + "_P)\n"
+                                    + "\t\t\t\telse " + monitor.getName() + ";");
+                        }
+                        writer.println();
+                        for (Actor node : actorsArray) {
+                            String[][] arrPort = node.getPortsArray();
+                            String outputNode = "";
+                            String inputNode = "";
+                            for (String[] port : arrPort) {
+                                if (port[1].equals("out")) {
+                                    outputNode += searchOut(node.getName(), port[0], channelsArray, monitorsArray) + "_P, ";
+                                } else {
+                                    outputNode += searchIn(node.getName(), port[0], channelsArray, driversArray) + "_C, ";
+                                    inputNode += searchIn(node.getName(), port[0], channelsArray, driversArray) + ", ";
+                                }
+                            }
+
+                            writer.println("(" + outputNode + node.getName() + "nbrFired) = " + node.getName() + "(" + deleteComma(inputNode) + ");");
+
+                        }
+                        writer.println();
+
+                        writer.println("\ntel;");
+                        writer.println();
+                        writer.println();
+
+                        writer.println("\n--************************************************--");
+                        writer.println("--******* Node Harness***************--");
+                        writer.println("--************************************************--");
+                        writer.println("node Harness (in:UsrInt) returns (noError :bool)\n");
+                        writer.println("var");
+                        writer.println(getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray) + ";\n");
+                        writer.println("noDeadlock : bool;\n\nlet\n");
+                        writer.println("(" + getOutputNodeTop(channelsArray, actorsArray, driversArray, monitorsArray).replaceAll(":UsrInt", "")
+                                + ") = top( in);");
+                        writer.println("\nnoDeadlock = " + deadlockString(actorsArray) + ";");
+                        writer.println("\nnoError= noDeadlock;\n\ntel");
+
+                        /**
+                         *  **************** close writer ****************
+                         */
+                        writer.close();
+                    } catch (IOException e) {
+                        System.out.println("ERROR output.lus");
+                    }
+
+                } else {
+                    System.out.println("fichier not Ok");
+                    System.out.println(verifyXML.getERRORXML());
+                }
+
+            }
+        } catch (final ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static String deleteComma(String str) {
+        if (!str.equals("")) {
+            str = str.trim();
+            str = str.substring(0, str.length() - 1);
+        }
+        return str;
+    }
+
+    private static String getOutputNodeTop(Channel[] channelsArray, Actor[] actorsArray, DriverActor[] driversArray, MonitorActor[] monitorsArray) {
+        String str = "";
+
+        for (Channel channel : channelsArray) {
+            str += channel.name + ", ";
+        }
+        for (DriverActor driver : driversArray) {
+            str += driver.getName() + ", ";
+        }
+        for (MonitorActor monitor : monitorsArray) {
+            str += monitor.getName() + ", ";
+        }
+        for (Actor arrNode : actorsArray) {
+            str += arrNode.getName() + "nbrFired, ";
+        }
+
+        return deleteComma(str) + ":UsrInt";
+    }
+
+    private static String positiveValuesString(Channel[] channelsArray, Actor[] actorsArray, DriverActor[] driversArray, MonitorActor[] monitorsArray) {
+        String str = "";
+
+        for (Channel channel : channelsArray) {
+            str += "UsrIntGte( " + channel.name + ", UsrInt_0) \n\tand ";
+        }
+        for (DriverActor driver : driversArray) {
+            str += "UsrIntGte( " + driver.getName() + ", UsrInt_0) \n\tand ";
+        }
+        for (MonitorActor monitor : monitorsArray) {
+            str += "UsrIntGte( " + monitor.getName() + ", UsrInt_0) \n\tand ";
+        }
+        for (Actor arrNode : actorsArray) {
+            str += "UsrIntGte( " + arrNode.getName() + "nbrFired " + ", UsrInt_0) \n\tand ";
+        }
+        str = str.trim();
+        str = str.substring(0, str.length() - 5);
+        return str;
+    }
+
+    private static String deadlockString(Actor[] actorsArray) {
+        String str = "";
+
+        for (Actor arrNode : actorsArray) {
+            str += "UsrIntGte( " + arrNode.getName() + "nbrFired " + ", UsrInt_1) \n\tor ";
+        }
+        str = str.trim();
+        str = str.substring(0, str.length() - 5);
+        return str;
+    }
+
+    public static String searchOut(String nodeName, String portName, Channel[] channelsArray, MonitorActor[] monitorsArray) {
+        String str = "";
+        for (Channel channel : channelsArray) {
+            if (channel.srcActor.equals(nodeName) && channel.srcPort.equals(portName)) {
+                return channel.getName();
+            }
+        }
+        for (MonitorActor monitor : monitorsArray) {
+            if (monitor.getSrcActor().equals(nodeName) && monitor.getPortSrc().equals(portName)) {
+                return monitor.getName();
+            }
+        }
+        return str;
+    }
+
+    public static String searchIn(String nodeName, String portName, Channel[] channelsArray, DriverActor[] driversArray) {
+        String str = "";
+        for (Channel channel : channelsArray) {
+            if (channel.getDstActor().equals(nodeName) && channel.getDstPort().equals(portName)) {
+                return channel.getName();
+            }
+        }
+        for (DriverActor driver : driversArray) {
+            if (driver.getActorDest().equals(nodeName) && driver.getPortDest().equals(portName)) {
+                return driver.getName();
+            }
+        }
+        return str;
+    }
+
+    private static boolean BaliseErroné(Element racine) {
+        NodeList racineNodes = racine.getChildNodes();
+        for (int i = 0; i < racineNodes.getLength(); i++) {
+            if (racineNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                String s = racineNodes.item(i).getNodeName();
+                if (!s.equals("actor") && !s.equals("port") && !s.equals("channel")
+                        && !s.equals("driver") && !s.equals("monitor")) {
+                    System.out.println(" vous avez le balise " + s + " Erronée...");
+                    return true;
+                }
+
+            }
+        }
+        for (int i = 0; i < racineNodes.getLength(); i++) {
+            if (racineNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                if (racineNodes.item(i).getNodeName().equals("actor")) {
+                    NodeList Ports = racineNodes.item(i).getChildNodes();
+                    for (int j = 0; j < Ports.getLength(); j++) {
+                        if (Ports.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            String s = Ports.item(j).getNodeName();
+                            if (!s.equals("port")) {
+                                System.out.println(" vous avez le balise " + s + " Erronée... qu'lle doit être normalement <port...>");
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+}
+

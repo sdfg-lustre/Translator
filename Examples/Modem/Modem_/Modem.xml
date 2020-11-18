@@ -1,0 +1,148 @@
+ 
+    <sdf name="modem" nberBit="8" maxValue="15">
+
+      <actor name="fork1" duration="1" maxAutoConcurrences="1">
+
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out1" type="out" rate="1"/>
+        <port name="p_out2" type="out" rate="1"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+
+      <actor name="biq" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+
+      <actor name="bi" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="add" duration="1" maxAutoConcurrences="1">
+        <port name="p_in1" type="in" rate="1"/>
+        <port name="p_in2" type="in" rate="1"/>
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+      <actor name="ac" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="fork2" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out1" type="out" rate="1"/>
+        <port name="p_out2" type="out" rate="1"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+      <actor name="conj" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="2"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="mul1" duration="1" maxAutoConcurrences="1">
+        <port name="p_in1" type="in" rate="2"/>
+        <port name="p_in2" type="in" rate="2"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+      <actor name="in" duration="1" maxAutoConcurrences="1">
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p2" type="out" rate="1"/>
+        <port name="_p3" type="in" rate="1"/>
+      </actor>
+      <actor name="filt" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="hil" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="8"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="eq" duration="1" maxAutoConcurrences="1">
+        <port name="p_in1" type="in" rate="4"/>
+        <port name="p_in2" type="in" rate="2"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+      <actor name="mul2" duration="1" maxAutoConcurrences="1">
+        <port name="p_in1" type="in" rate="2"/>
+        <port name="p_in2" type="in" rate="2"/>
+        <port name="p_out" type="out" rate="2"/>
+        <port name="_p4" type="out" rate="1"/>
+        <port name="_p5" type="in" rate="1"/>
+      </actor>
+      <actor name="deci" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="2"/>
+        <port name="p_out1" type="out" rate="2"/>
+        <port name="p_out2" type="out" rate="2"/>
+        <port name="p_out3" type="out" rate="1"/>
+        <port name="_p5" type="out" rate="1"/>
+        <port name="_p6" type="in" rate="1"/>
+      </actor>
+      <actor name="deco" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="2"/>
+        <port name="p_out" type="out" rate="1"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="out" duration="1" maxAutoConcurrences="1">
+        <port name="p_in" type="in" rate="1"/>
+        <port name="_p2" type="out" rate="1"/>
+        <port name="_p3" type="in" rate="1"/>
+      </actor>
+
+
+      <channel name="a" srcActor="fork1" srcPort="p_out1" dstActor="biq" dstPort="p_in" initialTokens="0"/>
+      <channel name="b" srcActor="fork1" srcPort="p_out2" dstActor="bi" dstPort="p_in" initialTokens="0"/>
+      <channel name="c" srcActor="biq" srcPort="p_out" dstActor="add" dstPort="p_in1" initialTokens="0"/>
+      <channel name="d" srcActor="bi" srcPort="p_out" dstActor="add" dstPort="p_in2" initialTokens="0"/>
+      <channel name="e" srcActor="add" srcPort="p_out" dstActor="ac" dstPort="p_in" initialTokens="0"/>
+      <channel name="f" srcActor="ac" srcPort="p_out" dstActor="fork2" dstPort="p_in" initialTokens="0"/>
+      <channel name="g" srcActor="fork2" srcPort="p_out1" dstActor="conj" dstPort="p_in" initialTokens="0"/>
+      <channel name="h" srcActor="fork2" srcPort="p_out2" dstActor="mul1" dstPort="p_in1" initialTokens="0"/>
+      <channel name="i" srcActor="conj" srcPort="p_out" dstActor="mul2" dstPort="p_in1" initialTokens="0"/>
+      <channel name="j" srcActor="mul1" srcPort="p_out" dstActor="deci" dstPort="p_in" initialTokens="0" />
+      <channel name="k" srcActor="mul2" srcPort="p_out" dstActor="eq" dstPort="p_in2" initialTokens="2"/>
+      <channel name="l" srcActor="in" srcPort="p_out" dstActor="filt" dstPort="p_in" initialTokens="0" />
+      <channel name="m" srcActor="filt" srcPort="p_out" dstActor="hil" dstPort="p_in" initialTokens="0"/>
+      <channel name="n" srcActor="hil" srcPort="p_out" dstActor="eq" dstPort="p_in1" initialTokens="0"/>
+      <channel name="o" srcActor="eq" srcPort="p_out" dstActor="mul1" dstPort="p_in2" initialTokens="0"/>
+      <channel name="p" srcActor="deci" srcPort="p_out1" dstActor="mul2" dstPort="p_in2" initialTokens="0"/>
+      <channel name="q" srcActor="deci" srcPort="p_out2" dstActor="deco" dstPort="p_in" initialTokens="0"/>
+      <channel name="r" srcActor="deco" srcPort="p_out" dstActor="out" dstPort="p_in" initialTokens="0"/>
+      <channel name="s" srcActor="deci" srcPort="p_out3" dstActor="fork1" dstPort="p_in" initialTokens="1"/>
+      <channel name="_ch20" srcActor="fork1" srcPort="_p4" dstActor="fork1" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch21" srcActor="biq" srcPort="_p3" dstActor="biq" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch22" srcActor="bi" srcPort="_p3" dstActor="bi" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch23" srcActor="add" srcPort="_p4" dstActor="add" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch24" srcActor="ac" srcPort="_p3" dstActor="ac" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch25" srcActor="fork2" srcPort="_p4" dstActor="fork2" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch26" srcActor="conj" srcPort="_p3" dstActor="conj" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch27" srcActor="mul1" srcPort="_p4" dstActor="mul1" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch28" srcActor="in" srcPort="_p2" dstActor="in" dstPort="_p3" initialTokens="1"/>
+      <channel name="_ch29" srcActor="filt" srcPort="_p3" dstActor="filt" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch30" srcActor="hil" srcPort="_p3" dstActor="hil" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch31" srcActor="eq" srcPort="_p4" dstActor="eq" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch32" srcActor="mul2" srcPort="_p4" dstActor="mul2" dstPort="_p5" initialTokens="1"/>
+      <channel name="_ch33" srcActor="deci" srcPort="_p5" dstActor="deci" dstPort="_p6" initialTokens="1"/>
+      <channel name="_ch34" srcActor="deco" srcPort="_p3" dstActor="deco" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch35" srcActor="out" srcPort="_p2" dstActor="out" dstPort="_p3" initialTokens="1"/>
+
+    </sdf>
+    

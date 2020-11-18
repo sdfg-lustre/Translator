@@ -1,0 +1,204 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [1,1,1,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const A_Y_rate_in = [1,0,0,0,0,0,0,0];
+const A_Vin_rate_in = [1,0,0,0,0,0,0,0];
+const A_Vout_rate_out = [1,0,0,0,0,0,0,0];
+const A_Z_rate_out = [1,0,0,0,0,0,0,0];
+const A1_Z_rate_in = [1,0,0,0,0,0,0,0];
+const A1_B1_rate_out = [1,0,0,0,0,0,0,0];
+const A1_B2_rate_out = [1,0,0,0,0,0,0,0];
+const G_In_rate_in = [1,0,0,0,0,0,0,0];
+const G_Y_rate_out = [1,0,0,0,0,0,0,0];
+const P2_B1_rate_in = [1,0,0,0,0,0,0,0];
+const P2_B2_rate_in = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const Y_I = [0,0,0,0,0,0,0,0];
+const V_I = [1,1,0,0,0,0,0,0];
+const Z_I = [0,0,0,0,0,0,0,0];
+const B1_I = [0,0,0,0,0,0,0,0];
+const B2_I = [0,0,0,0,0,0,0,0];
+
+const In_I = [0,0,0,0,0,0,0,0];
+
+--**************** Nodes Declaration ****************--
+
+node A(Y, Vin :UsrInt) returns (Y_C, Vin_C, Vout_P, Z_P :UsrInt; AnbrFired: UsrInt );
+
+var
+Vout_PD, Z_PD :UsrInt;
+let
+AnbrFired= if ADoFire(Y, Vin,UsrInt_3) then UsrInt_3
+		else if ADoFire(Y, Vin,UsrInt_2) then UsrInt_2
+		else if ADoFire(Y, Vin,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(Y_C, Vin_C,Vout_PD, Z_PD) = (UsrIntMult(AnbrFired, A_Y_rate_in),UsrIntMult(AnbrFired, A_Vin_rate_in),UsrIntMult(AnbrFired, A_Vout_rate_out),UsrIntMult(AnbrFired, A_Z_rate_out));
+
+Vout_P = UsrInt_0 -> pre (UsrInt_0 -> pre (Vout_PD));
+
+Z_P = UsrInt_0 -> pre (UsrInt_0 -> pre (Z_PD));
+
+
+tel;
+------------------
+node ADoFire(Y, Vin,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(Y, UsrIntMult(times, A_Y_rate_in)) 
+	and UsrIntGte(Vin, UsrIntMult(times, A_Vin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node A1(Z :UsrInt) returns (Z_C, B1_P, B2_P :UsrInt; A1nbrFired: UsrInt );
+
+var
+B1_PD, B2_PD :UsrInt;
+let
+A1nbrFired= if A1DoFire(Z,UsrInt_3) then UsrInt_3
+		else if A1DoFire(Z,UsrInt_2) then UsrInt_2
+		else if A1DoFire(Z,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(Z_C,B1_PD, B2_PD) = (UsrIntMult(A1nbrFired, A1_Z_rate_in),UsrIntMult(A1nbrFired, A1_B1_rate_out),UsrIntMult(A1nbrFired, A1_B2_rate_out));
+
+B1_P = UsrInt_0 -> pre (B1_PD);
+
+B2_P = UsrInt_0 -> pre (B2_PD);
+
+
+tel;
+------------------
+node A1DoFire(Z,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(Z, UsrIntMult(times, A1_Z_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+------------------
+node G(In :UsrInt) returns (In_C,  Y_P :UsrInt; GnbrFired: UsrInt );
+
+let
+GnbrFired= if  GDoFire(In,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(In_C, Y_P) = (In,  In);
+
+tel;
+
+------------------
+node GDoFire(In,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(In, UsrIntMult(times, G_In_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+------------------
+node P2(B1, B2 :UsrInt) returns (B1_C, B2_C :UsrInt; P2nbrFired: UsrInt );
+
+temp: UsrInt;
+
+let
+temp= UsrInt_0-> pre (UsrInt_0-> pre (UsrInt_0-> pre (B2)));
+P2nbrFired= if  P2DoFire(temp, B2,UsrInt_3) then UsrInt_3
+		else if P2DoFire(temp, B2,UsrInt_2) then UsrInt_2
+		else if P2DoFire(temp, B2,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(B1_C, B2_C,) = (UsrIntMult(P2nbrFired, P2_B1_rate_in),UsrIntMult(P2nbrFired, P2_B2_rate_in));
+
+tel;
+------------------
+node P2DoFire(B1, B2,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(B1, UsrIntMult(times, P2_B1_rate_in)) 
+	and UsrIntGte(B2, UsrIntMult(times, P2_B2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (In_P: UsrInt) returns (Y, V, Z, B1, B2, In, AnbrFired, A1nbrFired, GnbrFired, P2nbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+Y_C, Y_P: UsrInt; 
+V_C, V_P: UsrInt; 
+Z_C, Z_P: UsrInt; 
+B1_C, B1_P: UsrInt; 
+B2_C, B2_P: UsrInt; 
+In_C : UsrInt;
+
+let
+
+V = V_I -> pre UsrIntPlus( UsrIntMinus( V,V_C), V_P);
+Z = Z_I -> pre UsrIntPlus( UsrIntMinus( Z,Z_C), Z_P);
+B1 = B1_I -> pre UsrIntPlus( UsrIntMinus( B1,B1_C), B1_P);
+B2 = B2_I -> pre UsrIntPlus( UsrIntMinus( B2,B2_C), B2_P);
+
+Y = Y_I -> pre if (  UsrIntLt(UsrIntPlus(UsrIntMinus( Y, Y_C), Y_P), maxValue)) 
+				then UsrIntPlus( UsrIntMinus(Y ,Y_C), Y_P)
+				else UsrIntMinus( Y,Y_C);
+
+In = In_I -> pre In_P;
+
+
+
+(Y_C, V_C, V_P, Z_P, AnbrFired) = A(Y, V);
+(Z_C, B1_P, B2_P, A1nbrFired) = A1(Z);
+(In_C, Y_P, GnbrFired) = G(In);
+(B1_C, B2_C, P2nbrFired) = P2(B1, B2);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (In_P: UsrInt) returns (noError :bool)
+
+var
+
+Y, V, Z, B1, B2, In, AnbrFired, A1nbrFired, GnbrFired, P2nbrFired:UsrInt;
+
+positiveValues, P2: bool;
+
+let
+
+(Y, V, Z, B1, B2, In, AnbrFired, A1nbrFired, GnbrFired, P2nbrFired) = top(In_P);
+
+positiveValues = UsrIntGte( Y, UsrInt_0) 
+	and UsrIntGte( V, UsrInt_0) 
+	and UsrIntGte( Z, UsrInt_0) 
+	and UsrIntGte( B1, UsrInt_0) 
+	and UsrIntGte( B2, UsrInt_0) 
+	and UsrIntGte( In, UsrInt_0) 
+	and UsrIntGte( AnbrFired , UsrInt_0) 
+	and UsrIntGte( A1nbrFired , UsrInt_0) 
+	and UsrIntGte( GnbrFired , UsrInt_0) 
+	and UsrIntGte( P2nbrFired , UsrInt_0) ;
+P2=  UsrIntLte(UsrIntMinus(B1, UsrInt_0-> pre (UsrInt_0-> pre (UsrInt_0-> pre (B2)))), V_I) ;
+
+noError= positiveValues and P2;
+assert UsrIntLte(In_P, UsrInt_3) and UsrIntGte(In_P, UsrInt_0) ;
+tel

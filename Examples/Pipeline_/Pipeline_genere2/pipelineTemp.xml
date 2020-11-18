@@ -1,0 +1,29 @@
+<sdf name="example" nberBit="8" maxValue="8">
+  
+   <actor name="a1bis" duration="8" maxAutoConcurrences="4">
+        <port name="e1bis" type="in" rate="1"/>
+       <port name="e3bis" type="in"  rate="1" />
+         <port name="e4bis" type="out"  rate="1" />
+    </actor>
+
+  <actor name="a2bis" duration="2" maxAutoConcurrences="4">
+        <port name="e4bis" type="in" rate="1"/>
+       <port name="e5bisin" type="in"  rate="1" />
+        <port name="e5bisout" type="out"  rate="1" />
+	<port name="e2bis" type="out" rate="1"/>
+       <port name="e3bis" type="out"  rate="1" />
+    </actor>
+
+<actor name="endbis" duration="1" maxAutoConcurrences="1">
+        <port name="e2bis" type="in" rate="1"/>
+    </actor>
+  
+    <channel name = "e2bis" srcActor="a2bis" srcPort="e2bis" dstActor="endbis" dstPort="e2bis" initialTokens="0"/>  
+    <channel name = "e3bis" srcActor="a2bis" srcPort="e3bis" dstActor="a1bis" dstPort="e3bis" initialTokens="3"/>  
+    <channel name = "e4bis" srcActor="a1bis" srcPort="e4bis" dstActor="a2bis" dstPort="e4bis" initialTokens="0"/>  
+    <channel name = "e5bis" srcActor="a2bis" srcPort="e5bisout" dstActor="a2bis" dstPort="e5bisin" initialTokens="1"/>    
+    <driver name="e1bis" actorDest="a1bis" portDest="e1bis"/>
+     
+   
+ 
+ </sdf>

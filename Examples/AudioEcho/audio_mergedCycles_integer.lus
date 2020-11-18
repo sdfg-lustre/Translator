@@ -1,0 +1,263 @@
+--** This lustre code is generated automatically on 12 sept. 2020 11:32:39 PM
+--** It corresponds to the translation of an SDFG model (audioEcho)  to Lustre. This version produce a Lustre code having a reduced number of steps.
+
+
+
+
+--**************** Const Rates ****************--
+
+const out_e1in_rate_in = 1;
+const out_e1out_rate_out = 1;
+const out_e2_rate_in = 1;
+const out_e3_rate_out = 1;
+const abc_e4in_rate_in = 1;
+const abc_e4out_rate_out = 1;
+const abc_e3_rate_in = 23;
+const abc_e6_rate_in = 23;
+const abc_e8_rate_in = 23;
+const abc_e2_rate_out = 23;
+const abc_e5_rate_out = 23;
+const abc_e9_rate_out = 23;
+const src_e7in_rate_in = 1;
+const src_e7out_rate_out = 1;
+const src_e5_rate_in = 1;
+const src_e6_rate_out = 1;
+const adc_e10in_rate_in = 1;
+const adc_e10out_rate_out = 1;
+const adc_e9_rate_in = 1;
+const adc_e8_rate_out = 1;
+
+--****************  Actors' durations ****************--
+
+const out_maxStages  = 1;
+const out_duration  = 1;
+const abc_maxStages  = 1;
+const abc_duration  = 1;
+const src_maxStages  = 1;
+const src_duration  = 1;
+const adc_maxStages  = 1;
+const adc_duration  = 1;
+const  maxDuration  = 1;
+
+--**************** Init Channel ****************--
+
+const e1_I = 1;
+const e4_I = 1;
+const e7_I = 1;
+const e10_I = 1;
+const e2_I = 0;
+const e3_I = 44;
+const e5_I = 44;
+const e6_I = 0;
+const e8_I = 0;
+const e9_I = 44;
+
+
+--************************************************--
+--******* Translation of Actor: out***************--
+--************************************************--
+node out(clock, e1in, e2 :int) returns (nextClock, e1in_C, e1out_P, e2_C, e3_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if outDoFire(e1in, e2,2) then 2
+		else if outDoFire(e1in, e2,1) then 1
+		else 0;
+
+(e1in_C, e2_C) = ((nbrFired * out_e1in_rate_in), (nbrFired * out_e2_rate_in));
+
+(e1out_P, e3_P) = ((nbrEnd * out_e1out_rate_out), (nbrEnd * out_e3_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorout-----------------
+node outDoFire(e1in, e2,times:int) returns ( yes: bool);
+let
+
+yes = if (e1in>=  (times * out_e1in_rate_in)) 
+	and (e2>=  (times * out_e2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: abc***************--
+--************************************************--
+node abc(clock, e4in, e3, e6, e8 :int) returns (nextClock, e4in_C, e4out_P, e3_C, e6_C, e8_C, e2_P, e5_P, e9_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if abcDoFire(e4in, e3, e6, e8,2) then 2
+		else if abcDoFire(e4in, e3, e6, e8,1) then 1
+		else 0;
+
+(e4in_C, e3_C, e6_C, e8_C) = ((nbrFired * abc_e4in_rate_in), (nbrFired * abc_e3_rate_in), (nbrFired * abc_e6_rate_in), (nbrFired * abc_e8_rate_in));
+
+(e4out_P, e2_P, e5_P, e9_P) = ((nbrEnd * abc_e4out_rate_out), (nbrEnd * abc_e2_rate_out), (nbrEnd * abc_e5_rate_out), (nbrEnd * abc_e9_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorabc-----------------
+node abcDoFire(e4in, e3, e6, e8,times:int) returns ( yes: bool);
+let
+
+yes = if (e4in>=  (times * abc_e4in_rate_in)) 
+	and (e3>=  (times * abc_e3_rate_in)) 
+	and (e6>=  (times * abc_e6_rate_in)) 
+	and (e8>=  (times * abc_e8_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: src***************--
+--************************************************--
+node src(clock, e7in, e5 :int) returns (nextClock, e7in_C, e7out_P, e5_C, e6_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if srcDoFire(e7in, e5,2) then 2
+		else if srcDoFire(e7in, e5,1) then 1
+		else 0;
+
+(e7in_C, e5_C) = ((nbrFired * src_e7in_rate_in), (nbrFired * src_e5_rate_in));
+
+(e7out_P, e6_P) = ((nbrEnd * src_e7out_rate_out), (nbrEnd * src_e6_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actorsrc-----------------
+node srcDoFire(e7in, e5,times:int) returns ( yes: bool);
+let
+
+yes = if (e7in>=  (times * src_e7in_rate_in)) 
+	and (e5>=  (times * src_e5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+
+--************************************************--
+--******* Translation of Actor: adc***************--
+--************************************************--
+node adc(clock, e10in, e9 :int) returns (nextClock, e10in_C, e10out_P, e9_C, e8_P :int; nbrFired, nbrEnd: int );
+
+let
+nbrFired= if adcDoFire(e10in, e9,2) then 2
+		else if adcDoFire(e10in, e9,1) then 1
+		else 0;
+
+(e10in_C, e9_C) = ((nbrFired * adc_e10in_rate_in), (nbrFired * adc_e9_rate_in));
+
+(e10out_P, e8_P) = ((nbrEnd * adc_e10out_rate_out), (nbrEnd * adc_e8_rate_out));
+
+nbrEnd = 0 -> pre nbrFired  ;
+nextClock = if (nbrFired = 0) then maxDuration else 1;
+tel;
+------------------subnode Dofire of Actoradc-----------------
+node adcDoFire(e10in, e9,times:int) returns ( yes: bool);
+let
+
+yes = if (e10in>=  (times * adc_e10in_rate_in)) 
+	and (e9>=  (times * adc_e9_rate_in)) 
+	then true 
+	else false;
+
+tel;
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (_: bool) returns ( adv, e1, e4, e7, e10, e2, e3, e5, e6, e8, e9, outnbrFired, abcnbrFired, srcnbrFired, adcnbrFired:int);
+
+var
+
+e1_C, e1_P: int; 
+e4_C, e4_P: int; 
+e7_C, e7_P: int; 
+e10_C, e10_P: int; 
+e2_C, e2_P: int; 
+e3_C, e3_P: int; 
+e5_C, e5_P: int; 
+e6_C, e6_P: int; 
+e8_C, e8_P: int; 
+e9_C, e9_P: int; 
+outnextClock : int;  
+abcnextClock : int;  
+srcnextClock : int;  
+adcnextClock : int;  
+outnbrEnd, abcnbrEnd, srcnbrEnd, adcnbrEnd : int; 
+
+outnbrRun, abcnbrRun, srcnbrRun, adcnbrRun : int; 
+
+positiveValues, noDeadlock: bool; 
+
+let
+
+e1 = e1_I ->  ( pre ( e1 - e1_C) + e1_P);
+e4 = e4_I ->  ( pre ( e4 - e4_C) + e4_P);
+e7 = e7_I ->  ( pre ( e7 - e7_C) + e7_P);
+e10 = e10_I ->  ( pre ( e10 - e10_C) + e10_P);
+e2 = e2_I ->  ( pre ( e2 - e2_C) + e2_P);
+e3 = e3_I ->  ( pre ( e3 - e3_C) + e3_P);
+e5 = e5_I ->  ( pre ( e5 - e5_C) + e5_P);
+e6 = e6_I ->  ( pre ( e6 - e6_C) + e6_P);
+e8 = e8_I ->  ( pre ( e8 - e8_C) + e8_P);
+e9 = e9_I ->  ( pre ( e9 - e9_C) + e9_P);
+
+
+
+
+(outnextClock, e1_C, e1_P, e2_C, e3_P, outnbrFired, outnbrEnd ) = out(adv, e1, e2);
+(abcnextClock, e4_C, e4_P, e3_C, e6_C, e8_C, e2_P, e5_P, e9_P, abcnbrFired, abcnbrEnd ) = abc(adv, e4, e3, e6, e8);
+(srcnextClock, e7_C, e7_P, e5_C, e6_P, srcnbrFired, srcnbrEnd ) = src(adv, e7, e5);
+(adcnextClock, e10_C, e10_P, e9_C, e8_P, adcnbrFired, adcnbrEnd ) = adc(adv, e10, e9);
+
+adv= Min(outnextClock , Min(abcnextClock , Min(srcnextClock , adcnextClock)));
+
+
+outnbrRun=  outnbrFired  -> (pre outnbrRun) +outnbrFired - outnbrEnd ;
+
+abcnbrRun=  abcnbrFired  -> (pre abcnbrRun) +abcnbrFired - abcnbrEnd ;
+
+srcnbrRun=  srcnbrFired  -> (pre srcnbrRun) +srcnbrFired - srcnbrEnd ;
+
+adcnbrRun=  adcnbrFired  -> (pre adcnbrRun) +adcnbrFired - adcnbrEnd ;
+
+
+positiveValues = ( e1 >= 0) 
+	and ( e4 >= 0) 
+	and ( e7 >= 0) 
+	and ( e10 >= 0) 
+	and ( e2 >= 0) 
+	and ( e3 >= 0) 
+	and ( e5 >= 0) 
+	and ( e6 >= 0) 
+	and ( e8 >= 0) 
+	and ( e9 >= 0) 
+	and ( outnbrFired  >=  0) 
+	and ( abcnbrFired  >=  0) 
+	and ( srcnbrFired  >=  0) 
+	and ( adcnbrFired  >=  0) ;
+
+noDeadlock = ( outnbrRun >= 1) 
+	or  ( abcnbrRun >= 1) 
+	or  ( srcnbrRun >= 1) 
+	or  ( adcnbrRun >= 1);
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+
+--%PROPERTY  "no deadlock "  noDeadlock;
+
+
+tel;
+
+

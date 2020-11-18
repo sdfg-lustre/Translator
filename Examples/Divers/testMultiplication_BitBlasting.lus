@@ -1,0 +1,11 @@
+include "toInclude_BitBlasting_ok.lus"
+
+node prod ( val : UsrInt ) returns ( cpt : UsrInt ) ;
+let
+
+cpt =  UsrIntMulti (UsrInt_2, UsrInt_2);
+
+tel
+----
+
+

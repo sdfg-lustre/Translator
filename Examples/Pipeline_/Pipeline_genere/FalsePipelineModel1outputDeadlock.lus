@@ -1,0 +1,118 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [0,0,0,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const Wait_A_rate_in = [1,0,0,0,0,0,0,0];
+const Wait_W_rate_in = [1,0,0,0,0,0,0,0];
+const Wait_Z_rate_out = [1,0,0,0,0,0,0,0];
+const Ta_Z_rate_in = [1,0,0,0,0,0,0,0];
+const Ta_W_rate_out = [1,0,0,0,0,0,0,0];
+const Ta_Vin_rate_in = [1,0,0,0,0,0,0,0];
+const Ta_Vout_rate_out = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const V_I = [1,0,0,0,0,0,0,0];
+const W_I = [1,1,0,0,0,0,0,0];
+const Z_I = [0,0,0,0,0,0,0,0];
+
+const A_I = [0,0,0,0,0,0,0,0];
+
+--**************** Nodes Declaration ****************--
+
+node Wait(A, W :UsrInt) returns (A_C, W_C, Z_P :UsrInt; WaitnbrFired: UsrInt );
+
+let
+WaitnbrFired= if WaitDoFire(A, W,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(A_C, W_C,Z_P) = (UsrIntMult(WaitnbrFired, Wait_A_rate_in),UsrIntMult(WaitnbrFired, Wait_W_rate_in),UsrIntMult(WaitnbrFired, Wait_Z_rate_out));
+
+tel;
+------------------
+node WaitDoFire(A, W,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(A, UsrIntMult(times, Wait_A_rate_in)) 
+	and UsrIntGte(W, UsrIntMult(times, Wait_W_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node Ta(Z, Vin :UsrInt) returns (Z_C, W_P, Vin_C, Vout_P :UsrInt; TanbrFired: UsrInt );
+
+let
+TanbrFired= if TaDoFire(Z, Vin,UsrInt_3) then UsrInt_3
+		else if TaDoFire(Z, Vin,UsrInt_2) then UsrInt_2
+		else if TaDoFire(Z, Vin,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(Z_C, Vin_C,W_P, Vout_P) = (UsrIntMult(TanbrFired, Ta_Z_rate_in),UsrIntMult(TanbrFired, Ta_Vin_rate_in),UsrIntMult(TanbrFired, Ta_W_rate_out),UsrIntMult(TanbrFired, Ta_Vout_rate_out));
+
+tel;
+------------------
+node TaDoFire(Z, Vin,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(Z, UsrIntMult(times, Ta_Z_rate_in)) 
+	and UsrIntGte(Vin, UsrIntMult(times, Ta_Vin_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (A_P: UsrInt) returns (V, W, Z, A, WaitnbrFired, TanbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+V_C, V_P: UsrInt; 
+W_C, W_P: UsrInt; 
+Z_C, Z_P: UsrInt; 
+A_C : UsrInt;
+
+let
+
+V = V_I -> pre UsrIntPlus( UsrIntMinus( V,V_C), V_P);
+W = W_I -> pre UsrIntPlus( UsrIntMinus( W,W_C), W_P);
+Z = Z_I -> pre UsrIntPlus( UsrIntMinus( Z,Z_C), Z_P);
+
+A = A_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( A,A_C), A_P), maxValue) 
+				then UsrIntPlus( UsrIntMinus( A,A_C), A_P)
+				else UsrIntMinus( A,A_C);
+
+
+(A_C, W_C, Z_P, WaitnbrFired) = Wait(A, W);
+(Z_C, W_P, V_C, V_P, TanbrFired) = Ta(Z, V);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (A_P: UsrInt) returns (noError :bool)
+
+var
+
+V, W, Z, A, WaitnbrFired, TanbrFired:UsrInt;
+
+noDeadlock : bool;
+
+let
+
+(V, W, Z, A, WaitnbrFired, TanbrFired) = top(A_P);
+
+noDeadlock = UsrIntGte( WaitnbrFired , UsrInt_1) 
+	or UsrIntGte( TanbrFired , UsrInt_1);
+
+noError= noDeadlock;
+
+tel

@@ -1,0 +1,111 @@
+--** This lustre code is generated automatically. 
+--**It corresponds to a translation of Untimed SDFG model to Lustre
+--     26 mai 2020 10:23:31 AM
+
+
+
+
+--**************** Const Rates ****************--
+
+const maxValue = 15;
+const A_Z_rate_out = 1;
+const A1_Z_rate_in = 1;
+
+--**************** Init Channel ****************--
+
+const Z_I = 0;
+
+
+--**************** Nodes Declaration ****************--
+
+node A() returns (Z_P :int; AnbrFired: int );
+
+let
+AnbrFired= if ADoFire(3) then 3
+		else if ADoFire(2) then 2
+		else if ADoFire(1) then 1
+		else 0;
+
+(Z_P) = ((AnbrFired * A_Z_rate_out));
+
+tel;
+------------------
+node ADoFire(times:int) returns ( yes: bool);
+let
+
+yes = if then true 
+	else false;
+
+tel;
+------------------
+node A1(Z :int) returns (Z_C :int; A1nbrFired: int );
+
+let
+A1nbrFired= if A1DoFire(Z,3) then 3
+		else if A1DoFire(Z,2) then 2
+		else if A1DoFire(Z,1) then 1
+		else 0;
+
+(Z_C) = ((A1nbrFired * A1_Z_rate_in));
+
+tel;
+------------------
+node A1DoFire(Z,times:int) returns ( yes: bool);
+let
+
+yes = if (Z>=  (times * A1_Z_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+node top (_: bool) returns (Z, AnbrFired, A1nbrFired:int);
+
+-------------- Les variables -------------- 
+
+var
+
+Z_C, Z_P: int; 
+
+let
+
+Z = Z_I -> pre ( ( Z-Z_C) + Z_P);
+
+
+
+(Z_P, AnbrFired) = A();
+(Z_C, A1nbrFired) = A1(Z);
+
+
+tel;
+
+
+
+--************************************************--
+--******* Node Harness***************--
+--************************************************--
+node Harness (_: bool ) returns (noError :bool)
+
+var
+Z, AnbrFired, A1nbrFired:int;
+
+noDeadlock : bool;
+
+let
+
+(Z, AnbrFired, A1nbrFired) =top(_); 
+
+noDeadlock = ( AnbrFired  >= 1) 
+	or ( A1nbrFired  >= 1);
+
+noError= noDeadlock;
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+tel 
+

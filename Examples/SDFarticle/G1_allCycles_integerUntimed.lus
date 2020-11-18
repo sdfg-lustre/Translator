@@ -1,0 +1,154 @@
+--** This lustre code is generated automatically on 22 août 2020 12:27:16 PM
+--**It corresponds to a translation to Lustre of the Untimed SDFG model  of the design "example" 
+
+
+
+
+--**************** Const Rates ****************--
+
+const a_e4_rate_in = 3 ;
+const a_e1_rate_out = 3 ;
+const b_e1_rate_in = 1 ;
+const b_e3_rate_in = 1 ;
+const b_e2_rate_out = 1 ;
+const c_e2_rate_in = 1 ;
+const c_e5in_rate_in = 1 ;
+const c_e5out_rate_out = 1 ;
+const c_e3_rate_out = 1 ;
+const c_e4_rate_out = 1 ;
+
+--**************** Init Channel ****************--
+
+const e1_I = 0 ;
+const e2_I = 0 ;
+const e3_I = 2 ;
+const e4_I = 5 ;
+const e5_I = 1 ;
+
+
+--**************** Nodes Declaration ****************--
+
+node a(e4 :int) returns (e4_C, e1_P :int; anbrFired: int );
+
+var
+anbrEnd: int;
+let
+anbrFired= if aDoFire(e4,1) then 1
+		else 0;
+
+anbrEnd= 0 -> pre (anbrFired);
+
+
+
+(e4_C) = ((anbrFired * a_e4_rate_in));
+
+(e1_P) = ((anbrEnd * a_e1_rate_out));
+
+tel;
+------------------
+node aDoFire(e4 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e4>=  (times * a_e4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b(e1, e3 :int) returns (e1_C, e3_C, e2_P :int; bnbrFired: int );
+
+var
+bnbrEnd: int;
+let
+bnbrFired= if bDoFire(e1, e3,2) then 2
+		else if bDoFire(e1, e3,1) then 1
+		else 0;
+
+bnbrEnd= 0 -> pre (bnbrFired);
+
+
+
+(e1_C, e3_C) = ((bnbrFired * b_e1_rate_in), (bnbrFired * b_e3_rate_in));
+
+(e2_P) = ((bnbrEnd * b_e2_rate_out));
+
+tel;
+------------------
+node bDoFire(e1, e3 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e1>=  (times * b_e1_rate_in)) 
+	and  (e3>=  (times * b_e3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c(e2, e5in :int) returns (e2_C, e5in_C, e5out_P, e3_P, e4_P :int; cnbrFired: int );
+
+var
+cnbrEnd: int;
+let
+cnbrFired= if cDoFire(e2, e5in,1) then 1
+		else 0;
+
+cnbrEnd= 0 -> pre (cnbrFired);
+
+
+
+(e2_C, e5in_C) = ((cnbrFired * c_e2_rate_in), (cnbrFired * c_e5in_rate_in));
+
+(e5out_P, e3_P, e4_P) = ((cnbrEnd * c_e5out_rate_out), (cnbrEnd * c_e3_rate_out), (cnbrEnd * c_e4_rate_out));
+
+tel;
+------------------
+node cDoFire(e2, e5in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e2>=  (times * c_e2_rate_in)) 
+	and  (e5in>=  (times * c_e5in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (_: bool) returns (e1, e2, e3, e4, e5, anbrFired, bnbrFired, cnbrFired: int);
+
+var
+
+e1_C, e1_P: int; 
+e2_C, e2_P: int; 
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e5_C, e5_P: int; 
+noDeadlock : bool;
+
+let
+
+e1 = e1_I -> pre ( e1-e1_C)+ e1_P;
+e2 = e2_I -> pre ( e2-e2_C)+ e2_P;
+e3 = e3_I -> pre ( e3-e3_C)+ e3_P;
+e4 = e4_I -> pre ( e4-e4_C)+ e4_P;
+e5 = e5_I -> pre ( e5-e5_C)+ e5_P;
+
+
+
+(e4_C, e1_P, anbrFired) = a(e4);
+(e1_C, e3_C, e2_P, bnbrFired) = b(e1, e3);
+(e2_C, e5_C, e5_P, e3_P, e4_P, cnbrFired) = c(e2, e5);
+
+
+noDeadlock = ( anbrFired >= 1) 
+	or  ( bnbrFired >= 1) 
+	or  ( cnbrFired >= 1);
+--%MAIN;
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+
+tel;
+
+

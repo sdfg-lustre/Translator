@@ -1,0 +1,581 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [1,1,1,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const fork1_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const fork1_p_out1_rate_out = [1,0,0,0,0,0,0,0];
+const fork1_p_out2_rate_out = [1,0,0,0,0,0,0,0];
+const fork1__p4_rate_out = [1,0,0,0,0,0,0,0];
+const fork1__p5_rate_in = [1,0,0,0,0,0,0,0];
+const biq_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const biq_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const biq__p3_rate_out = [1,0,0,0,0,0,0,0];
+const biq__p4_rate_in = [1,0,0,0,0,0,0,0];
+const bi_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const bi_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const bi__p3_rate_out = [1,0,0,0,0,0,0,0];
+const bi__p4_rate_in = [1,0,0,0,0,0,0,0];
+const add_p_in1_rate_in = [1,0,0,0,0,0,0,0];
+const add_p_in2_rate_in = [1,0,0,0,0,0,0,0];
+const add_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const add__p4_rate_out = [1,0,0,0,0,0,0,0];
+const add__p5_rate_in = [1,0,0,0,0,0,0,0];
+const ac_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const ac_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const ac__p3_rate_out = [1,0,0,0,0,0,0,0];
+const ac__p4_rate_in = [1,0,0,0,0,0,0,0];
+const fork2_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const fork2_p_out1_rate_out = [1,0,0,0,0,0,0,0];
+const fork2_p_out2_rate_out = [1,0,0,0,0,0,0,0];
+const fork2__p4_rate_out = [1,0,0,0,0,0,0,0];
+const fork2__p5_rate_in = [1,0,0,0,0,0,0,0];
+const conj_p_in_rate_in = [0,1,0,0,0,0,0,0];
+const conj_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const conj__p3_rate_out = [1,0,0,0,0,0,0,0];
+const conj__p4_rate_in = [1,0,0,0,0,0,0,0];
+const mul1_p_in1_rate_in = [0,1,0,0,0,0,0,0];
+const mul1_p_in2_rate_in = [0,1,0,0,0,0,0,0];
+const mul1_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const mul1__p4_rate_out = [1,0,0,0,0,0,0,0];
+const mul1__p5_rate_in = [1,0,0,0,0,0,0,0];
+const in_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const in__p2_rate_out = [1,0,0,0,0,0,0,0];
+const in__p3_rate_in = [1,0,0,0,0,0,0,0];
+const filt_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const filt_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const filt__p3_rate_out = [1,0,0,0,0,0,0,0];
+const filt__p4_rate_in = [1,0,0,0,0,0,0,0];
+const hil_p_in_rate_in = [0,0,0,1,0,0,0,0];
+const hil_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const hil__p3_rate_out = [1,0,0,0,0,0,0,0];
+const hil__p4_rate_in = [1,0,0,0,0,0,0,0];
+const eq_p_in1_rate_in = [0,0,1,0,0,0,0,0];
+const eq_p_in2_rate_in = [0,1,0,0,0,0,0,0];
+const eq_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const eq__p4_rate_out = [1,0,0,0,0,0,0,0];
+const eq__p5_rate_in = [1,0,0,0,0,0,0,0];
+const mul2_p_in1_rate_in = [0,1,0,0,0,0,0,0];
+const mul2_p_in2_rate_in = [0,1,0,0,0,0,0,0];
+const mul2_p_out_rate_out = [0,1,0,0,0,0,0,0];
+const mul2__p4_rate_out = [1,0,0,0,0,0,0,0];
+const mul2__p5_rate_in = [1,0,0,0,0,0,0,0];
+const deci_p_in_rate_in = [0,1,0,0,0,0,0,0];
+const deci_p_out1_rate_out = [0,1,0,0,0,0,0,0];
+const deci_p_out2_rate_out = [0,1,0,0,0,0,0,0];
+const deci_p_out3_rate_out = [1,0,0,0,0,0,0,0];
+const deci__p5_rate_out = [1,0,0,0,0,0,0,0];
+const deci__p6_rate_in = [1,0,0,0,0,0,0,0];
+const deco_p_in_rate_in = [0,1,0,0,0,0,0,0];
+const deco_p_out_rate_out = [1,0,0,0,0,0,0,0];
+const deco__p3_rate_out = [1,0,0,0,0,0,0,0];
+const deco__p4_rate_in = [1,0,0,0,0,0,0,0];
+const out_p_in_rate_in = [1,0,0,0,0,0,0,0];
+const out__p2_rate_out = [1,0,0,0,0,0,0,0];
+const out__p3_rate_in = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const a_I = [0,0,0,0,0,0,0,0];
+const b_I = [0,0,0,0,0,0,0,0];
+const c_I = [0,0,0,0,0,0,0,0];
+const d_I = [0,0,0,0,0,0,0,0];
+const e_I = [0,0,0,0,0,0,0,0];
+const f_I = [0,0,0,0,0,0,0,0];
+const g_I = [0,0,0,0,0,0,0,0];
+const h_I = [0,0,0,0,0,0,0,0];
+const i_I = [0,0,0,0,0,0,0,0];
+const j_I = [0,0,0,0,0,0,0,0];
+const k_I = [0,1,0,0,0,0,0,0];
+const l_I = [0,0,0,0,0,0,0,0];
+const m_I = [0,0,0,0,0,0,0,0];
+const n_I = [0,0,0,0,0,0,0,0];
+const o_I = [0,0,0,0,0,0,0,0];
+const p_I = [0,0,0,0,0,0,0,0];
+const q_I = [0,0,0,0,0,0,0,0];
+const r_I = [0,0,0,0,0,0,0,0];
+const s_I = [1,0,0,0,0,0,0,0];
+const _ch20_I = [1,0,0,0,0,0,0,0];
+const _ch21_I = [1,0,0,0,0,0,0,0];
+const _ch22_I = [1,0,0,0,0,0,0,0];
+const _ch23_I = [1,0,0,0,0,0,0,0];
+const _ch24_I = [1,0,0,0,0,0,0,0];
+const _ch25_I = [1,0,0,0,0,0,0,0];
+const _ch26_I = [1,0,0,0,0,0,0,0];
+const _ch27_I = [1,0,0,0,0,0,0,0];
+const _ch28_I = [1,0,0,0,0,0,0,0];
+const _ch29_I = [1,0,0,0,0,0,0,0];
+const _ch30_I = [1,0,0,0,0,0,0,0];
+const _ch31_I = [1,0,0,0,0,0,0,0];
+const _ch32_I = [1,0,0,0,0,0,0,0];
+const _ch33_I = [1,0,0,0,0,0,0,0];
+const _ch34_I = [1,0,0,0,0,0,0,0];
+const _ch35_I = [1,0,0,0,0,0,0,0];
+
+
+--**************** Nodes Declaration ****************--
+
+node fork1(p_in, _p5 :UsrInt) returns (p_in_C, p_out1_P, p_out2_P, _p4_P, _p5_C :UsrInt; fork1nbrFired: UsrInt );
+
+let
+fork1nbrFired= if fork1DoFire(p_in, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p5_C,p_out1_P, p_out2_P, _p4_P) = (UsrIntMult(fork1nbrFired, fork1_p_in_rate_in),UsrIntMult(fork1nbrFired, fork1__p5_rate_in),UsrIntMult(fork1nbrFired, fork1_p_out1_rate_out),UsrIntMult(fork1nbrFired, fork1_p_out2_rate_out),UsrIntMult(fork1nbrFired, fork1__p4_rate_out));
+
+tel;
+------------------
+node fork1DoFire(p_in, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, fork1_p_in_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, fork1__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node biq(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; biqnbrFired: UsrInt );
+
+let
+biqnbrFired= if biqDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(biqnbrFired, biq_p_in_rate_in),UsrIntMult(biqnbrFired, biq__p4_rate_in),UsrIntMult(biqnbrFired, biq_p_out_rate_out),UsrIntMult(biqnbrFired, biq__p3_rate_out));
+
+tel;
+------------------
+node biqDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, biq_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, biq__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node bi(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; binbrFired: UsrInt );
+
+let
+binbrFired= if biDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(binbrFired, bi_p_in_rate_in),UsrIntMult(binbrFired, bi__p4_rate_in),UsrIntMult(binbrFired, bi_p_out_rate_out),UsrIntMult(binbrFired, bi__p3_rate_out));
+
+tel;
+------------------
+node biDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, bi_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, bi__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node add(p_in1, p_in2, _p5 :UsrInt) returns (p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :UsrInt; addnbrFired: UsrInt );
+
+let
+addnbrFired= if addDoFire(p_in1, p_in2, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in1_C, p_in2_C, _p5_C,p_out_P, _p4_P) = (UsrIntMult(addnbrFired, add_p_in1_rate_in),UsrIntMult(addnbrFired, add_p_in2_rate_in),UsrIntMult(addnbrFired, add__p5_rate_in),UsrIntMult(addnbrFired, add_p_out_rate_out),UsrIntMult(addnbrFired, add__p4_rate_out));
+
+tel;
+------------------
+node addDoFire(p_in1, p_in2, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in1, UsrIntMult(times, add_p_in1_rate_in)) 
+	and UsrIntGte(p_in2, UsrIntMult(times, add_p_in2_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, add__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node ac(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; acnbrFired: UsrInt );
+
+let
+acnbrFired= if acDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(acnbrFired, ac_p_in_rate_in),UsrIntMult(acnbrFired, ac__p4_rate_in),UsrIntMult(acnbrFired, ac_p_out_rate_out),UsrIntMult(acnbrFired, ac__p3_rate_out));
+
+tel;
+------------------
+node acDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, ac_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, ac__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node fork2(p_in, _p5 :UsrInt) returns (p_in_C, p_out1_P, p_out2_P, _p4_P, _p5_C :UsrInt; fork2nbrFired: UsrInt );
+
+let
+fork2nbrFired= if fork2DoFire(p_in, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p5_C,p_out1_P, p_out2_P, _p4_P) = (UsrIntMult(fork2nbrFired, fork2_p_in_rate_in),UsrIntMult(fork2nbrFired, fork2__p5_rate_in),UsrIntMult(fork2nbrFired, fork2_p_out1_rate_out),UsrIntMult(fork2nbrFired, fork2_p_out2_rate_out),UsrIntMult(fork2nbrFired, fork2__p4_rate_out));
+
+tel;
+------------------
+node fork2DoFire(p_in, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, fork2_p_in_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, fork2__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node conj(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; conjnbrFired: UsrInt );
+
+let
+conjnbrFired= if conjDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(conjnbrFired, conj_p_in_rate_in),UsrIntMult(conjnbrFired, conj__p4_rate_in),UsrIntMult(conjnbrFired, conj_p_out_rate_out),UsrIntMult(conjnbrFired, conj__p3_rate_out));
+
+tel;
+------------------
+node conjDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, conj_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, conj__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node mul1(p_in1, p_in2, _p5 :UsrInt) returns (p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :UsrInt; mul1nbrFired: UsrInt );
+
+let
+mul1nbrFired= if mul1DoFire(p_in1, p_in2, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in1_C, p_in2_C, _p5_C,p_out_P, _p4_P) = (UsrIntMult(mul1nbrFired, mul1_p_in1_rate_in),UsrIntMult(mul1nbrFired, mul1_p_in2_rate_in),UsrIntMult(mul1nbrFired, mul1__p5_rate_in),UsrIntMult(mul1nbrFired, mul1_p_out_rate_out),UsrIntMult(mul1nbrFired, mul1__p4_rate_out));
+
+tel;
+------------------
+node mul1DoFire(p_in1, p_in2, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in1, UsrIntMult(times, mul1_p_in1_rate_in)) 
+	and UsrIntGte(p_in2, UsrIntMult(times, mul1_p_in2_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, mul1__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node in(_p3 :UsrInt) returns (p_out_P, _p2_P, _p3_C :UsrInt; innbrFired: UsrInt );
+
+let
+innbrFired= if inDoFire(_p3,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(_p3_C,p_out_P, _p2_P) = (UsrIntMult(innbrFired, in__p3_rate_in),UsrIntMult(innbrFired, in_p_out_rate_out),UsrIntMult(innbrFired, in__p2_rate_out));
+
+tel;
+------------------
+node inDoFire(_p3,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(_p3, UsrIntMult(times, in__p3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node filt(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; filtnbrFired: UsrInt );
+
+let
+filtnbrFired= if filtDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(filtnbrFired, filt_p_in_rate_in),UsrIntMult(filtnbrFired, filt__p4_rate_in),UsrIntMult(filtnbrFired, filt_p_out_rate_out),UsrIntMult(filtnbrFired, filt__p3_rate_out));
+
+tel;
+------------------
+node filtDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, filt_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, filt__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node hil(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; hilnbrFired: UsrInt );
+
+let
+hilnbrFired= if hilDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(hilnbrFired, hil_p_in_rate_in),UsrIntMult(hilnbrFired, hil__p4_rate_in),UsrIntMult(hilnbrFired, hil_p_out_rate_out),UsrIntMult(hilnbrFired, hil__p3_rate_out));
+
+tel;
+------------------
+node hilDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, hil_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, hil__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node eq(p_in1, p_in2, _p5 :UsrInt) returns (p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :UsrInt; eqnbrFired: UsrInt );
+
+let
+eqnbrFired= if eqDoFire(p_in1, p_in2, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in1_C, p_in2_C, _p5_C,p_out_P, _p4_P) = (UsrIntMult(eqnbrFired, eq_p_in1_rate_in),UsrIntMult(eqnbrFired, eq_p_in2_rate_in),UsrIntMult(eqnbrFired, eq__p5_rate_in),UsrIntMult(eqnbrFired, eq_p_out_rate_out),UsrIntMult(eqnbrFired, eq__p4_rate_out));
+
+tel;
+------------------
+node eqDoFire(p_in1, p_in2, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in1, UsrIntMult(times, eq_p_in1_rate_in)) 
+	and UsrIntGte(p_in2, UsrIntMult(times, eq_p_in2_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, eq__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node mul2(p_in1, p_in2, _p5 :UsrInt) returns (p_in1_C, p_in2_C, p_out_P, _p4_P, _p5_C :UsrInt; mul2nbrFired: UsrInt );
+
+let
+mul2nbrFired= if mul2DoFire(p_in1, p_in2, _p5,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in1_C, p_in2_C, _p5_C,p_out_P, _p4_P) = (UsrIntMult(mul2nbrFired, mul2_p_in1_rate_in),UsrIntMult(mul2nbrFired, mul2_p_in2_rate_in),UsrIntMult(mul2nbrFired, mul2__p5_rate_in),UsrIntMult(mul2nbrFired, mul2_p_out_rate_out),UsrIntMult(mul2nbrFired, mul2__p4_rate_out));
+
+tel;
+------------------
+node mul2DoFire(p_in1, p_in2, _p5,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in1, UsrIntMult(times, mul2_p_in1_rate_in)) 
+	and UsrIntGte(p_in2, UsrIntMult(times, mul2_p_in2_rate_in)) 
+	and UsrIntGte(_p5, UsrIntMult(times, mul2__p5_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node deci(p_in, _p6 :UsrInt) returns (p_in_C, p_out1_P, p_out2_P, p_out3_P, _p5_P, _p6_C :UsrInt; decinbrFired: UsrInt );
+
+let
+decinbrFired= if deciDoFire(p_in, _p6,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p6_C,p_out1_P, p_out2_P, p_out3_P, _p5_P) = (UsrIntMult(decinbrFired, deci_p_in_rate_in),UsrIntMult(decinbrFired, deci__p6_rate_in),UsrIntMult(decinbrFired, deci_p_out1_rate_out),UsrIntMult(decinbrFired, deci_p_out2_rate_out),UsrIntMult(decinbrFired, deci_p_out3_rate_out),UsrIntMult(decinbrFired, deci__p5_rate_out));
+
+tel;
+------------------
+node deciDoFire(p_in, _p6,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, deci_p_in_rate_in)) 
+	and UsrIntGte(_p6, UsrIntMult(times, deci__p6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node deco(p_in, _p4 :UsrInt) returns (p_in_C, p_out_P, _p3_P, _p4_C :UsrInt; deconbrFired: UsrInt );
+
+let
+deconbrFired= if decoDoFire(p_in, _p4,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p4_C,p_out_P, _p3_P) = (UsrIntMult(deconbrFired, deco_p_in_rate_in),UsrIntMult(deconbrFired, deco__p4_rate_in),UsrIntMult(deconbrFired, deco_p_out_rate_out),UsrIntMult(deconbrFired, deco__p3_rate_out));
+
+tel;
+------------------
+node decoDoFire(p_in, _p4,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, deco_p_in_rate_in)) 
+	and UsrIntGte(_p4, UsrIntMult(times, deco__p4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node out(p_in, _p3 :UsrInt) returns (p_in_C, _p2_P, _p3_C :UsrInt; outnbrFired: UsrInt );
+
+let
+outnbrFired= if outDoFire(p_in, _p3,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(p_in_C, _p3_C,_p2_P) = (UsrIntMult(outnbrFired, out_p_in_rate_in),UsrIntMult(outnbrFired, out__p3_rate_in),UsrIntMult(outnbrFired, out__p2_rate_out));
+
+tel;
+------------------
+node outDoFire(p_in, _p3,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(p_in, UsrIntMult(times, out_p_in_rate_in)) 
+	and UsrIntGte(_p3, UsrIntMult(times, out__p3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (In: UsrInt) returns (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, _ch20, _ch21, _ch22, _ch23, _ch24, _ch25, _ch26, _ch27, _ch28, _ch29, _ch30, _ch31, _ch32, _ch33, _ch34, _ch35, fork1nbrFired, biqnbrFired, binbrFired, addnbrFired, acnbrFired, fork2nbrFired, conjnbrFired, mul1nbrFired, innbrFired, filtnbrFired, hilnbrFired, eqnbrFired, mul2nbrFired, decinbrFired, deconbrFired, outnbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+a_C, a_P: UsrInt; 
+b_C, b_P: UsrInt; 
+c_C, c_P: UsrInt; 
+d_C, d_P: UsrInt; 
+e_C, e_P: UsrInt; 
+f_C, f_P: UsrInt; 
+g_C, g_P: UsrInt; 
+h_C, h_P: UsrInt; 
+i_C, i_P: UsrInt; 
+j_C, j_P: UsrInt; 
+k_C, k_P: UsrInt; 
+l_C, l_P: UsrInt; 
+m_C, m_P: UsrInt; 
+n_C, n_P: UsrInt; 
+o_C, o_P: UsrInt; 
+p_C, p_P: UsrInt; 
+q_C, q_P: UsrInt; 
+r_C, r_P: UsrInt; 
+s_C, s_P: UsrInt; 
+_ch20_C, _ch20_P: UsrInt; 
+_ch21_C, _ch21_P: UsrInt; 
+_ch22_C, _ch22_P: UsrInt; 
+_ch23_C, _ch23_P: UsrInt; 
+_ch24_C, _ch24_P: UsrInt; 
+_ch25_C, _ch25_P: UsrInt; 
+_ch26_C, _ch26_P: UsrInt; 
+_ch27_C, _ch27_P: UsrInt; 
+_ch28_C, _ch28_P: UsrInt; 
+_ch29_C, _ch29_P: UsrInt; 
+_ch30_C, _ch30_P: UsrInt; 
+_ch31_C, _ch31_P: UsrInt; 
+_ch32_C, _ch32_P: UsrInt; 
+_ch33_C, _ch33_P: UsrInt; 
+_ch34_C, _ch34_P: UsrInt; 
+_ch35_C, _ch35_P: UsrInt; 
+
+let
+
+a = a_I -> pre UsrIntPlus( UsrIntMinus( a,a_C), a_P);
+b = b_I -> pre UsrIntPlus( UsrIntMinus( b,b_C), b_P);
+c = c_I -> pre UsrIntPlus( UsrIntMinus( c,c_C), c_P);
+d = d_I -> pre UsrIntPlus( UsrIntMinus( d,d_C), d_P);
+e = e_I -> pre UsrIntPlus( UsrIntMinus( e,e_C), e_P);
+f = f_I -> pre UsrIntPlus( UsrIntMinus( f,f_C), f_P);
+g = g_I -> pre UsrIntPlus( UsrIntMinus( g,g_C), g_P);
+h = h_I -> pre UsrIntPlus( UsrIntMinus( h,h_C), h_P);
+i = i_I -> pre UsrIntPlus( UsrIntMinus( i,i_C), i_P);
+j = j_I -> pre UsrIntPlus( UsrIntMinus( j,j_C), j_P);
+k = k_I -> pre UsrIntPlus( UsrIntMinus( k,k_C), k_P);
+l = l_I -> pre UsrIntPlus( UsrIntMinus( l,l_C), l_P);
+m = m_I -> pre UsrIntPlus( UsrIntMinus( m,m_C), m_P);
+n = n_I -> pre UsrIntPlus( UsrIntMinus( n,n_C), n_P);
+o = o_I -> pre UsrIntPlus( UsrIntMinus( o,o_C), o_P);
+p = p_I -> pre UsrIntPlus( UsrIntMinus( p,p_C), p_P);
+q = q_I -> pre UsrIntPlus( UsrIntMinus( q,q_C), q_P);
+r = r_I -> pre UsrIntPlus( UsrIntMinus( r,r_C), r_P);
+s = s_I -> pre UsrIntPlus( UsrIntMinus( s,s_C), s_P);
+_ch20 = _ch20_I -> pre UsrIntPlus( UsrIntMinus( _ch20,_ch20_C), _ch20_P);
+_ch21 = _ch21_I -> pre UsrIntPlus( UsrIntMinus( _ch21,_ch21_C), _ch21_P);
+_ch22 = _ch22_I -> pre UsrIntPlus( UsrIntMinus( _ch22,_ch22_C), _ch22_P);
+_ch23 = _ch23_I -> pre UsrIntPlus( UsrIntMinus( _ch23,_ch23_C), _ch23_P);
+_ch24 = _ch24_I -> pre UsrIntPlus( UsrIntMinus( _ch24,_ch24_C), _ch24_P);
+_ch25 = _ch25_I -> pre UsrIntPlus( UsrIntMinus( _ch25,_ch25_C), _ch25_P);
+_ch26 = _ch26_I -> pre UsrIntPlus( UsrIntMinus( _ch26,_ch26_C), _ch26_P);
+_ch27 = _ch27_I -> pre UsrIntPlus( UsrIntMinus( _ch27,_ch27_C), _ch27_P);
+_ch28 = _ch28_I -> pre UsrIntPlus( UsrIntMinus( _ch28,_ch28_C), _ch28_P);
+_ch29 = _ch29_I -> pre UsrIntPlus( UsrIntMinus( _ch29,_ch29_C), _ch29_P);
+_ch30 = _ch30_I -> pre UsrIntPlus( UsrIntMinus( _ch30,_ch30_C), _ch30_P);
+_ch31 = _ch31_I -> pre UsrIntPlus( UsrIntMinus( _ch31,_ch31_C), _ch31_P);
+_ch32 = _ch32_I -> pre UsrIntPlus( UsrIntMinus( _ch32,_ch32_C), _ch32_P);
+_ch33 = _ch33_I -> pre UsrIntPlus( UsrIntMinus( _ch33,_ch33_C), _ch33_P);
+_ch34 = _ch34_I -> pre UsrIntPlus( UsrIntMinus( _ch34,_ch34_C), _ch34_P);
+_ch35 = _ch35_I -> pre UsrIntPlus( UsrIntMinus( _ch35,_ch35_C), _ch35_P);
+
+
+
+(s_C, a_P, b_P, _ch20_P, _ch20_C, fork1nbrFired) = fork1(s, _ch20);
+(a_C, c_P, _ch21_P, _ch21_C, biqnbrFired) = biq(a, _ch21);
+(b_C, d_P, _ch22_P, _ch22_C, binbrFired) = bi(b, _ch22);
+(c_C, d_C, e_P, _ch23_P, _ch23_C, addnbrFired) = add(c, d, _ch23);
+(e_C, f_P, _ch24_P, _ch24_C, acnbrFired) = ac(e, _ch24);
+(f_C, g_P, h_P, _ch25_P, _ch25_C, fork2nbrFired) = fork2(f, _ch25);
+(g_C, i_P, _ch26_P, _ch26_C, conjnbrFired) = conj(g, _ch26);
+(h_C, o_C, j_P, _ch27_P, _ch27_C, mul1nbrFired) = mul1(h, o, _ch27);
+(l_P, _ch28_P, _ch28_C, innbrFired) = in(_ch28);
+(l_C, m_P, _ch29_P, _ch29_C, filtnbrFired) = filt(l, _ch29);
+(m_C, n_P, _ch30_P, _ch30_C, hilnbrFired) = hil(m, _ch30);
+(n_C, k_C, o_P, _ch31_P, _ch31_C, eqnbrFired) = eq(n, k, _ch31);
+(i_C, p_C, k_P, _ch32_P, _ch32_C, mul2nbrFired) = mul2(i, p, _ch32);
+(j_C, p_P, q_P, s_P, _ch33_P, _ch33_C, decinbrFired) = deci(j, _ch33);
+(q_C, r_P, _ch34_P, _ch34_C, deconbrFired) = deco(q, _ch34);
+(r_C, _ch35_P, _ch35_C, outnbrFired) = out(r, _ch35);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (In: UsrInt) returns (noError :bool)
+
+var
+
+a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, _ch20, _ch21, _ch22, _ch23, _ch24, _ch25, _ch26, _ch27, _ch28, _ch29, _ch30, _ch31, _ch32, _ch33, _ch34, _ch35, fork1nbrFired, biqnbrFired, binbrFired, addnbrFired, acnbrFired, fork2nbrFired, conjnbrFired, mul1nbrFired, innbrFired, filtnbrFired, hilnbrFired, eqnbrFired, mul2nbrFired, decinbrFired, deconbrFired, outnbrFired:UsrInt;
+
+noDeadlock : bool;
+
+let
+
+(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, _ch20, _ch21, _ch22, _ch23, _ch24, _ch25, _ch26, _ch27, _ch28, _ch29, _ch30, _ch31, _ch32, _ch33, _ch34, _ch35, fork1nbrFired, biqnbrFired, binbrFired, addnbrFired, acnbrFired, fork2nbrFired, conjnbrFired, mul1nbrFired, innbrFired, filtnbrFired, hilnbrFired, eqnbrFired, mul2nbrFired, decinbrFired, deconbrFired, outnbrFired) = top(In);
+
+noDeadlock = UsrIntGte( fork1nbrFired , UsrInt_1) 
+	or UsrIntGte( biqnbrFired , UsrInt_1) 
+	or UsrIntGte( binbrFired , UsrInt_1) 
+	or UsrIntGte( addnbrFired , UsrInt_1) 
+	or UsrIntGte( acnbrFired , UsrInt_1) 
+	or UsrIntGte( fork2nbrFired , UsrInt_1) 
+	or UsrIntGte( conjnbrFired , UsrInt_1) 
+	or UsrIntGte( mul1nbrFired , UsrInt_1) 
+	or UsrIntGte( innbrFired , UsrInt_1) 
+	or UsrIntGte( filtnbrFired , UsrInt_1) 
+	or UsrIntGte( hilnbrFired , UsrInt_1) 
+	or UsrIntGte( eqnbrFired , UsrInt_1) 
+	or UsrIntGte( mul2nbrFired , UsrInt_1) 
+	or UsrIntGte( decinbrFired , UsrInt_1) 
+	or UsrIntGte( deconbrFired , UsrInt_1) 
+	or UsrIntGte( outnbrFired , UsrInt_1);
+
+noError= noDeadlock;
+
+tel

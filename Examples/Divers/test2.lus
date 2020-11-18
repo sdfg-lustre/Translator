@@ -1,0 +1,15 @@
+const inx=3;const outx=2; 
+const iny=1;const outy=1;
+
+node top2 (in:bool) returns (out: bool);
+
+
+let
+--   var e0, e1: bool;
+--   (eO, e1, out) = if (in and (not pred (e0)) and (not pred (e1))) then (0,0,0);
+
+--   var e0: bool;
+--   (eO, out) = if (in and (pred (e0)) and (not pred (e1))) then (0,0,0);
+
+--  assert (y < 3);
+tel

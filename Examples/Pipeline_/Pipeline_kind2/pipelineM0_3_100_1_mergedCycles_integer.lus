@@ -1,0 +1,207 @@
+--** This lustre code is generated automatically on 01 juin 2020 06:02:45 PM
+--** It corresponds to the translation of an SDFG model (example)  to Lustre. This version produce a Lustre code having a reduced number of steps.
+
+
+
+
+--**************** Const Rates ****************--
+
+const a1_e1_rate_in = 1;
+const a1_e3_rate_in = 1;
+const a1_e5in_rate_in = 1;
+const a1_e5out_rate_out = 1;
+const a1_e4_rate_out = 1;
+const a2_e4_rate_in = 1;
+const a2_e2_rate_out = 1;
+const a2_e3_rate_out = 1;
+
+--****************  Actors' durations ****************--
+
+const a1_maxStages  = 1;
+const a1_duration  = 3;
+const a2_maxStages  = 1;
+const a2_duration  = 100;
+const  maxDuration  = 100;
+
+--**************** Init Channel ****************--
+
+const e3_I = 1;
+const e4_I = 0;
+const e5_I = 1;
+
+const e1_I = 0;
+const e2_I = 0;
+
+--************************************************--
+--******* Translation of Actor: a1***************--
+--************************************************--
+node a1(clock, e1, e3, e5in :int) returns (nextClock, e1_C, e3_C, e5in_C, e5out_P, e4_P :int; a1nbrFired: int );
+
+var
+e5out_PD, e4_PD :int;
+stage :int;
+let
+a1nbrFired= if a1DoFire(e1, e3, e5in,1) then 1
+		else 0;
+
+(e1_C, e3_C, e5in_C, e5out_PD, e4_PD) = ((a1nbrFired * a1_e1_rate_in),(a1nbrFired * a1_e3_rate_in),(a1nbrFired * a1_e5in_rate_in),(a1nbrFired * a1_e5out_rate_out),(a1nbrFired * a1_e4_rate_out));
+
+stage = if (a1nbrFired = 0) then 0 
+         else   1 ;
+
+(nextClock , e5out_P, e4_P)=a1Stage(clock, stage, 1, e5out_PD, e4_PD); 
+
+tel;
+------------------subnode Dofire of Actora1-----------------
+node a1DoFire(e1, e3, e5in,times:int) returns ( yes: bool);
+let
+
+yes = if (e1>=  (times * a1_e1_rate_in)) 
+	and (e3>=  (times * a1_e3_rate_in)) 
+	and (e5in>=  (times * a1_e5in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------subnode Stage of Actora1-----------------
+node a1Stage(clock,  stage, numStage, e5out_PD, e4_PD: int) returns (rTime, e5out_P, e4_P : int);
+
+var 
+e5out_PDBuffer, e4_PDBuffer: int; 
+selected, endExecution, active : bool; 
+
+ let 
+selected = if  (stage = numStage) then true else false ; 
+ endExecution= false -> if not pre (active)  then false else pre  ((rTime - clock) = 0); 
+active = if  selected then true else false -> 
+           if  selected then true 
+         else if  endExecution then false else pre active; 
+rTime = if  selected then a1_duration  else maxDuration -> 
+          if  selected then a1_duration 
+          else if  (pre active) then if  (pre (rTime > clock) )then  pre (rTime - clock) 
+          else maxDuration   else maxDuration ; 
+(e5out_PDBuffer, e4_PDBuffer) = if selected then (e5out_PD, e4_PD) 
+                               else (0, 0) 
+ ->if selected then (e5out_PD, e4_PD) 
+                               else if endExecution then (0, 0)
+           else pre (e5out_PDBuffer, e4_PDBuffer); 
+(e5out_P, e4_P) = (0, 0) ->   if endExecution then pre (e5out_PDBuffer, e4_PDBuffer)
+                                        else (0, 0); 
+tel; 
+
+
+--************************************************--
+--******* Translation of Actor: a2***************--
+--************************************************--
+node a2(clock, e4 :int) returns (nextClock, e4_C, e2_P, e3_P :int; a2nbrFired: int );
+
+var
+e2_PD, e3_PD :int;
+stage :int;
+let
+a2nbrFired= if a2DoFire(e4,1) then 1
+		else 0;
+
+(e4_C, e2_PD, e3_PD) = ((a2nbrFired * a2_e4_rate_in),(a2nbrFired * a2_e2_rate_out),(a2nbrFired * a2_e3_rate_out));
+
+stage = if (a2nbrFired = 0) then 0 
+         else   1 ;
+
+(nextClock , e2_P, e3_P)=a2Stage(clock, stage, 1, e2_PD, e3_PD); 
+
+tel;
+------------------subnode Dofire of Actora2-----------------
+node a2DoFire(e4,times:int) returns ( yes: bool);
+let
+
+yes = if (e4>=  (times * a2_e4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------subnode Stage of Actora2-----------------
+node a2Stage(clock,  stage, numStage, e2_PD, e3_PD: int) returns (rTime, e2_P, e3_P : int);
+
+var 
+e2_PDBuffer, e3_PDBuffer: int; 
+selected, endExecution, active : bool; 
+
+ let 
+selected = if  (stage = numStage) then true else false ; 
+ endExecution= false -> if not pre (active)  then false else pre  ((rTime - clock) = 0); 
+active = if  selected then true else false -> 
+           if  selected then true 
+         else if  endExecution then false else pre active; 
+rTime = if  selected then a2_duration  else maxDuration -> 
+          if  selected then a2_duration 
+          else if  (pre active) then if  (pre (rTime > clock) )then  pre (rTime - clock) 
+          else maxDuration   else maxDuration ; 
+(e2_PDBuffer, e3_PDBuffer) = if selected then (e2_PD, e3_PD) 
+                               else (0, 0) 
+ ->if selected then (e2_PD, e3_PD) 
+                               else if endExecution then (0, 0)
+           else pre (e2_PDBuffer, e3_PDBuffer); 
+(e2_P, e3_P) = (0, 0) ->   if endExecution then pre (e2_PDBuffer, e3_PDBuffer)
+                                        else (0, 0); 
+tel; 
+
+--******* Node Min***************--
+node Min (x, y :int) returns ( r: int);
+let
+r= if  (x < y) then x else y;
+tel;
+
+--************************************************--
+--******* Node Top***************--
+--************************************************--
+
+
+node top (e1_P: int) returns (e3, e4, e5, e1, e2, a1nbrFired, a2nbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e5_C, e5_P: int; 
+e1_C : int;
+e2_P : int;
+positiveValues, P3: bool;
+
+
+let
+
+assert e1_P  >=0; 
+ 
+e3 = e3_I -> pre  (  ( e3-e3_C)+ e3_P);
+e4 = e4_I -> pre  (  ( e4-e4_C)+ e4_P);
+e5 = e5_I -> pre  (  ( e5-e5_C)+ e5_P);
+
+e1 = e1_P -> pre  ( e1-e1_C)+ e1_P ;
+
+e2 = e2_I -> pre (e2+ e2_P);
+
+(e1_C, e3_C, e5_C, e5_P, e4_P, a1nbrFired) = a1(e1, e3, e5);
+(e4_C, e2_P, e3_P, a2nbrFired) = a2(e4);
+
+
+positiveValues = ( e3>=   0) 
+	and  ( e4>=   0) 
+	and  ( e5>=   0) 
+	and  ( e1>=  0) 
+	and  ( e2>=  0) 
+	and  ( a1nbrFired >= 0) 
+	and  ( a2nbrFired >= 0) ;
+
+ 
+ 
+
+P3= true -> (e4_C=0 =>  e4_P=0) and (e4_C=1 =>  e4_P=1) ;
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+--%PROPERTY  "P3 "  P3;
+
+tel;
+

@@ -1,0 +1,83 @@
+
+    <sdf name='mp3decoder' nberBit="8" maxValue="15">
+      <actor name='huffman' duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='out' rate='2'/>
+          <port name='p1' type='out' rate='2'/>
+          <port name='p2' type='in' rate='1'/>
+          <port name='p3' type='out' rate='1'/>
+      </actor>
+      <actor name='req0'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+          <port name='p2' type='in' rate='1'/>
+          <port name='p3' type='out' rate='1'/>
+      </actor>
+      <actor name='reorder0'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='req1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+          <port name='p2' type='in' rate='1'/>
+          <port name='p3' type='out' rate='1'/>
+      </actor>
+      <actor name='reorder1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='stereo'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='in' rate='1'/>
+          <port name='p2' type='out' rate='1'/>
+          <port name='p3' type='out' rate='1'/>
+      </actor>
+      <actor name='antialias0'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='hybridsynth0'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='freqinv0' duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='subbinv0'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+      </actor>
+      <actor name='antialias1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='hybridsynth1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='freqinv1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+          <port name='p1' type='out' rate='1'/>
+      </actor>
+      <actor name='subbinv1'  duration="1" maxAutoConcurrences="3">
+          <port name='p0' type='in' rate='1'/>
+      </actor>
+      <channel name='ch0' srcActor='huffman' srcPort='p0' dstActor='req0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch1' srcActor='huffman' srcPort='p1' dstActor='req1' dstPort='p0' initialTokens="0"/>
+      <channel name='ch2' srcActor='req0' srcPort='p1' dstActor='reorder0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch3' srcActor='req1' srcPort='p1' dstActor='reorder1' dstPort='p0'  initialTokens="0"/>
+      <channel name='ch4' srcActor='reorder0' srcPort='p1' dstActor='stereo' dstPort='p0' initialTokens="0"/>
+      <channel name='ch5' srcActor='reorder1' srcPort='p1' dstActor='stereo' dstPort='p1'  initialTokens="0"/>
+      <channel name='ch6' srcActor='stereo' srcPort='p2' dstActor='antialias0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch7' srcActor='stereo' srcPort='p3' dstActor='antialias1' dstPort='p0' initialTokens="0"/>
+      <channel name='ch8' srcActor='antialias0' srcPort='p1' dstActor='hybridsynth0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch9' srcActor='antialias1' srcPort='p1' dstActor='hybridsynth1' dstPort='p0' initialTokens="0"/>
+      <channel name='ch10' srcActor='hybridsynth0' srcPort='p1' dstActor='freqinv0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch11' srcActor='hybridsynth1' srcPort='p1' dstActor='freqinv1' dstPort='p0' initialTokens="0"/>
+      <channel name='ch12' srcActor='freqinv0' srcPort='p1' dstActor='subbinv0' dstPort='p0' initialTokens="0"/>
+      <channel name='ch13' srcActor='freqinv1' srcPort='p1' dstActor='subbinv1' dstPort='p0'  initialTokens="0"/>
+      <channel name='ch14' srcActor='huffman' srcPort='p3' dstActor='huffman' dstPort='p2' initialTokens='1'/>
+      <channel name='ch15' srcActor='req0' srcPort='p3' dstActor='req0' dstPort='p2' initialTokens='1'/>
+      <channel name='ch16' srcActor='req1' srcPort='p3' dstActor='req1' dstPort='p2' initialTokens='1'/>
+    </sdf>
+

@@ -1,0 +1,36 @@
+
+    <sdf name="bipartite" nberBit="8" maxValue="15">
+      <actor name="a" duration="1" maxAutoConcurrences="3">
+        <port name="p1" type="out" rate="3"/>
+        <port name="p2" type="out" rate="4"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="b" duration="1" maxAutoConcurrences="3">
+        <port name="p1" type="out" rate="1"/>
+        <port name="p2" type="out" rate="4"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="c" duration="1" maxAutoConcurrences="3">
+        <port name="p1" type="in" rate="4"/>
+        <port name="p2" type="in" rate="4"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <actor name="d" duration="1" maxAutoConcurrences="3">
+        <port name="p1" type="in" rate="3"/>
+        <port name="p2" type="in" rate="9"/>
+        <port name="_p3" type="out" rate="1"/>
+        <port name="_p4" type="in" rate="1"/>
+      </actor>
+      <channel name="ch1" srcActor="a" srcPort="p1" dstActor="c" dstPort="p1" initialTokens="0"/>
+      <channel name="ch2" srcActor="a" srcPort="p2" dstActor="d" dstPort="p1" initialTokens="0"/>
+      <channel name="ch3" srcActor="b" srcPort="p1" dstActor="c" dstPort="p2" initialTokens="0"/>
+      <channel name="ch4" srcActor="b" srcPort="p2" dstActor="d" dstPort="p2" initialTokens="0"/>
+      <channel name="_ch5" srcActor="a" srcPort="_p3" dstActor="a" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch6" srcActor="b" srcPort="_p3" dstActor="b" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch7" srcActor="c" srcPort="_p3" dstActor="c" dstPort="_p4" initialTokens="1"/>
+      <channel name="_ch8" srcActor="d" srcPort="_p3" dstActor="d" dstPort="_p4" initialTokens="1"/>
+    </sdf>
+   

@@ -1,0 +1,221 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [1,1,1,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const F_RF_rate_in = [1,0,0,0,0,0,0,0];
+const F_FR_rate_out = [1,0,0,0,0,0,0,0];
+const F_FM_rate_out = [1,0,0,0,0,0,0,0];
+const F_FV_rate_out = [1,0,1,0,0,0,0,0];
+const F_FI_rate_out = [1,0,1,0,0,0,0,0];
+const R_FR_rate_in = [1,0,0,0,0,0,0,0];
+const R_MR_rate_in = [1,0,0,0,0,0,0,0];
+const R_IR_rate_in = [1,0,1,0,0,0,0,0];
+const R_RF_rate_out = [1,0,0,0,0,0,0,0];
+const R_RM_rate_out = [1,0,0,0,0,0,0,0];
+const M_FM_rate_in = [1,0,0,0,0,0,0,0];
+const M_VM_rate_in = [1,0,1,0,0,0,0,0];
+const M_RM_rate_in = [1,0,0,0,0,0,0,0];
+const M_MR_rate_out = [1,0,0,0,0,0,0,0];
+const V_FV_rate_in = [1,0,0,0,0,0,0,0];
+const V_VM_rate_out = [1,0,0,0,0,0,0,0];
+const V_VI_rate_out = [1,0,0,0,0,0,0,0];
+const I_FI_rate_in = [1,0,0,0,0,0,0,0];
+const I_VI_rate_in = [1,0,0,0,0,0,0,0];
+const I_IR_rate_out = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const FR_I = [0,0,0,0,0,0,0,0];
+const FM_I = [0,0,0,0,0,0,0,0];
+const FV_I = [0,0,0,0,0,0,0,0];
+const FI_I = [0,0,0,0,0,0,0,0];
+const RF_I = [1,1,0,0,0,0,0,0];
+const RM_I = [1,0,0,0,0,0,0,0];
+const MR_I = [0,0,0,0,0,0,0,0];
+const VM_I = [0,0,0,0,0,0,0,0];
+const VI_I = [0,0,0,0,0,0,0,0];
+const IR_I = [0,0,0,0,0,0,0,0];
+
+
+--**************** Nodes Declaration ****************--
+
+node F(RF :UsrInt) returns (RF_C, FR_P, FM_P, FV_P, FI_P :UsrInt; FnbrFired: UsrInt );
+
+let
+FnbrFired= if FDoFire(RF,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(RF_C,FR_P, FM_P, FV_P, FI_P) = (UsrIntMult(FnbrFired, F_RF_rate_in),UsrIntMult(FnbrFired, F_FR_rate_out),UsrIntMult(FnbrFired, F_FM_rate_out),UsrIntMult(FnbrFired, F_FV_rate_out),UsrIntMult(FnbrFired, F_FI_rate_out));
+
+tel;
+------------------
+node FDoFire(RF,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(RF, UsrIntMult(times, F_RF_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node R(FR, MR, IR :UsrInt) returns (FR_C, MR_C, IR_C, RF_P, RM_P :UsrInt; RnbrFired: UsrInt );
+
+let
+RnbrFired= if RDoFire(FR, MR, IR,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(FR_C, MR_C, IR_C,RF_P, RM_P) = (UsrIntMult(RnbrFired, R_FR_rate_in),UsrIntMult(RnbrFired, R_MR_rate_in),UsrIntMult(RnbrFired, R_IR_rate_in),UsrIntMult(RnbrFired, R_RF_rate_out),UsrIntMult(RnbrFired, R_RM_rate_out));
+
+tel;
+------------------
+node RDoFire(FR, MR, IR,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(FR, UsrIntMult(times, R_FR_rate_in)) 
+	and UsrIntGte(MR, UsrIntMult(times, R_MR_rate_in)) 
+	and UsrIntGte(IR, UsrIntMult(times, R_IR_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node M(FM, VM, RM :UsrInt) returns (FM_C, VM_C, RM_C, MR_P :UsrInt; MnbrFired: UsrInt );
+
+let
+MnbrFired= if MDoFire(FM, VM, RM,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(FM_C, VM_C, RM_C,MR_P) = (UsrIntMult(MnbrFired, M_FM_rate_in),UsrIntMult(MnbrFired, M_VM_rate_in),UsrIntMult(MnbrFired, M_RM_rate_in),UsrIntMult(MnbrFired, M_MR_rate_out));
+
+tel;
+------------------
+node MDoFire(FM, VM, RM,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(FM, UsrIntMult(times, M_FM_rate_in)) 
+	and UsrIntGte(VM, UsrIntMult(times, M_VM_rate_in)) 
+	and UsrIntGte(RM, UsrIntMult(times, M_RM_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node V(FV :UsrInt) returns (FV_C, VM_P, VI_P :UsrInt; VnbrFired: UsrInt );
+
+let
+VnbrFired= if VDoFire(FV,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(FV_C,VM_P, VI_P) = (UsrIntMult(VnbrFired, V_FV_rate_in),UsrIntMult(VnbrFired, V_VM_rate_out),UsrIntMult(VnbrFired, V_VI_rate_out));
+
+tel;
+------------------
+node VDoFire(FV,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(FV, UsrIntMult(times, V_FV_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node I(FI, VI :UsrInt) returns (FI_C, VI_C, IR_P :UsrInt; InbrFired: UsrInt );
+
+let
+InbrFired= if IDoFire(FI, VI,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(FI_C, VI_C,IR_P) = (UsrIntMult(InbrFired, I_FI_rate_in),UsrIntMult(InbrFired, I_VI_rate_in),UsrIntMult(InbrFired, I_IR_rate_out));
+
+tel;
+------------------
+node IDoFire(FI, VI,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(FI, UsrIntMult(times, I_FI_rate_in)) 
+	and UsrIntGte(VI, UsrIntMult(times, I_VI_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (: UsrInt) returns (FR, FM, FV, FI, RF, RM, MR, VM, VI, IR, FnbrFired, RnbrFired, MnbrFired, VnbrFired, InbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+FR_C, FR_P: UsrInt; 
+FM_C, FM_P: UsrInt; 
+FV_C, FV_P: UsrInt; 
+FI_C, FI_P: UsrInt; 
+RF_C, RF_P: UsrInt; 
+RM_C, RM_P: UsrInt; 
+MR_C, MR_P: UsrInt; 
+VM_C, VM_P: UsrInt; 
+VI_C, VI_P: UsrInt; 
+IR_C, IR_P: UsrInt; 
+
+let
+
+FR = FR_I -> pre UsrIntPlus( UsrIntMinus( FR,FR_C), FR_P);
+FM = FM_I -> pre UsrIntPlus( UsrIntMinus( FM,FM_C), FM_P);
+FV = FV_I -> pre UsrIntPlus( UsrIntMinus( FV,FV_C), FV_P);
+FI = FI_I -> pre UsrIntPlus( UsrIntMinus( FI,FI_C), FI_P);
+RF = RF_I -> pre UsrIntPlus( UsrIntMinus( RF,RF_C), RF_P);
+RM = RM_I -> pre UsrIntPlus( UsrIntMinus( RM,RM_C), RM_P);
+MR = MR_I -> pre UsrIntPlus( UsrIntMinus( MR,MR_C), MR_P);
+VM = VM_I -> pre UsrIntPlus( UsrIntMinus( VM,VM_C), VM_P);
+VI = VI_I -> pre UsrIntPlus( UsrIntMinus( VI,VI_C), VI_P);
+IR = IR_I -> pre UsrIntPlus( UsrIntMinus( IR,IR_C), IR_P);
+
+
+
+(RF_C, FR_P, FM_P, FV_P, FI_P, FnbrFired) = F(RF);
+(FR_C, MR_C, IR_C, RF_P, RM_P, RnbrFired) = R(FR, MR, IR);
+(FM_C, VM_C, RM_C, MR_P, MnbrFired) = M(FM, VM, RM);
+(FV_C, VM_P, VI_P, VnbrFired) = V(FV);
+(FI_C, VI_C, IR_P, InbrFired) = I(FI, VI);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (: UsrInt) returns (noError :bool)
+
+var
+
+FR, FM, FV, FI, RF, RM, MR, VM, VI, IR, FnbrFired, RnbrFired, MnbrFired, VnbrFired, InbrFired:UsrInt;
+
+positiveValues: bool;
+
+let
+
+(FR, FM, FV, FI, RF, RM, MR, VM, VI, IR, FnbrFired, RnbrFired, MnbrFired, VnbrFired, InbrFired) = top();
+
+positiveValues = UsrIntGte( FR, UsrInt_0) 
+	and UsrIntGte( FM, UsrInt_0) 
+	and UsrIntGte( FV, UsrInt_0) 
+	and UsrIntGte( FI, UsrInt_0) 
+	and UsrIntGte( RF, UsrInt_0) 
+	and UsrIntGte( RM, UsrInt_0) 
+	and UsrIntGte( MR, UsrInt_0) 
+	and UsrIntGte( VM, UsrInt_0) 
+	and UsrIntGte( VI, UsrInt_0) 
+	and UsrIntGte( IR, UsrInt_0) 
+	and UsrIntGte( FnbrFired , UsrInt_0) 
+	and UsrIntGte( RnbrFired , UsrInt_0) 
+	and UsrIntGte( MnbrFired , UsrInt_0) 
+	and UsrIntGte( VnbrFired , UsrInt_0) 
+	and UsrIntGte( InbrFired , UsrInt_0) ;
+
+noError= positiveValues and true;
+
+tel

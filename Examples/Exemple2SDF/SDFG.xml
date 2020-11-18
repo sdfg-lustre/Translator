@@ -1,0 +1,80 @@
+
+ <sdf name="SDFG ">
+
+
+      <actor name="f" duration="2" maxAutoConcurrences="1"  maxStages="1">
+        <port name="fin" type="in" rate="1"/>
+        <port name="fout" type="out" rate="1"/>
+        <port name="af" type="in" rate="1"/>
+        <port name="fa" type="out" rate="1"/>
+      </actor>
+
+
+      <actor name="a" duration="2" maxAutoConcurrences="2"  maxStages="2">
+        <port name="fa" type="in" rate="2"/>
+         <port name="ba" type="in" rate="3"/>
+        <port name="ea" type="in" rate="12"/>
+        <port name="af" type="out" rate="2"/>
+        <port name="ab" type="out" rate="3"/>
+        <port name="ae" type="out" rate="12"/>
+      </actor>
+
+      <actor name="b" duration="2" maxAutoConcurrences="1"  maxStages="1">
+        <port name="bin" type="in" rate="1"/>
+        <port name="bout" type="out" rate="1"/>
+	<port name="ab" type="in" rate="5"/>
+        <port name="cb" type="in" rate="2"/>
+        <port name="eb" type="in" rate="4"/>
+        <port name="ba" type="out" rate="5"/>
+        <port name="bc" type="out" rate="2"/>
+        <port name="be" type="out" rate="4"/>
+      </actor>
+
+  <actor name="c" duration="2" maxAutoConcurrences="2"  maxStages="2">
+        <port name="bc" type="in" rate="3"/> 
+        <port name="dc" type="in" rate="3"/> 
+        <port name="cb" type="out" rate="3"/>
+        <port name="cd" type="out" rate="3"/>  
+      </actor>
+
+  <actor name="d" duration="2" maxAutoConcurrences="1"  maxStages="1">
+        <port name="din" type="in" rate="1"/> 
+        <port name="dout" type="out" rate="1"/> 
+        <port name="cd" type="in" rate="1"/>
+        <port name="ed" type="in" rate="2"/>  
+        <port name="dc" type="out" rate="1"/>
+        <port name="de" type="out" rate="2"/>
+      </actor>
+
+<actor name="e" duration="2" maxAutoConcurrences="2"  maxStages="2">
+        <port name="ae" type="in" rate="5"/> 
+         <port name="be" type="in" rate="1"/> 
+        <port name="de" type="in" rate="1"/> 
+        <port name="ea" type="out" rate="5"/> 
+        <port name="eb" type="out" rate="1"/> 
+        <port name="ed" type="out" rate="1"/> 
+      </actor>
+   <channel name="f" srcActor="f" srcPort="fout" dstActor="f" dstPort="fin" initialTokens="1"/>
+     <channel name="b" srcActor="b" srcPort="bout" dstActor="b" dstPort="bin" initialTokens="1"/>
+   <channel name="d" srcActor="d" srcPort="dout" dstActor="d" dstPort="din" initialTokens="1"/>   
+   <channel name="fa" srcActor="f" srcPort="fa" dstActor="a" dstPort="fa" initialTokens="4"/>
+   <channel name="af" srcActor="a" srcPort="af" dstActor="f" dstPort="af" initialTokens="0"/>
+   <channel name="ab" srcActor="a" srcPort="ab" dstActor="b" dstPort="ab" initialTokens="0"/>
+   <channel name="ae" srcActor="a" srcPort="ae" dstActor="e" dstPort="ae" initialTokens="35"/>
+
+   <channel name="ba" srcActor="b" srcPort="ba" dstActor="a" dstPort="ba" initialTokens="9"/>
+   <channel name="bc" srcActor="b" srcPort="bc" dstActor="c" dstPort="bc" initialTokens="1"/>
+   <channel name="be" srcActor="b" srcPort="be" dstActor="e" dstPort="be" initialTokens="0"/>
+
+   <channel name="cb" srcActor="c" srcPort="cb" dstActor="b" dstPort="cb" initialTokens="6"/>
+   <channel name="cd" srcActor="c" srcPort="cd" dstActor="d" dstPort="cd" initialTokens="0"/>
+
+ 
+   <channel name="dc" srcActor="d" srcPort="dc" dstActor="c" dstPort="dc" initialTokens="5"/>
+   <channel name="de" srcActor="d" srcPort="de" dstActor="e" dstPort="de" initialTokens="4"/>
+
+   <channel name="ea" srcActor="e" srcPort="ea" dstActor="a" dstPort="ea" initialTokens="26"/>
+   <channel name="eb" srcActor="e" srcPort="eb" dstActor="b" dstPort="eb" initialTokens="8"/>
+   <channel name="ed" srcActor="e" srcPort="ed" dstActor="d" dstPort="ed" initialTokens="0"/>
+</sdf>
+   

@@ -1,0 +1,17 @@
+const inx=3;const outx=2; 
+const iny=1;const outy=1;
+
+node top1 (A:bool) returns (B: bool);
+
+
+let
+   
+--  B= 3-> 5->7-> A; -- le résultat c'est 3 puis A (non 3 5 7 A)
+--  B= 3-> pre (5-> pre (7-> A));  -- le résultat c'est  3 5 7 puis pre pre pre A
+-- B= 3-> (0->(5->(0->(0->(7->(0->(0->(0 -> A))))))));  -- le résultat c'est  3 puis  A
+-- comment produire B= 3 5 7 puis la valeur courante de A?
+
+
+
+--  assert (y < 3);
+tel

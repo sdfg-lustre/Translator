@@ -1,0 +1,261 @@
+--** This lustre code is generated automatically on 12 sept. 2020 11:14:31 PM
+--**It corresponds to a translation to Lustre of the  SDFG model  of the design "example" 
+
+
+
+--**************** Const Rates ****************--
+
+const F_RF_rate_in = 1;
+const F_FR_rate_out = 1;
+const F_FM_rate_out = 1;
+const F_FV_rate_out = 5;
+const F_FI_rate_out = 5;
+const R_FR_rate_in = 1;
+const R_MR_rate_in = 1;
+const R_IR_rate_in = 5;
+const R_RF_rate_out = 1;
+const R_RM_rate_out = 1;
+const M_FM_rate_in = 1;
+const M_VM_rate_in = 5;
+const M_RM_rate_in = 1;
+const M_MR_rate_out = 1;
+const V_FV_rate_in = 1;
+const V_VM_rate_out = 1;
+const V_VI_rate_out = 1;
+const I_FI_rate_in = 1;
+const I_VI_rate_in = 1;
+const I_IR_rate_out = 1;
+
+--**************** Init Channel ****************--
+
+const FR_I = 0 ;
+const FM_I = 0 ;
+const FV_I = 0 ;
+const FI_I = 0 ;
+const RF_I = 3 ;
+const RM_I = 1 ;
+const MR_I = 0 ;
+const VM_I = 0 ;
+const VI_I = 0 ;
+const IR_I = 0 ;
+
+
+--**************** Actors Translation ****************--
+
+node F(RF :int) returns (RF_C, FR_P, FM_P, FV_P, FI_P :int; FnbrFired, FnbrEnd : int );
+
+let
+FnbrFired= if FDoFire(RF,1) then 1
+		else 0;
+
+FnbrEnd= 0 -> pre (FnbrFired);
+
+
+
+(RF_C) = ((FnbrFired * F_RF_rate_in));
+
+(FR_P, FM_P, FV_P, FI_P) = ((FnbrEnd * F_FR_rate_out), (FnbrEnd * F_FM_rate_out), (FnbrEnd * F_FV_rate_out), (FnbrEnd * F_FI_rate_out));
+
+tel;
+------------------
+node FDoFire(RF :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (RF>=  (times * F_RF_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node R(FR, MR, IR :int) returns (FR_C, MR_C, IR_C, RF_P, RM_P :int; RnbrFired, RnbrEnd : int );
+
+let
+RnbrFired= if RDoFire(FR, MR, IR,1) then 1
+		else 0;
+
+RnbrEnd= 0 -> pre (RnbrFired);
+
+
+
+(FR_C, MR_C, IR_C) = ((RnbrFired * R_FR_rate_in), (RnbrFired * R_MR_rate_in), (RnbrFired * R_IR_rate_in));
+
+(RF_P, RM_P) = ((RnbrEnd * R_RF_rate_out), (RnbrEnd * R_RM_rate_out));
+
+tel;
+------------------
+node RDoFire(FR, MR, IR :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (FR>=  (times * R_FR_rate_in)) 
+	and  (MR>=  (times * R_MR_rate_in)) 
+	and  (IR>=  (times * R_IR_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node M(FM, VM, RM :int) returns (FM_C, VM_C, RM_C, MR_P :int; MnbrFired, MnbrEnd : int );
+
+let
+MnbrFired= if MDoFire(FM, VM, RM,1) then 1
+		else 0;
+
+MnbrEnd= 0 -> pre (MnbrFired);
+
+
+
+(FM_C, VM_C, RM_C) = ((MnbrFired * M_FM_rate_in), (MnbrFired * M_VM_rate_in), (MnbrFired * M_RM_rate_in));
+
+(MR_P) = ((MnbrEnd * M_MR_rate_out));
+
+tel;
+------------------
+node MDoFire(FM, VM, RM :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (FM>=  (times * M_FM_rate_in)) 
+	and  (VM>=  (times * M_VM_rate_in)) 
+	and  (RM>=  (times * M_RM_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node V(FV :int) returns (FV_C, VM_P, VI_P :int; VnbrFired, VnbrEnd : int );
+
+let
+VnbrFired= if VDoFire(FV,1) then 1
+		else 0;
+
+VnbrEnd= 0 -> pre (VnbrFired);
+
+
+
+(FV_C) = ((VnbrFired * V_FV_rate_in));
+
+(VM_P, VI_P) = ((VnbrEnd * V_VM_rate_out), (VnbrEnd * V_VI_rate_out));
+
+tel;
+------------------
+node VDoFire(FV :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (FV>=  (times * V_FV_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node I(FI, VI :int) returns (FI_C, VI_C, IR_P :int; InbrFired, InbrEnd : int );
+
+let
+InbrFired= if IDoFire(FI, VI,1) then 1
+		else 0;
+
+InbrEnd= 0 -> pre (InbrFired);
+
+
+
+(FI_C, VI_C) = ((InbrFired * I_FI_rate_in), (InbrFired * I_VI_rate_in));
+
+(IR_P) = ((InbrEnd * I_IR_rate_out));
+
+tel;
+------------------
+node IDoFire(FI, VI :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (FI>=  (times * I_FI_rate_in)) 
+	and  (VI>=  (times * I_VI_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node top (_: bool) returns (FR, FM, FV, FI, RF, RM, MR, VM, VI, IR, FnbrFired, RnbrFired, MnbrFired, VnbrFired, InbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+FR_C, FR_P: int; 
+FM_C, FM_P: int; 
+FV_C, FV_P: int; 
+FI_C, FI_P: int; 
+RF_C, RF_P: int; 
+RM_C, RM_P: int; 
+MR_C, MR_P: int; 
+VM_C, VM_P: int; 
+VI_C, VI_P: int; 
+IR_C, IR_P: int; 
+FnbrEnd, RnbrEnd, MnbrEnd, VnbrEnd, InbrEnd : int; 
+
+FnbrRun, RnbrRun, MnbrRun, VnbrRun, InbrRun : int; 
+
+positiveValues, noDeadlock: bool;
+
+
+let
+
+FR = FR_I -> pre  (   FR-FR_C)+ FR_P;
+FM = FM_I -> pre  (   FM-FM_C)+ FM_P;
+FV = FV_I -> pre  (   FV-FV_C)+ FV_P;
+FI = FI_I -> pre  (   FI-FI_C)+ FI_P;
+RF = RF_I -> pre  (   RF-RF_C)+ RF_P;
+RM = RM_I -> pre  (   RM-RM_C)+ RM_P;
+MR = MR_I -> pre  (   MR-MR_C)+ MR_P;
+VM = VM_I -> pre  (   VM-VM_C)+ VM_P;
+VI = VI_I -> pre  (   VI-VI_C)+ VI_P;
+IR = IR_I -> pre  (   IR-IR_C)+ IR_P;
+
+
+
+(RF_C, FR_P, FM_P, FV_P, FI_P, FnbrFired, FnbrEnd ) = F(RF);
+(FR_C, MR_C, IR_C, RF_P, RM_P, RnbrFired, RnbrEnd ) = R(FR, MR, IR);
+(FM_C, VM_C, RM_C, MR_P, MnbrFired, MnbrEnd ) = M(FM, VM, RM);
+(FV_C, VM_P, VI_P, VnbrFired, VnbrEnd ) = V(FV);
+(FI_C, VI_C, IR_P, InbrFired, InbrEnd ) = I(FI, VI);
+
+FnbrRun=  FnbrFired  -> (pre FnbrRun) +FnbrFired - FnbrEnd ;
+
+RnbrRun=  RnbrFired  -> (pre RnbrRun) +RnbrFired - RnbrEnd ;
+
+MnbrRun=  MnbrFired  -> (pre MnbrRun) +MnbrFired - MnbrEnd ;
+
+VnbrRun=  VnbrFired  -> (pre VnbrRun) +VnbrFired - VnbrEnd ;
+
+InbrRun=  InbrFired  -> (pre InbrRun) +InbrFired - InbrEnd ;
+
+
+positiveValues = ( FR>=   0) 
+	and  ( FM>=   0) 
+	and  ( FV>=   0) 
+	and  ( FI>=   0) 
+	and  ( RF>=   0) 
+	and  ( RM>=   0) 
+	and  ( MR>=   0) 
+	and  ( VM>=   0) 
+	and  ( VI>=   0) 
+	and  ( IR>=   0) 
+	and  ( FnbrFired >= 0) 
+	and  ( RnbrFired >= 0) 
+	and  ( MnbrFired >= 0) 
+	and  ( VnbrFired >= 0) 
+	and  ( InbrFired >= 0) ;
+
+noDeadlock = ( FnbrRun >= 1) 
+	or  ( RnbrRun >= 1) 
+	or  ( MnbrRun >= 1) 
+	or  ( VnbrRun >= 1) 
+	or  ( InbrRun >= 1);
+
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+
+
+--%PROPERTY  "Deadlock free "  noDeadlock;
+
+
+tel;
+

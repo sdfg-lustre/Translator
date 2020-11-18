@@ -1,0 +1,85 @@
+<sdf name="hdfs" nberBit="8" maxValue="15">
+  
+   <actor name="A" duration="1" maxAutoConcurrences="3">
+         <port name="in" type="in"  rate="1" />
+        <port name="e1" type="out"  rate="1" />
+        <port name="e6" type="out"  rate="1" />
+        <port name="e12" type="out"  rate="2" />
+    </actor>
+
+   <actor name="B1" duration="1" maxAutoConcurrences="3">
+         <port name="e1" type="in"  rate="1" />
+        <port name="e2" type="in"  rate="1" />
+        <port name="e3" type="in"  rate="1" />
+        <port name="e4" type="out"  rate="1" />
+        <port name="e5" type="out"  rate="1" />
+    </actor>
+
+ <actor name="B2" duration="1" maxAutoConcurrences="3">
+         <port name="e6" type="in"  rate="1" />
+        <port name="e7" type="in"  rate="1" />
+        <port name="e8" type="in"  rate="1" />
+        <port name="e9" type="out"  rate="1" />
+        <port name="e10" type="out"  rate="1" />
+    </actor>
+
+<actor name="B3" duration="1" maxAutoConcurrences="3">
+         <port name="e12" type="in"  rate="1" />
+        <port name="e14" type="in"  rate="2" />
+        <port name="e13" type="out"  rate="2" />
+    </actor>
+
+ <actor name="C1" duration="1" maxAutoConcurrences="3">
+         <port name="e9" type="in"  rate="1" />
+         <port name="e11" type="in"  rate="1" />
+         <port name="e3" type="out"  rate="1" />
+         <port name="e16" type="out"  rate="1" />
+    </actor>
+
+ <actor name="C2" duration="1" maxAutoConcurrences="3">
+        <port name="e4" type="in"  rate="1" />
+         <port name="e16" type="in"  rate="1" />
+         <port name="e7" type="out"  rate="1" />
+         <port name="e17" type="out"  rate="1" />
+    </actor>
+
+  <actor name="C3" duration="1" maxAutoConcurrences="3">
+         <port name="e5" type="in"  rate="1" />
+         <port name="e17" type="in"  rate="1" />
+         <port name="e8" type="out"  rate="1" />
+         <port name="e18" type="out"  rate="1" />
+    </actor>
+  <actor name="C4" duration="1" maxAutoConcurrences="3">
+         <port name="e10" type="in"  rate="1" />
+         <port name="e18" type="in"  rate="1" />
+         <port name="e2" type="out"  rate="1" />
+         <port name="e11" type="out"  rate="1" />
+    </actor>
+  <actor name="C5" duration="1" maxAutoConcurrences="3">
+         <port name="e13" type="in"  rate="1" />
+         <port name="e15in" type="in"  rate="1" />
+         <port name="e14" type="out"  rate="1" />
+         <port name="e15out" type="out"  rate="1" />
+    </actor>
+ 
+     
+     <channel name = "e1" srcActor="A" srcPort="e1" dstActor="B1" dstPort="e1" initialTokens="0"/>
+     <channel name = "e2" srcActor="C4" srcPort="e2" dstActor="B1" dstPort="e2" initialTokens="1"/>
+     <channel name = "e3" srcActor="C1" srcPort="e3" dstActor="B1" dstPort="e3" initialTokens="0"/>
+     <channel name = "e4" srcActor="B1" srcPort="e4" dstActor="C2" dstPort="e4" initialTokens="0"/>
+     <channel name = "e5" srcActor="B1" srcPort="e5" dstActor="C3" dstPort="e5" initialTokens="0"/>
+     <channel name = "e6" srcActor="A" srcPort="e6" dstActor="B2" dstPort="e6" initialTokens="0"/>
+     <channel name = "e7" srcActor="C2" srcPort="e7" dstActor="B2" dstPort="e7" initialTokens="0"/>
+     <channel name = "e8" srcActor="C3" srcPort="e8" dstActor="B2" dstPort="e8" initialTokens="0"/>
+     <channel name = "e9" srcActor="B2" srcPort="e9" dstActor="C1" dstPort="e9" initialTokens="1"/>
+     <channel name = "e10" srcActor="B2" srcPort="e10" dstActor="C4" dstPort="e10" initialTokens="0"/>
+     <channel name = "e11" srcActor="C4" srcPort="e11" dstActor="C1" dstPort="e11" initialTokens="1"/>
+     <channel name = "e12" srcActor="A" srcPort="e12" dstActor="B3" dstPort="e12" initialTokens="0"/>
+     <channel name = "e13" srcActor="B3" srcPort="e13" dstActor="C5" dstPort="e13" initialTokens="1"/>
+     <channel name = "e14" srcActor="C5" srcPort="e14" dstActor="B3" dstPort="e14" initialTokens="1"/>
+     <channel name = "e15" srcActor="C5" srcPort="e15out" dstActor="C5" dstPort="e15in" initialTokens="1"/>
+     <channel name = "e16" srcActor="C1" srcPort="e16" dstActor="C2" dstPort="e16" initialTokens="0"/>
+     <channel name = "e17" srcActor="C2" srcPort="e17" dstActor="C3" dstPort="e17" initialTokens="0"/>
+     <channel name = "e18" srcActor="C3" srcPort="e18" dstActor="C4" dstPort="e18" initialTokens="0"/>
+     <driver name="in" actorDest="A" portDest="in"/>
+ </sdf>

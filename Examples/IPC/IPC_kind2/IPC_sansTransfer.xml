@@ -1,0 +1,92 @@
+
+    <sdf name='IPC'  >
+
+      <actor name='P1' duration="5" maxAutoConcurrences="1" maxStages="1">
+          <port name='e1' type='in' rate='1'/>
+          <port name='e2' type='out' rate='1'/>
+          <port name='e21' type='out' rate='1'/>
+ 
+      </actor>
+      <actor name='W1'  duration="1" maxAutoConcurrences="1" maxStages="1">
+          <port name='e2' type='in' rate='1'/>
+          <port name='e6' type='in' rate='1'/>
+          <port name='e3' type='out' rate='1'/>
+          <port name='e5' type='out' rate='1'/>
+      </actor>
+
+	<actor name='P2' duration="5" maxAutoConcurrences="1" maxStages="1">
+          <port name='e3' type='in' rate='1'/>
+          <port name='e4' type='out' rate='1'/>
+       </actor>
+
+	<actor name='W2'  duration="1" maxAutoConcurrences="1" maxStages="1">
+          <port name='e4' type='in' rate='1'/>
+          <port name='e7' type='in' rate='1'/>
+          <port name='e1' type='out' rate='1'/>
+          <port name='e8' type='out' rate='1'/>
+ 
+      </actor>
+
+
+      <actor name='R1'  duration="1" maxAutoConcurrences="2" maxStages="1">
+           <port name='e5' type='in' rate='1'/>
+          <port name='e17' type='in' rate='1'/>
+          <port name='e7' type='out' rate='1'/>
+          <port name='e11' type='out' rate='1'/>
+          <port name='e28' type='out' rate='1'/>
+      </actor>
+
+      <actor name='R2'  duration="1" maxAutoConcurrences="2" maxStages="1">
+           <port name='e11' type='in' rate='1'/>
+          <port name='e8' type='in' rate='1'/>
+          <port name='e6' type='out' rate='1'/>
+          <port name='e16' type='out' rate='1'/>
+          <port name='e29' type='out' rate='1'/>
+      </actor>
+
+   <actor name='C'  duration="16" maxAutoConcurrences="2" maxStages="1">
+           <port name='e16' type='in' rate='1'/>
+          <port name='e17' type='out' rate='1'/>
+ 
+          <port name='e22' type='out' rate='1'/>
+      </actor>
+  
+      <actor name='puit1'  duration="1" maxAutoConcurrences="1" maxStages="1">
+           <port name='e21' type='in' rate='1'/>
+           <port name='e22' type='in' rate='1'/>
+
+      </actor>
+
+    
+
+ <actor name='puit4'  duration="1" maxAutoConcurrences="1" maxStages="1">
+           <port name='e28' type='in' rate='1'/>
+           <port name='e29' type='in' rate='1'/>
+      </actor>
+
+
+
+      <channel name='e1' srcActor='W2' srcPort='e1' dstActor='P1' dstPort='e1' initialTokens="1"/>
+      <channel name='e2' srcActor='P1' srcPort='e2' dstActor='W1' dstPort='e2' initialTokens="0"/>
+      <channel name='e3' srcActor='W1' srcPort='e3' dstActor='P2' dstPort='e3' initialTokens="0"/>
+      <channel name='e4' srcActor='P2' srcPort='e4' dstActor='W2' dstPort='e4' initialTokens="0"/>
+      <channel name='e5' srcActor='W1' srcPort='e5' dstActor='R1' dstPort='e5' initialTokens="0"/>
+      <channel name='e6' srcActor='R2' srcPort='e6' dstActor='W1' dstPort='e6' initialTokens="1"/>
+      <channel name='e7' srcActor='R1' srcPort='e7' dstActor='W2' dstPort='e7' initialTokens="0"/>
+      <channel name='e8' srcActor='W2' srcPort='e8' dstActor='R2' dstPort='e8' initialTokens="0"/>
+      <channel name='e11' srcActor='R1' srcPort='e11' dstActor='R2' dstPort='e11' initialTokens="0"/>
+      <channel name='e16' srcActor='R2' srcPort='e16' dstActor='C' dstPort='e16' initialTokens="0"/>
+      <channel name='e17' srcActor='C' srcPort='e17' dstActor='R1' dstPort='e17' initialTokens="1"/>
+ 
+    
+   <channel name='e21' srcActor='P1' srcPort='e21' dstActor='puit1' dstPort='e21' initialTokens="0"/>
+      <channel name='e22' srcActor='C' srcPort='e22' dstActor='puit1' dstPort='e22' initialTokens="0"/>
+   
+  
+ 
+	<channel name='e28' srcActor='R1' srcPort='e28' dstActor='puit4' dstPort='e28' initialTokens="0"/>
+      <channel name='e29' srcActor='R2' srcPort='e29' dstActor='puit4' dstPort='e29' initialTokens="0"/>
+
+      
+    </sdf>
+

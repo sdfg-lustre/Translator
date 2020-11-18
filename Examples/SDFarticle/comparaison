@@ -1,0 +1,190 @@
+graphe SDFG exemple de mon article:
+
+durée b=2,maxstage 2, c=1
+
+imed@imed-labtop:~/Bureau/Link to Code_Lustre_SDFG/SDFarticle$ lesar  G1_allCycles.lus Harness -v 
+--Pollux Version 2.4
+start normalisation ... done
+start minimal network generation ........ done (4259 -> 1896 nodes)
+building bdds ... 50 (on 50)   
+
+computing relevant statevars ... done (49 on 49)
+DONE =>    13 states    13 transitions              
+
+=>total bdd memory : 6703 nodes (~ 680.77 K)
+TRUE PROPERTY
+
+**********
+time lesar  G1_mergedCyclesV2.lus Harness -v 
+--Pollux Version 2.4
+
+Warning 875 in Var::DefinedOnce : No definition for e1_PD in node a 
+
+Warning 875 in Var::DefinedOnce : No definition for e5out_PD in node c 
+
+Warning 875 in Var::DefinedOnce : No definition for e3_PD in node c 
+
+Warning 875 in Var::DefinedOnce : No definition for e4_PD in node c 
+start normalisation ... done
+start minimal network generation ........... done (5571 -> 2711 nodes)
+building bdds ... 87 (on 87)   
+
+computing relevant statevars ... done (86 on 86)
+DONE =>    14 states    14 transitions              
+
+=>total bdd memory : 67212 nodes (~ 6826.22 K)
+TRUE PROPERTY
+
+=====================
+
+=======================
+duree de b 4 maxStage 2 et de c 1 maxStage 1
+
+time lesar  G1_allCycles.lus Harness -v 
+--Pollux Version 2.4
+start normalisation ... done
+start minimal network generation ........ done (4291 -> 1928 nodes)
+building bdds ... 66 (on 66)   
+
+computing relevant statevars ... done (65 on 65)
+DONE =>    21 states    21 transitions              
+
+=>total bdd memory : 7652 nodes (~ 777.16 K)
+TRUE PROPERTY
+
+real    0m0.472s
+user    0m0.424s
+sys     0m0.028s
+
+**************
+
+time lesar  G1_mergedCyclesV2.lus Harness -v 
+--Pollux Version 2.4
+
+ start normalisation ... done
+start minimal network generation ........... done (5571 -> 2711 nodes)
+building bdds ... 87 (on 87)   
+
+computing relevant statevars ... done (86 on 86)
+DONE =>    18 states    18 transitions              
+
+=>total bdd memory : 86430 nodes (~ 8778.05 K)
+TRUE PROPERTY
+
+real    1m48.961s
+user    1m48.628s
+sys     0m0.128s
+
+
+
+==================================	
+duree de b 4 maxStage 2 et de c 4 maxStage 1
+time lesar  G1_allCycles.lus Harness -v 
+--Pollux Version 2.4
+start normalisation ... done
+start minimal network generation ........ done (4435 -> 1976 nodes)
+building bdds ... 90 (on 90)   
+
+computing relevant statevars ... done (89 on 89)
+DONE =>    21 states    21 transitions              
+
+=>total bdd memory : 30069 nodes (~ 3053.88 K)
+TRUE PROPERTY
+
+real    0m0.549s
+user    0m0.516s
+sys     0m0.012s
+********
+>time lesar  G1_mergedCyclesV2.lus Harness -v 
+--Pollux Version 2.4
+
+Warning 875 in Var::DefinedOnce : No definition for e1_PD in node a 
+start normalisation ... done
+start minimal network generation ............ done (6102 -> 2899 nodes)
+building bdds ... 8 (on 106)                               
+^C
+
+real    78m39.085s
+user    14m29.192s
+sys     0m0.300s
+trop long interrompu
+=================
+
+duree de b 4 maxStage 1 et de c 4 maxStage 1
+
+>time lesar  G1_allCycles.lus Harness -v 
+--Pollux Version 2.4
+start normalisation ... done
+start minimal network generation ........ done (4435 -> 1976 nodes)
+building bdds ... 90 (on 90)   
+
+computing relevant statevars ... done (89 on 89)
+DONE =>    21 states    21 transitions              
+
+=>total bdd memory : 30069 nodes (~ 3053.88 K)
+TRUE PROPERTY
+
+real    0m0.570s
+user    0m0.496s
+sys     0m0.052s
+************************
+ >time lesar  G1_mergedCyclesV2.lus Harness -v 
+--Pollux Version 2.4
+
+Warning 875 in Var::DefinedOnce : No definition for e1_PD in node a 
+start normalisation ... done
+start minimal network generation ........... done (5405 -> 2496 nodes)
+building bdds ... 80 (on 80)   
+
+computing relevant statevars ... done (79 on 79)
+DONE =>    13 states    13 transitions              
+
+=>total bdd memory : 154670 nodes (~ 15708.67 K)
+TRUE PROPERTY
+
+real    0m26.535s
+user    0m26.396s
+sys     0m0.060s
+
+======================================================================
+duree de b 4 maxStage 1 et de c 1 maxStage 1
+lesar  G1_allCycles.lus Harness -v 
+--Pollux Version 2.4
+start normalisation ... done
+start minimal network generation ........ done (4355 -> 1992 nodes)
+building bdds ... 98 (on 98)   
+
+computing relevant statevars ... done (97 on 97)
+DONE =>    37 states    37 transitions              
+
+=>total bdd memory : 10308 nodes (~ 1046.91 K)
+TRUE PROPERTY
+
+real    0m0.533s
+user    0m0.468s
+sys     0m0.036s
+*******************
+G1_mergedCyclesV2.lus Harness -v 
+--Pollux Version 2.4
+
+Warning 875 in Var::DefinedOnce : No definition for e1_PD in node a 
+
+Warning 875 in Var::DefinedOnce : No definition for e5out_PD in node c 
+
+Warning 875 in Var::DefinedOnce : No definition for e3_PD in node c 
+
+Warning 875 in Var::DefinedOnce : No definition for e4_PD in node c 
+start normalisation ... done
+start minimal network generation ........... done (5571 -> 2711 nodes)
+building bdds ... 87 (on 87)   
+
+computing relevant statevars ... done (86 on 86)
+DONE =>    18 states    18 transitions              
+
+=>total bdd memory : 91170 nodes (~ 9259.45 K)
+TRUE PROPERTY
+
+real    1m50.461s
+user    1m50.196s
+sys     0m0.064s
+

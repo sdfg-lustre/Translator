@@ -1,0 +1,127 @@
+include "toInclude_BitBlasting_ok.lus"
+
+
+
+--------------instruction with --------------------
+--node P(const n: int; B: bool^n) returns (p:bool);
+--let
+-- p = with n=1 then B[0]
+--      else XOR(B[n-1] , P(n-1,B[0..n-2]));
+--tel
+
+
+
+------------------------------SDFG
+const IN_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const X0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+const IN_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Y0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Z0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const V0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const W0=[1 , 1 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_A=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const B0=[1, 1,  1 , 0,  0 , 0  ,0  ,0];
+
+ 
+node top1 (A:UsrInt) returns (  Ta, start, wait: bool);
+--delayedV, delayedZ,
+var  prodX, consX, prodY, consY,  prodZ, prodW, prodV, prodB,
+consZ,   consV,   consW, delayedW,    consB, delayedB,
+X, Y, Z, V, W, B,
+ X1, Y1, Z1, V1, W1, B1: UsrInt;
+
+
+let
+
+-------noued start
+  start= UsrIntGte (A, IN_A) and UsrIntGte (B, IN_B);
+  (prodX, prodY, consB) =  	if  not start 
+				then (UsrInt_0,UsrInt_0,UsrInt_0) 
+
+			   	else 	if UsrIntGte (A, FourBitsMult(UsrInt_4, IN_A)) and
+						 UsrIntGte (B, FourBitsMult(UsrInt_4, IN_B)) 
+					then  ( FourBitsMult(UsrInt_4, OUT_X), FourBitsMult(UsrInt_4, OUT_Y),
+				 		FourBitsMult(UsrInt_4,IN_B) )
+
+					else if UsrIntGte (A, FourBitsMult(UsrInt_3, IN_A)) and
+						 UsrIntGte (B, FourBitsMult(UsrInt_3, IN_B)) 
+					then  ( FourBitsMult(UsrInt_3, OUT_X), FourBitsMult(UsrInt_3, OUT_Y),
+				 		FourBitsMult(UsrInt_3,IN_B) )
+
+					else if UsrIntGte (A, FourBitsMult(UsrInt_2, IN_A)) and
+						 UsrIntGte (B, FourBitsMult(UsrInt_2, IN_B)) 
+					then  ( FourBitsMult(UsrInt_2, OUT_X), FourBitsMult(UsrInt_2, OUT_Y),
+				 		FourBitsMult(UsrInt_2,IN_B) )
+
+					else 	(OUT_X,OUT_Y, IN_B)  ;
+
+-------noued Wait
+-- wait= UsrIntGte (X, IN_X)  and UsrIntGte( V, IN_V);
+ -- (consX, consV, delayedV, delayedZ) =  if  wait then (IN_X, IN_V, OUT_V, OUT_Z) else (UsrInt_0,UsrInt_0,UsrInt_0, UsrInt_0);
+
+ --prodV= UsrInt_0->(pre (UsrInt_0-> pre delayedV));
+-- prodZ= UsrInt_0->(pre (UsrInt_0-> pre delayedZ));
+
+--prodV= UsrInt_0-> pre delayedV;
+--prodZ= UsrInt_0-> pre delayedZ;
+
+ wait= UsrIntGte (X, IN_X)  and UsrIntGte( V, IN_V);
+ (consX, consV, prodV, prodZ) =  if not  wait then (UsrInt_0,UsrInt_0,UsrInt_0, UsrInt_0)
+
+				else  if  UsrIntGte (X, FourBitsMult(UsrInt_4, IN_X)) and
+						 UsrIntGte (V, FourBitsMult(UsrInt_4, IN_V))
+				then  ( FourBitsMult(UsrInt_4, IN_X), FourBitsMult(UsrInt_4, IN_V),
+				 		FourBitsMult(UsrInt_4,OUT_V), FourBitsMult(UsrInt_4,OUT_Z) )
+
+				else if  UsrIntGte (X, FourBitsMult(UsrInt_3, IN_X)) and
+						 UsrIntGte (V, FourBitsMult(UsrInt_3, IN_V))
+				then  ( FourBitsMult(UsrInt_3, IN_X), FourBitsMult(UsrInt_3, IN_V),
+				 		FourBitsMult(UsrInt_3,OUT_V), FourBitsMult(UsrInt_3,OUT_Z) )
+ 
+				else if  UsrIntGte (X, FourBitsMult(UsrInt_2, IN_X)) and
+						 UsrIntGte (V, FourBitsMult(UsrInt_2, IN_V))
+				then  ( FourBitsMult(UsrInt_2, IN_X), FourBitsMult(UsrInt_2, IN_V),
+				 		FourBitsMult(UsrInt_2,OUT_V), FourBitsMult(UsrInt_2,OUT_Z) )
+
+				else (IN_X, IN_V, OUT_V, OUT_Z) ;
+
+
+
+-------noued Ta-----
+  Ta= UsrIntGte (Y, IN_Y) and UsrIntGte (Z,IN_Z)  and UsrIntGte (W,IN_W );
+   (consZ, consY, consW, delayedW, delayedB) =  
+			if  not Ta then (UsrInt_0,UsrInt_0,UsrInt_0, UsrInt_0, UsrInt_0)
+			
+			else  if  UsrIntGte (Y, FourBitsMult(UsrInt_4, IN_Y)) and
+			UsrIntGte (Z, FourBitsMult(UsrInt_4, IN_Z)) and 
+			UsrIntGte (W, FourBitsMult(UsrInt_4, IN_W))
+			then  ( FourBitsMult(UsrInt_4, IN_Z), FourBitsMult(UsrInt_4, IN_Y),
+			FourBitsMult(UsrInt_4,IN_W), FourBitsMult(UsrInt_4,OUT_W), 
+			FourBitsMult(UsrInt_4,OUT_B) )
+
+			else  if  UsrIntGte (Y, FourBitsMult(UsrInt_3, IN_Y)) and
+			UsrIntGte (Z, FourBitsMult(UsrInt_3, IN_Z)) and 
+			UsrIntGte (W, FourBitsMult(UsrInt_3, IN_W))
+			then  ( FourBitsMult(UsrInt_3, IN_Z), FourBitsMult(UsrInt_3, IN_Y),
+			FourBitsMult(UsrInt_3,IN_W), FourBitsMult(UsrInt_3,OUT_W), 
+			FourBitsMult(UsrInt_3,OUT_B) )
+
+			else  if  UsrIntGte (Y, FourBitsMult(UsrInt_2, IN_Y)) and
+			UsrIntGte (Z, FourBitsMult(UsrInt_2, IN_Z)) and 
+			UsrIntGte (W, FourBitsMult(UsrInt_2, IN_W))
+			then  ( FourBitsMult(UsrInt_2, IN_Z), FourBitsMult(UsrInt_2, IN_Y),
+			FourBitsMult(UsrInt_2,IN_W), FourBitsMult(UsrInt_2,OUT_W), 
+			FourBitsMult(UsrInt_2,OUT_B) )
+			else (IN_Z, IN_Y, IN_W, OUT_W, OUT_B);
+
+  prodW= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedW)))))))))));
+  prodB= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedB)))))))))));
+ 
+
+--------
+X1= UsrIntPlus (UsrIntMinus (X, consX), prodX);   X= X0-> (pre X1);
+Y1= UsrIntPlus (UsrIntMinus (Y, consY), prodY);   Y= Y0-> (pre Y1);
+Z1= UsrIntPlus (UsrIntMinus (Z, consZ), prodZ);   Z= Z0-> (pre Z1);
+V1= UsrIntPlus (UsrIntMinus (V, consV), prodV);     V= V0-> (pre V1);
+W1= UsrIntPlus (UsrIntMinus (W, consW), prodW);     W= W0-> (pre W1);
+B1= UsrIntPlus (UsrIntMinus (B, consB), prodB);       B= B0-> (pre B1);
+
+tel

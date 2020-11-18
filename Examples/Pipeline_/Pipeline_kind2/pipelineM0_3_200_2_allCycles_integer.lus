@@ -1,0 +1,141 @@
+--** This lustre code is generated automatically on 02 sept. 2020 03:03:55 PM
+--**It corresponds to a translation to Lustre of the  SDFG model  of the design "example" 
+
+
+
+--**************** Const Rates ****************--
+
+const a1_e1_rate_in = 1;
+const a1_e3_rate_in = 1;
+const a1_e5in_rate_in = 1;
+const a1_e5out_rate_out = 1;
+const a1_e4_rate_out = 1;
+const a2_e4_rate_in = 1;
+const a2_e2_rate_out = 1;
+const a2_e3_rate_out = 1;
+
+--**************** Init Channel ****************--
+
+const e3_I = 2 ;
+const e4_I = 0 ;
+const e5_I = 1 ;
+
+const e1_I = 0 ;
+const e2_I = 0 ;
+
+--**************** Actors Translation ****************--
+
+node a1(e1, e3, e5in :int) returns (e1_C, e3_C, e5in_C, e5out_P, e4_P :int; a1nbrFired, a1nbrEnd : int );
+
+let
+a1nbrFired= if a1DoFire(e1, e3, e5in,1) then 1
+		else 0;
+
+a1nbrEnd= 0 -> pre (0 -> pre (0 -> pre (a1nbrFired)));
+
+
+
+(e1_C, e3_C, e5in_C) = ((a1nbrFired * a1_e1_rate_in), (a1nbrFired * a1_e3_rate_in), (a1nbrFired * a1_e5in_rate_in));
+
+(e5out_P, e4_P) = ((a1nbrEnd * a1_e5out_rate_out), (a1nbrEnd * a1_e4_rate_out));
+
+tel;
+------------------
+node a1DoFire(e1, e3, e5in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e1>=  (times * a1_e1_rate_in)) 
+	and  (e3>=  (times * a1_e3_rate_in)) 
+	and  (e5in>=  (times * a1_e5in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a2(e4 :int) returns (e4_C, e2_P, e3_P :int; a2nbrFired, a2nbrEnd : int );
+
+let
+a2nbrFired= if a2DoFire(e4,1) then 1
+		else 0;
+
+a2nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (0 -> pre (a2nbrFired)))))))))))))))))))))))))));
+
+
+
+(e4_C) = ((a2nbrFired * a2_e4_rate_in));
+
+(e2_P, e3_P) = ((a2nbrEnd * a2_e2_rate_out), (a2nbrEnd * a2_e3_rate_out));
+
+tel;
+------------------
+node a2DoFire(e4 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e4>=  (times * a2_e4_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node top (e1_P : int)
+returns (e3, e4, e5, e1, e2, a1nbrFired, a2nbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e5_C, e5_P: int; 
+e1_C : int;
+e2_P : int;
+a1nbrEnd, a2nbrEnd : int; 
+
+ 
+
+positiveValues, P1, P2, P3, P4: bool;
+
+
+let
+
+e3 = e3_I -> pre  (   e3-e3_C)+ e3_P;
+e4 = e4_I -> pre  (   e4-e4_C)+ e4_P;
+e5 = e5_I -> pre  (   e5-e5_C)+ e5_P;
+
+e1 = e1_P -> pre  ( e1-e1_C)+ e1_P ;
+
+e2 = e2_I -> pre e2+ e2_P;
+
+(e1_C, e3_C, e5_C, e5_P, e4_P, a1nbrFired, a1nbrEnd ) = a1(e1, e3, e5);
+(e4_C, e2_P, e3_P, a2nbrFired, a2nbrEnd ) = a2(e4);
+
+ 
+
+ 
+
+
+positiveValues = ( e3>=   0) 
+	and  ( e4>=   0) 
+	and  ( e5>=   0) 
+	and  ( e1>=  0) 
+	and  ( e2>=  0) 
+	and  ( a1nbrFired >= 0) 
+	and  ( a2nbrFired >= 0) ;
+
+assert e1_P >=0 and e1_P <=6; 
+
+P1= true->(e2_P <=1) and ((e2_P=1) => (pre e2_P=0) and (pre pre e2_P=0) );
+P2= e3>=0;
+P3= (a1nbrEnd=0 => a2nbrFired=0) and ( a1nbrEnd>0 => a2nbrFired>0);
+--P3= true -> (e4_C=0 => pre e4_P=0) and (e4_C=1 => pre e4_P=1) ;
+P4= true-> (a1nbrFired=0)=> (e3=0) or (e1=0) or (pre a1nbrFired  >0) or (pre pre a1nbrFired  >0); 
+
+--%MAIN;
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+--%PROPERTY  "P1"  P1;
+---%PROPERTY  "P2"  P2;
+---%PROPERTY  "P3"  P3;
+---%PROPERTY  "P4"  P4;
+
+tel;
+

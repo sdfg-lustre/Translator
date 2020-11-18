@@ -1,0 +1,144 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [0,0,0,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const a1_e1_rate_in = [1,0,0,0,0,0,0,0];
+const a1_e3_rate_in = [1,0,0,0,0,0,0,0];
+const a1_e4_rate_out = [1,0,0,0,0,0,0,0];
+const a2_e4_rate_in = [1,0,0,0,0,0,0,0];
+const a2_e5in_rate_in = [1,0,0,0,0,0,0,0];
+const a2_e5out_rate_out = [1,0,0,0,0,0,0,0];
+const a2_e2_rate_out = [1,0,0,0,0,0,0,0];
+const a2_e3_rate_out = [1,0,0,0,0,0,0,0];
+const end_e2_rate_in = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const e2_I = [0,0,0,0,0,0,0,0];
+const e3_I = [1,1,0,0,0,0,0,0];
+const e4_I = [0,0,0,0,0,0,0,0];
+const e5_I = [1,0,0,0,0,0,0,0];
+
+const e1_I = [0,0,0,0,0,0,0,0];
+
+--**************** Nodes Declaration ****************--
+
+node a1(e1, e3 :UsrInt) returns (e1_C, e3_C, e4_P :UsrInt; a1nbrFired: UsrInt );
+
+let
+a1nbrFired= if a1DoFire(e1, e3,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e1_C, e3_C,e4_P) = (UsrIntMult(a1nbrFired, a1_e1_rate_in),UsrIntMult(a1nbrFired, a1_e3_rate_in),UsrIntMult(a1nbrFired, a1_e4_rate_out));
+
+tel;
+------------------
+node a1DoFire(e1, e3,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e1, UsrIntMult(times, a1_e1_rate_in)) 
+	and UsrIntGte(e3, UsrIntMult(times, a1_e3_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node a2(e4, e5in :UsrInt) returns (e4_C, e5in_C, e5out_P, e2_P, e3_P :UsrInt; a2nbrFired: UsrInt );
+
+let
+a2nbrFired= if a2DoFire(e4, e5in,UsrInt_3) then UsrInt_3
+		else if a2DoFire(e4, e5in,UsrInt_2) then UsrInt_2
+		else if a2DoFire(e4, e5in,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e4_C, e5in_C,e5out_P, e2_P, e3_P) = (UsrIntMult(a2nbrFired, a2_e4_rate_in),UsrIntMult(a2nbrFired, a2_e5in_rate_in),UsrIntMult(a2nbrFired, a2_e5out_rate_out),UsrIntMult(a2nbrFired, a2_e2_rate_out),UsrIntMult(a2nbrFired, a2_e3_rate_out));
+
+tel;
+------------------
+node a2DoFire(e4, e5in,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e4, UsrIntMult(times, a2_e4_rate_in)) 
+	and UsrIntGte(e5in, UsrIntMult(times, a2_e5in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node end(e2 :UsrInt) returns (e2_C :UsrInt; endnbrFired: UsrInt );
+
+let
+endnbrFired= if endDoFire(e2,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e2_C,) = (UsrIntMult(endnbrFired, end_e2_rate_in));
+
+tel;
+------------------
+node endDoFire(e2,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e2, UsrIntMult(times, end_e2_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (e1_P: UsrInt) returns (e2, e3, e4, e5, e1, a1nbrFired, a2nbrFired, endnbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+e2_C, e2_P: UsrInt; 
+e3_C, e3_P: UsrInt; 
+e4_C, e4_P: UsrInt; 
+e5_C, e5_P: UsrInt; 
+e1_C : UsrInt;
+
+let
+
+e2 = e2_I -> pre UsrIntPlus( UsrIntMinus( e2,e2_C), e2_P);
+e3 = e3_I -> pre UsrIntPlus( UsrIntMinus( e3,e3_C), e3_P);
+e4 = e4_I -> pre UsrIntPlus( UsrIntMinus( e4,e4_C), e4_P);
+e5 = e5_I -> pre UsrIntPlus( UsrIntMinus( e5,e5_C), e5_P);
+
+e1 = e1_I -> pre if UsrIntLt(UsrIntPlus( UsrIntMinus( e1,e1_C), e1_P), maxValue) 
+				then UsrIntPlus( UsrIntMinus( e1,e1_C), e1_P)
+				else UsrIntMinus( e1,e1_C);
+
+
+(e1_C, e3_C, e4_P, a1nbrFired) = a1(e1, e3);
+(e4_C, e5_C, e5_P, e2_P, e3_P, a2nbrFired) = a2(e4, e5);
+(e2_C, endnbrFired) = end(e2);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (e1_P: UsrInt) returns (noError :bool)
+
+var
+
+e2, e3, e4, e5, e1, a1nbrFired, a2nbrFired, endnbrFired:UsrInt;
+
+noDeadlock : bool;
+
+let
+
+(e2, e3, e4, e5, e1, a1nbrFired, a2nbrFired, endnbrFired) = top(e1_P);
+
+noDeadlock = UsrIntGte( a1nbrFired , UsrInt_1) 
+	or UsrIntGte( a2nbrFired , UsrInt_1) 
+	or UsrIntGte( endnbrFired , UsrInt_1);
+
+noError= noDeadlock;
+
+tel

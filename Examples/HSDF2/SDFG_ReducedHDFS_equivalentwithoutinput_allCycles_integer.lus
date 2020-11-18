@@ -1,0 +1,423 @@
+--** This lustre code is generated automatically on 28 août 2020 12:03:49 PM
+--**It corresponds to a translation to Lustre of the  SDFG model  of the design "hdfs" 
+
+
+
+--**************** Const Rates ****************--
+
+const a__e1in_rate_in = 1;
+const a__e1out_rate_out = 1;
+const a__e5x_rate_out = 3;
+const a__e3__rate_out = 1;
+const a__e4__rate_out = 1;
+const b__e5x_rate_in = 1;
+const b__e16in_rate_in = 1;
+const b__e16out_rate_out = 1;
+const b__e17x_rate_out = 1;
+const c__e17x_rate_in = 1;
+const c__e18x_rate_out = 1;
+const d__e18x_rate_in = 3;
+const d__e19in_rate_in = 1;
+const d__e19out_rate_out = 1;
+const b0b1bis_e3__rate_in = 1;
+const b0b1bis_e8__rate_in = 1;
+const b0b1bis_e6__rate_out = 1;
+const b0b1bis_e2__rate_out = 1;
+const b0b1bis_e5__rate_out = 1;
+const b2bis_e4__rate_in = 1;
+const b2bis_e5__rate_in = 1;
+const b2bis_e8__rate_out = 1;
+const b2bis_e11__rate_out = 1;
+const c0bis_e6__rate_in = 1;
+const c0bis_e12__rate_out = 1;
+const c1bis_e2__rate_in = 1;
+const c1bis_e13__rate_out = 1;
+const c2bis_e11__rate_in = 1;
+const c2bis_e14__rate_out = 1;
+const d0bis_e12__rate_in = 1;
+const d0bis_e13__rate_in = 1;
+const d0bis_e14__rate_in = 1;
+const d0bis_e15_in_rate_in = 1;
+const d0bis_e15_out_rate_out = 1;
+
+--**************** Init Channel ****************--
+
+const e1x_I = 1 ;
+const e5x_I = 0 ;
+const e16x_I = 1 ;
+const e17x_I = 0 ;
+const e18x_I = 0 ;
+const e19x_I = 1 ;
+const e2__I = 0 ;
+const e3__I = 0 ;
+const e4__I = 0 ;
+const e5__I = 0 ;
+const e6__I = 0 ;
+const e8__I = 1 ;
+const e11__I = 0 ;
+const e12__I = 0 ;
+const e13__I = 0 ;
+const e14__I = 0 ;
+const e15__I = 1 ;
+
+
+--**************** Actors Translation ****************--
+
+node a_(e1in :int) returns (e1in_C, e1out_P, e5x_P, e3__P, e4__P :int; a_nbrFired, a_nbrEnd : int );
+
+let
+a_nbrFired= if a_DoFire(e1in,1) then 1
+		else 0;
+
+a_nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (a_nbrFired))));
+
+
+
+(e1in_C) = ((a_nbrFired * a__e1in_rate_in));
+
+(e1out_P, e5x_P, e3__P, e4__P) = ((a_nbrEnd * a__e1out_rate_out), (a_nbrEnd * a__e5x_rate_out), (a_nbrEnd * a__e3__rate_out), (a_nbrEnd * a__e4__rate_out));
+
+tel;
+------------------
+node a_DoFire(e1in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e1in>=  (times * a__e1in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b_(e5x, e16in :int) returns (e5x_C, e16in_C, e16out_P, e17x_P :int; b_nbrFired, b_nbrEnd : int );
+
+let
+b_nbrFired= if b_DoFire(e5x, e16in,1) then 1
+		else 0;
+
+b_nbrEnd= 0 -> pre (b_nbrFired);
+
+
+
+(e5x_C, e16in_C) = ((b_nbrFired * b__e5x_rate_in), (b_nbrFired * b__e16in_rate_in));
+
+(e16out_P, e17x_P) = ((b_nbrEnd * b__e16out_rate_out), (b_nbrEnd * b__e17x_rate_out));
+
+tel;
+------------------
+node b_DoFire(e5x, e16in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e5x>=  (times * b__e5x_rate_in)) 
+	and  (e16in>=  (times * b__e16in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c_(e17x :int) returns (e17x_C, e18x_P :int; c_nbrFired, c_nbrEnd : int );
+
+let
+c_nbrFired= if c_DoFire(e17x,1) then 1
+		else 0;
+
+c_nbrEnd= 0 -> pre (c_nbrFired);
+
+
+
+(e17x_C) = ((c_nbrFired * c__e17x_rate_in));
+
+(e18x_P) = ((c_nbrEnd * c__e18x_rate_out));
+
+tel;
+------------------
+node c_DoFire(e17x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e17x>=  (times * c__e17x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node d_(e18x, e19in :int) returns (e18x_C, e19in_C, e19out_P :int; d_nbrFired, d_nbrEnd : int );
+
+let
+d_nbrFired= if d_DoFire(e18x, e19in,1) then 1
+		else 0;
+
+d_nbrEnd= 0 -> pre (d_nbrFired);
+
+
+
+(e18x_C, e19in_C) = ((d_nbrFired * d__e18x_rate_in), (d_nbrFired * d__e19in_rate_in));
+
+(e19out_P) = ((d_nbrEnd * d__e19out_rate_out));
+
+tel;
+------------------
+node d_DoFire(e18x, e19in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e18x>=  (times * d__e18x_rate_in)) 
+	and  (e19in>=  (times * d__e19in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b0b1bis(e3_, e8_ :int) returns (e3__C, e8__C, e6__P, e2__P, e5__P :int; b0b1bisnbrFired, b0b1bisnbrEnd : int );
+
+let
+b0b1bisnbrFired= if b0b1bisDoFire(e3_, e8_,1) then 1
+		else 0;
+
+b0b1bisnbrEnd= 0 -> pre (0 -> pre (b0b1bisnbrFired));
+
+
+
+(e3__C, e8__C) = ((b0b1bisnbrFired * b0b1bis_e3__rate_in), (b0b1bisnbrFired * b0b1bis_e8__rate_in));
+
+(e6__P, e2__P, e5__P) = ((b0b1bisnbrEnd * b0b1bis_e6__rate_out), (b0b1bisnbrEnd * b0b1bis_e2__rate_out), (b0b1bisnbrEnd * b0b1bis_e5__rate_out));
+
+tel;
+------------------
+node b0b1bisDoFire(e3_, e8_ :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e3_>=  (times * b0b1bis_e3__rate_in)) 
+	and  (e8_>=  (times * b0b1bis_e8__rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b2bis(e4_, e5_ :int) returns (e4__C, e5__C, e8__P, e11__P :int; b2bisnbrFired, b2bisnbrEnd : int );
+
+let
+b2bisnbrFired= if b2bisDoFire(e4_, e5_,1) then 1
+		else 0;
+
+b2bisnbrEnd= 0 -> pre (b2bisnbrFired);
+
+
+
+(e4__C, e5__C) = ((b2bisnbrFired * b2bis_e4__rate_in), (b2bisnbrFired * b2bis_e5__rate_in));
+
+(e8__P, e11__P) = ((b2bisnbrEnd * b2bis_e8__rate_out), (b2bisnbrEnd * b2bis_e11__rate_out));
+
+tel;
+------------------
+node b2bisDoFire(e4_, e5_ :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e4_>=  (times * b2bis_e4__rate_in)) 
+	and  (e5_>=  (times * b2bis_e5__rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c0bis(e6_ :int) returns (e6__C, e12__P :int; c0bisnbrFired, c0bisnbrEnd : int );
+
+let
+c0bisnbrFired= if c0bisDoFire(e6_,1) then 1
+		else 0;
+
+c0bisnbrEnd= 0 -> pre (c0bisnbrFired);
+
+
+
+(e6__C) = ((c0bisnbrFired * c0bis_e6__rate_in));
+
+(e12__P) = ((c0bisnbrEnd * c0bis_e12__rate_out));
+
+tel;
+------------------
+node c0bisDoFire(e6_ :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e6_>=  (times * c0bis_e6__rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c1bis(e2_ :int) returns (e2__C, e13__P :int; c1bisnbrFired, c1bisnbrEnd : int );
+
+let
+c1bisnbrFired= if c1bisDoFire(e2_,1) then 1
+		else 0;
+
+c1bisnbrEnd= 0 -> pre (c1bisnbrFired);
+
+
+
+(e2__C) = ((c1bisnbrFired * c1bis_e2__rate_in));
+
+(e13__P) = ((c1bisnbrEnd * c1bis_e13__rate_out));
+
+tel;
+------------------
+node c1bisDoFire(e2_ :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e2_>=  (times * c1bis_e2__rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c2bis(e11_ :int) returns (e11__C, e14__P :int; c2bisnbrFired, c2bisnbrEnd : int );
+
+let
+c2bisnbrFired= if c2bisDoFire(e11_,1) then 1
+		else 0;
+
+c2bisnbrEnd= 0 -> pre (c2bisnbrFired);
+
+
+
+(e11__C) = ((c2bisnbrFired * c2bis_e11__rate_in));
+
+(e14__P) = ((c2bisnbrEnd * c2bis_e14__rate_out));
+
+tel;
+------------------
+node c2bisDoFire(e11_ :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e11_>=  (times * c2bis_e11__rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node d0bis(e12_, e13_, e14_, e15_in :int) returns (e12__C, e13__C, e14__C, e15_in_C, e15_out_P :int; d0bisnbrFired, d0bisnbrEnd : int );
+
+let
+d0bisnbrFired= if d0bisDoFire(e12_, e13_, e14_, e15_in,1) then 1
+		else 0;
+
+d0bisnbrEnd= 0 -> pre (d0bisnbrFired);
+
+
+
+(e12__C, e13__C, e14__C, e15_in_C) = ((d0bisnbrFired * d0bis_e12__rate_in), (d0bisnbrFired * d0bis_e13__rate_in), (d0bisnbrFired * d0bis_e14__rate_in), (d0bisnbrFired * d0bis_e15_in_rate_in));
+
+(e15_out_P) = ((d0bisnbrEnd * d0bis_e15_out_rate_out));
+
+tel;
+------------------
+node d0bisDoFire(e12_, e13_, e14_, e15_in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e12_>=  (times * d0bis_e12__rate_in)) 
+	and  (e13_>=  (times * d0bis_e13__rate_in)) 
+	and  (e14_>=  (times * d0bis_e14__rate_in)) 
+	and  (e15_in>=  (times * d0bis_e15_in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node top (_: bool) returns (e1x, e5x, e16x, e17x, e18x, e19x, e2_, e3_, e4_, e5_, e6_, e8_, e11_, e12_, e13_, e14_, e15_, a_nbrFired, b_nbrFired, c_nbrFired, d_nbrFired, b0b1bisnbrFired, b2bisnbrFired, c0bisnbrFired, c1bisnbrFired, c2bisnbrFired, d0bisnbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+e1x_C, e1x_P: int; 
+e5x_C, e5x_P: int; 
+e16x_C, e16x_P: int; 
+e17x_C, e17x_P: int; 
+e18x_C, e18x_P: int; 
+e19x_C, e19x_P: int; 
+e2__C, e2__P: int; 
+e3__C, e3__P: int; 
+e4__C, e4__P: int; 
+e5__C, e5__P: int; 
+e6__C, e6__P: int; 
+e8__C, e8__P: int; 
+e11__C, e11__P: int; 
+e12__C, e12__P: int; 
+e13__C, e13__P: int; 
+e14__C, e14__P: int; 
+e15__C, e15__P: int; 
+a_nbrEnd, b_nbrEnd, c_nbrEnd, d_nbrEnd, b0b1bisnbrEnd, b2bisnbrEnd, c0bisnbrEnd, c1bisnbrEnd, c2bisnbrEnd, d0bisnbrEnd : int; 
+
+
+
+positiveValues: bool;
+
+
+let
+
+e1x = e1x_I -> pre  (   e1x-e1x_C)+ e1x_P;
+e5x = e5x_I -> pre  (   e5x-e5x_C)+ e5x_P;
+e16x = e16x_I -> pre  (   e16x-e16x_C)+ e16x_P;
+e17x = e17x_I -> pre  (   e17x-e17x_C)+ e17x_P;
+e18x = e18x_I -> pre  (   e18x-e18x_C)+ e18x_P;
+e19x = e19x_I -> pre  (   e19x-e19x_C)+ e19x_P;
+e2_ = e2__I -> pre  (   e2_-e2__C)+ e2__P;
+e3_ = e3__I -> pre  (   e3_-e3__C)+ e3__P;
+e4_ = e4__I -> pre  (   e4_-e4__C)+ e4__P;
+e5_ = e5__I -> pre  (   e5_-e5__C)+ e5__P;
+e6_ = e6__I -> pre  (   e6_-e6__C)+ e6__P;
+e8_ = e8__I -> pre  (   e8_-e8__C)+ e8__P;
+e11_ = e11__I -> pre  (   e11_-e11__C)+ e11__P;
+e12_ = e12__I -> pre  (   e12_-e12__C)+ e12__P;
+e13_ = e13__I -> pre  (   e13_-e13__C)+ e13__P;
+e14_ = e14__I -> pre  (   e14_-e14__C)+ e14__P;
+e15_ = e15__I -> pre  (   e15_-e15__C)+ e15__P;
+
+
+
+(e1x_C, e1x_P, e5x_P, e3__P, e4__P, a_nbrFired, a_nbrEnd ) = a_(e1x);
+(e5x_C, e16x_C, e16x_P, e17x_P, b_nbrFired, b_nbrEnd ) = b_(e5x, e16x);
+(e17x_C, e18x_P, c_nbrFired, c_nbrEnd ) = c_(e17x);
+(e18x_C, e19x_C, e19x_P, d_nbrFired, d_nbrEnd ) = d_(e18x, e19x);
+(e3__C, e8__C, e6__P, e2__P, e5__P, b0b1bisnbrFired, b0b1bisnbrEnd ) = b0b1bis(e3_, e8_);
+(e4__C, e5__C, e8__P, e11__P, b2bisnbrFired, b2bisnbrEnd ) = b2bis(e4_, e5_);
+(e6__C, e12__P, c0bisnbrFired, c0bisnbrEnd ) = c0bis(e6_);
+(e2__C, e13__P, c1bisnbrFired, c1bisnbrEnd ) = c1bis(e2_);
+(e11__C, e14__P, c2bisnbrFired, c2bisnbrEnd ) = c2bis(e11_);
+(e12__C, e13__C, e14__C, e15__C, e15__P, d0bisnbrFired, d0bisnbrEnd ) = d0bis(e12_, e13_, e14_, e15_);
+
+ 
+
+
+positiveValues = ( e1x>=   0) 
+	and  ( e5x>=   0) 
+	and  ( e16x>=   0) 
+	and  ( e17x>=   0) 
+	and  ( e18x>=   0) 
+	and  ( e19x>=   0) 
+	and  ( e2_>=   0) 
+	and  ( e3_>=   0) 
+	and  ( e4_>=   0) 
+	and  ( e5_>=   0) 
+	and  ( e6_>=   0) 
+	and  ( e8_>=   0) 
+	and  ( e11_>=   0) 
+	and  ( e12_>=   0) 
+	and  ( e13_>=   0) 
+	and  ( e14_>=   0) 
+	and  ( e15_>=   0) 
+	and  ( a_nbrFired >= 0) 
+	and  ( b_nbrFired >= 0) 
+	and  ( c_nbrFired >= 0) 
+	and  ( d_nbrFired >= 0) 
+	and  ( b0b1bisnbrFired >= 0) 
+	and  ( b2bisnbrFired >= 0) 
+	and  ( c0bisnbrFired >= 0) 
+	and  ( c1bisnbrFired >= 0) 
+	and  ( c2bisnbrFired >= 0) 
+	and  ( d0bisnbrFired >= 0) ;
+
+--%MAIN;
+
+--%PROPERTY  "Ok, all variables are positive "  positiveValues;
+--%PROPERTY  "equiv "  d0bisnbrFired=d_nbrFired;
+
+tel;
+

@@ -1,0 +1,233 @@
+---ça modelise pas correctement le pipeline : car P2 n'est pas vérifiée: on peut avoir deux instances exécutées au m^eme temps:  le modèle est donc optimiste.
+include "../BitBlasting/toInclude_BitBlasting_ok.lus"
+
+
+
+--------------instruction with --------------------
+--node P(const n: int; B: bool^n) returns (p:bool);
+--let
+-- p = with n=1 then B[0]
+--      else XOR(B[n-1] , P(n-1,B[0..n-2]));
+--tel
+
+
+
+------------------------------SDFG weights
+const IN_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const X0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+const IN_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Y0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Z0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const V0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const W0=[1 , 1 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_A=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const A0=[0, 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_L=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_L=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const L0=[1, 1,  1 , 0,  0 , 0  ,0  ,0];
+
+const IN_P=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+
+
+
+--***************************************************************************
+--*******************node start*********************************************
+
+node Start (A: UsrInt) returns (consA, prodX, prodY : UsrInt;  StartFired: bool);
+let
+
+StartFired =UsrIntGte (A, IN_A) ;
+
+(consA, prodX, prodY) =	if 	DoFireStart (A,UsrInt_4) then FireStart (UsrInt_4) 
+			else if DoFireStart (A,UsrInt_3) then FireStart (UsrInt_3) 
+			else if DoFireStart (A,UsrInt_2) then FireStart (UsrInt_2)  
+			else if DoFireStart (A,UsrInt_1) then FireStart (UsrInt_1) 
+			else 					FireStart (UsrInt_0);
+tel
+
+----------
+node FireStart (times:UsrInt) returns (consA, prodX, prodY: UsrInt);
+let
+consA= FourBitsMult(times,IN_A) ;
+prodX= FourBitsMult(times, OUT_X) ;
+prodY= FourBitsMult(times, OUT_Y);
+tel
+
+node DoFireStart (A,  times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (A, FourBitsMult(times, IN_A)) then true 
+	else false;
+tel
+---
+
+
+
+--***************************************************************************
+--******************node wait***********************************************
+
+node Wait (X, V: UsrInt) returns ( consX, consV, prodV, prodZ:UsrInt;  WaitFired:bool);
+let
+
+WaitFired =UsrIntGte (X, IN_X) and UsrIntGte (V, IN_V);
+(consX, consV, prodV, prodZ) =	if 	DoFireWait (X,V,UsrInt_4) then FireWait (UsrInt_4) 
+				else if DoFireWait (X,V,UsrInt_3) then FireWait (UsrInt_3) 
+				else if DoFireWait (X,V,UsrInt_2) then FireWait (UsrInt_2)  
+				else if DoFireWait (X,V,UsrInt_1) then FireWait (UsrInt_1) 
+				else 					FireWait (UsrInt_0);
+tel
+
+----
+node DoFireWait (X, V, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (X, FourBitsMult(times, IN_X)) and 
+	 UsrIntGte (V, FourBitsMult(times, IN_V)) then true 
+	else false;
+tel
+---
+
+node FireWait (times:UsrInt) returns (consX, consV, prodV, prodZ: UsrInt);
+let
+consX= FourBitsMult(times, IN_X) ;
+consV= FourBitsMult(times, IN_V);
+prodV= FourBitsMult(times,OUT_V) ;
+prodZ= FourBitsMult(times,OUT_Z) ;
+tel
+----
+
+
+--***************************************************************************
+--*****************node Ta**************************************************
+ node Ta (Z, Y, W: UsrInt) returns (consZ, consY, consW, prodW, prodL:UsrInt;  TaFired:bool);
+let
+
+TaFired =UsrIntGte (Z, IN_Z) and UsrIntGte (Y, IN_Y) and UsrIntGte (W, IN_W);
+(consZ, consY, consW, prodW, prodL) =	if 	DoFireTa (Z, Y, W, UsrInt_4)  then FireTa (UsrInt_4) 
+				else if DoFireTa (Z, Y, W, UsrInt_3) then FireTa (UsrInt_3) 
+				else if DoFireTa (Z, Y, W, UsrInt_2) then FireTa (UsrInt_2)  
+				else if DoFireTa (Z, Y, W, UsrInt_1) then FireTa (UsrInt_1) 
+				else 					FireTa (UsrInt_0);
+tel
+
+----
+node DoFireTa (Z, Y, W, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (Z, FourBitsMult(times, IN_Z)) and 
+	 UsrIntGte (Y, FourBitsMult(times, IN_Y)) and 
+	 UsrIntGte (W, FourBitsMult(times, IN_W)) then true 
+	else false;
+tel
+---
+
+node FireTa (times:UsrInt) returns (consZ, consY, consW, prodW, prodL: UsrInt);
+let
+consZ= FourBitsMult(times, IN_Z) ;
+consY= FourBitsMult(times, IN_Y);
+consW= FourBitsMult(times, IN_W);
+prodW= FourBitsMult(times,OUT_W) ;
+prodL= FourBitsMult(times,OUT_L) ;
+tel
+----
+
+
+--***************************************************************************
+--*******************node generator****************************************
+
+node generator (P, L: UsrInt) returns (consL, prodA : UsrInt;  generatorFired: bool);
+let
+
+generatorFired =  UsrIntGte (P, IN_P) and UsrIntGte (L, IN_L);
+(consL, prodA) = if generatorFired	then (IN_L, P)  else (UsrInt_0, UsrInt_0);
+
+tel
+
+
+
+
+--***************************************************************************
+--********************top****************************************************
+node top (P:UsrInt) returns (generatorFired, TaFired, StartFired, WaitFired, noErreur: bool; X: UsrInt);
+--delayedV, delayedZ,
+
+var  prodX, consX, prodY, consY,  prodZ, prodW, prodV, prodL, prodA,
+consA, consZ, delayedZ , consV, delayedV,  consW, delayedW,    consL, delayedL, 
+A,  Y, Z, V, W, L, A1, X1, Y1, Z1, V1, W1, L1: UsrInt;
+
+
+---variabes pour les propreiétes
+P1, P2, P3: bool;
+
+
+let
+
+(consL, prodA, generatorFired) =  generator (P, L);
+(consA, prodX, prodY, StartFired) =  Start (A);
+(consX, consV,   delayedV, delayedZ, WaitFired) = Wait(X,V);
+(consZ, consY, consW, delayedW, delayedL, TaFired)= Ta(Z,Y,W);
+
+
+X1= UsrIntPlus (UsrIntMinus (X, consX), prodX);   X= X0-> (pre X1);
+Y1= UsrIntPlus (UsrIntMinus (Y, consY), prodY);   Y= Y0-> (pre Y1);
+Z1= UsrIntPlus (UsrIntMinus (Z, consZ), prodZ);   Z= Z0-> (pre Z1);
+V1= UsrIntPlus (UsrIntMinus (V, consV), prodV);     V= V0-> (pre V1);
+W1= UsrIntPlus (UsrIntMinus (W, consW), prodW);     W= W0-> (pre W1);
+L1= UsrIntPlus (UsrIntMinus (L, consL), prodL);       L= L0-> (pre L1);
+A1= UsrIntPlus (UsrIntMinus (A, consA), prodA);   A= A0-> (pre A1);
+
+----------------------------------------MAJ des delais des noeuds
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+-- delai == 2
+--prodV= UsrInt_0->(pre (UsrInt_0-> pre delayedV));
+prodV= UsrInt_0-> pre delayedV;
+prodZ= UsrInt_0-> pre delayedZ;
+
+
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+--delai Ta= 7
+prodW= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedW)))))))))));
+prodL = UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre  (UsrInt_0-> (pre delayedL )))))))))));
+ 
+
+------------------------------------------ les signaux suivants ajoutÃ©s pour la vÃ©rification du modele------------------------------------
+--enFiringTa vaut true qd Ta se termine; nbrRuningTA donne le nombre d'instance Ta en parallele
+--si le delai de Ta est X alors il faut X pre dans endFiringTa ( et non X-1)
+--Delai Ta= 7
+--endFiringTa= false->(pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre TaFired)))))))))))));
+--nbrRuningTA = UsrInt_0 -> if (not endFiringTa and  TaFired) then UsrIntPlus(pre nbrRuningTA, UsrInt_1) else 
+--(if  (endFiringTa and not TaFired) then UsrIntMinus(pre nbrRuningTA, UsrInt_1) else pre nbrRuningTA);
+
+
+
+----P1: le pipeline n'est pas pas débordé
+P1= UsrIntGte (W,  UsrInt_0) ; 
+
+
+--------P2: si Ta est activé alors il est activé une seule fois dans ce cycle et n'a pas été activé dans les cycles précedents.
+----si durée de wait est X alors il faut X-1 "pre" dans "not (pre  pre ....pre TaFired)"
+--P2= TaFired => UsrIntLte (consY, UsrInt_1) and not (pre  TaFired) and not (pre  pre TaFired); 
+P2= TaFired => UsrIntEq (consY, UsrInt_1)  and not (pre  TaFired); 
+
+
+------P3: si Ta n'est pas activé c'est qu'il y a pas de jetons, ou le pipeline est plein ou Ta a été activé dans l'un des cycles précédent
+----si durée de wait est X alors il faut X-1 "pre" dans "pre  pre ....pre TaFired"
+--P3=  not TaFired => UsrIntEq(Y, UsrInt_0)  or  UsrIntEq (W,  UsrInt_0)  or    (pre  TaFired) or  (pre  pre TaFired);
+P3=  not TaFired => UsrIntEq(Y, UsrInt_0)  or  UsrIntEq (W,  UsrInt_0)  or    (pre  TaFired) ;
+
+--noErreur= P1 and P2 and  P3;
+
+
+--- P2 est false ;  TaFired => UsrIntEq (consY, UsrInt_1) est false;  ---
+--En cours noErreur= TaFired => not (pre  TaFired); 
+noErreur= P2;
+
+
+assert UsrIntLte(P, UsrInt_2);
+
+tel
+
+--*****************************************************************************
+--********************test***************************************************
+node test (P:UsrInt) returns ( noErreur: bool);
+ var
+generatorFired, TaFired, StartFired, WaitFired:bool; 
+X: UsrInt;
+
+let
+(generatorFired, TaFired, StartFired, WaitFired, noErreur,  X)= top(P);
+
+tel
+

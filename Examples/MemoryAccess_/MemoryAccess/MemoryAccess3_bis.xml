@@ -1,0 +1,75 @@
+<sdf name="example" nberBit="8" maxValue="15">
+  
+   <actor name="r1" duration="1" maxAutoConcurrences="3">
+        <port name="e1" type="out" rate="3"/>
+        <port name="e2" type="in"  rate="3" />
+ 
+ 
+    </actor>
+
+<actor name="m1" duration="2" maxAutoConcurrences="3">
+        <port name="e2" type="out" rate="1"/>
+        <port name="e1" type="in"  rate="1" />
+       <port name="e3" type="out" rate="1"/>
+        <port name="e4" type="in"  rate="1" />
+       <port name="e7" type="out" rate="1"/>
+        <port name="e8" type="in"  rate="1" />
+ 
+    </actor>
+
+<actor name="m2" duration="2" maxAutoConcurrences="3">
+       
+       <port name="e3" type="in" rate="1"/>
+        <port name="e4" type="out"  rate="1" />
+       <port name="e5" type="out" rate="1"/>
+        <port name="e6" type="in"  rate="1" />
+ 
+    </actor>
+
+<actor name="a1" duration="3" maxAutoConcurrences="3">
+              <port name="e5" type="in" rate="1"/>
+        <port name="e7" type="in" rate="1"/>
+       <port name="e8" type="out" rate="1"/>
+        <port name="e9" type="in"  rate="1" />
+       <port name="e10" type="out" rate="1"/>
+
+
+    </actor>
+
+<actor name="a2" duration="4" maxAutoConcurrences="3">
+
+       <port name="e6" type="out" rate="1"/>
+
+       <port name="e10" type="in" rate="1"/>
+        <port name="e9" type="out"  rate="1" />
+       <port name="e11" type="in" rate="1"/>
+       <port name="e12" type="out" rate="1"/>
+
+    </actor>
+
+<actor name="r0" duration="1" maxAutoConcurrences="3">
+      
+       <port name="e11" type="out" rate="3"/>
+       <port name="e12" type="in" rate="3"/>
+
+    </actor>
+
+    
+
+
+    <channel name = "e1" srcActor="r1" srcPort="e1" dstActor="m1" dstPort="e1" initialTokens="0"/>    
+     <channel name = "e2" srcActor="m1" srcPort="e2" dstActor="r1" dstPort="e2" initialTokens="3"/>   
+    <channel name = "e3" srcActor="m1" srcPort="e3" dstActor="m2" dstPort="e3" initialTokens="0"/>    
+    <channel name = "e4" srcActor="m2" srcPort="e4" dstActor="m1" dstPort="e4" initialTokens="1"/>    
+    <channel name = "e5" srcActor="m2" srcPort="e5" dstActor="a1" dstPort="e5" initialTokens="1"/>    
+    <channel name = "e6" srcActor="a2" srcPort="e6" dstActor="m2" dstPort="e6" initialTokens="0"/>    
+    <channel name = "e7" srcActor="m1" srcPort="e7" dstActor="a1" dstPort="e7" initialTokens="1"/>    
+    <channel name = "e8" srcActor="a1" srcPort="e8" dstActor="m1" dstPort="e8" initialTokens="0"/>    
+    <channel name = "e9" srcActor="a2" srcPort="e9" dstActor="a1" dstPort="e9" initialTokens="1"/>    
+    <channel name = "e10" srcActor="a1" srcPort="e10" dstActor="a2" dstPort="e10" initialTokens="0"/>     
+
+    <channel name = "e11" srcActor="r0" srcPort="e11" dstActor="a2" dstPort="e11" initialTokens="3"/>     
+    <channel name = "e12" srcActor="a2" srcPort="e12" dstActor="r0" dstPort="e12" initialTokens="0"/>    
+
+ 
+ </sdf>

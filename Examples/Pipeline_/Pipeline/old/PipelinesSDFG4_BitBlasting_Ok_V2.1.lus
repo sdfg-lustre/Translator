@@ -1,0 +1,149 @@
+include "toInclude_BitBlasting_ok.lus"
+
+
+
+--------------instruction with --------------------
+--node P(const n: int; B: bool^n) returns (p:bool);
+--let
+-- p = with n=1 then B[0]
+--      else XOR(B[n-1] , P(n-1,B[0..n-2]));
+--tel
+
+
+
+------------------------------SDFG weights
+const IN_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const X0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+const IN_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Y0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Z0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const V0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const W0=[1 , 1 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_A=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const B0=[1, 1,  1 , 0,  0 , 0  ,0  ,0];
+
+
+--*******************node start*****************************************************
+
+node Start (A, B: UsrInt) returns (consB, prodX, prodY : UsrInt;  StartFired: bool);
+let
+
+StartFired =UsrIntGte (A, IN_A) and UsrIntGte (B, IN_B);
+
+(prodX, prodY, consB) =	if 	DoFireStart (A,B,UsrInt_4) then FireStart (UsrInt_4) 
+			else if DoFireStart (A,B,UsrInt_3) then FireStart (UsrInt_3) 
+			else if DoFireStart (A,B,UsrInt_2) then FireStart (UsrInt_2)  
+			else if DoFireStart (A,B,UsrInt_1) then FireStart (UsrInt_1) 
+			else 					FireStart (UsrInt_0);
+tel
+
+----------
+node FireStart (times:UsrInt) returns (consB, prodX, prodY: UsrInt);
+let
+consB= FourBitsMult(times,IN_B) ;
+prodX= FourBitsMult(times, OUT_X) ;
+prodY= FourBitsMult(times, OUT_Y);
+tel
+
+node DoFireStart (A, B, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (A, FourBitsMult(times, IN_A)) and 
+	 UsrIntGte (B, FourBitsMult(times, IN_B)) then true 
+	else false;
+tel
+---
+
+--******************node wait******************************************************
+
+node Wait (X, V: UsrInt) returns ( consX, consV, prodV, prodZ:UsrInt;  WaitFired:bool);
+let
+
+WaitFired =UsrIntGte (X, IN_X) and UsrIntGte (V, IN_V);
+(consX, consV, prodV, prodZ) =	if 	DoFireWait (X,V,UsrInt_4) then FireWait (UsrInt_4) 
+				else if DoFireWait (X,V,UsrInt_3) then FireWait (UsrInt_3) 
+				else if DoFireWait (X,V,UsrInt_2) then FireWait (UsrInt_2)  
+				else if DoFireWait (X,V,UsrInt_1) then FireWait (UsrInt_1) 
+				else 					FireWait (UsrInt_0);
+tel
+
+----
+node DoFireWait (X, V, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (X, FourBitsMult(times, IN_X)) and 
+	 UsrIntGte (V, FourBitsMult(times, IN_V)) then true 
+	else false;
+tel
+---
+
+node FireWait (times:UsrInt) returns (consX, consV, prodV, prodZ: UsrInt);
+let
+consX= FourBitsMult(times, IN_X) ;
+consV= FourBitsMult(times, IN_V);
+prodV= FourBitsMult(times,OUT_V) ;
+prodZ= FourBitsMult(times,OUT_Z) ;
+tel
+----
+
+--*****************node Ta*******************************************************
+ node Ta (Z, Y, W: UsrInt) returns (consZ, consY, consW, prodW, prodB:UsrInt;  TaFired:bool);
+let
+
+TaFired =UsrIntGte (Z, IN_Z) and UsrIntGte (Y, IN_Y) and UsrIntGte (W, IN_W);
+(consZ, consY, consW, prodW, prodB) =	if 	DoFireTa (Z, Y, W, UsrInt_4)  then FireTa (UsrInt_4) 
+				else if DoFireTa (Z, Y, W, UsrInt_3) then FireTa (UsrInt_3) 
+				else if DoFireTa (Z, Y, W, UsrInt_2) then FireTa (UsrInt_2)  
+				else if DoFireTa (Z, Y, W, UsrInt_1) then FireTa (UsrInt_1) 
+				else 					FireTa (UsrInt_0);
+tel
+
+----
+node DoFireTa (Z, Y, W, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (Z, FourBitsMult(times, IN_Z)) and 
+	 UsrIntGte (Y, FourBitsMult(times, IN_Y)) and 
+	 UsrIntGte (W, FourBitsMult(times, IN_W)) then true 
+	else false;
+tel
+---
+
+node FireTa (times:UsrInt) returns (consZ, consY, consW, prodW, prodB: UsrInt);
+let
+consZ= FourBitsMult(times, IN_Z) ;
+consY= FourBitsMult(times, IN_Y);
+consW= FourBitsMult(times, IN_W);
+prodW= FourBitsMult(times,OUT_W) ;
+prodB= FourBitsMult(times,OUT_B) ;
+tel
+----
+
+--********************top****************************************************
+node top (A:UsrInt) returns (  TaFired, StartFired, WaitFired: bool);
+--delayedV, delayedZ,
+
+var  prodX, consX, prodY, consY,  prodZ, prodW, prodV, prodB,
+consZ,   consV,   consW, delayedW,    consB, delayedB,
+X, Y, Z, V, W, B, X1, Y1, Z1, V1, W1, B1: UsrInt;
+
+let
+
+(consB, prodX, prodY, StartFired) =  Start (A,B);
+
+
+(consX, consV,   prodV, prodZ, WaitFired) = Wait(X,V);
+--(consX, consV, delayedV, delayedZ, WaitFired) = Wait(X,V);
+ --prodV= UsrInt_0->(pre (UsrInt_0-> pre delayedV));
+-- prodZ= UsrInt_0->(pre (UsrInt_0-> pre delayedZ));
+
+
+(consZ, consY, consW, delayedW, delayedB, TaFired)= Ta(Z,Y,W);
+prodW= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedW)))))))))));
+  prodB= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedB)))))))))));
+ 
+
+--------
+X1= UsrIntPlus (UsrIntMinus (X, consX), prodX);   X= X0-> (pre X1);
+Y1= UsrIntPlus (UsrIntMinus (Y, consY), prodY);   Y= Y0-> (pre Y1);
+Z1= UsrIntPlus (UsrIntMinus (Z, consZ), prodZ);   Z= Z0-> (pre Z1);
+V1= UsrIntPlus (UsrIntMinus (V, consV), prodV);     V= V0-> (pre V1);
+W1= UsrIntPlus (UsrIntMinus (W, consW), prodW);     W= W0-> (pre W1);
+B1= UsrIntPlus (UsrIntMinus (B, consB), prodB);       B= B0-> (pre B1);
+
+tel

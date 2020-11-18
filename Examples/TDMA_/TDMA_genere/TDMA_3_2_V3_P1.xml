@@ -1,0 +1,41 @@
+<sdf name="example" nberBit="8" maxValue="15">
+  
+   <actor name="A" duration="3" maxAutoConcurrences="3">
+        <port name="Y" type="in" rate="1"/>
+        <port name="Vin" type="in"  rate="1" />
+        <port name="Vout" type="out"  rate="1" />
+        <port name="Z" type="out"  rate="1" />
+    </actor>
+
+    <actor name="A1" duration="2" maxAutoConcurrences="3">
+        <port name="Z" type="in"  rate="1" />
+        <port name="B" type="out" rate="1" />
+     </actor>
+
+ <actor name="G" duration="1" maxAutoConcurrences="1">
+        <port name="In" type="in" rate="1"/>
+	 <port name="X" type="out"  rate="1" />
+        <port name="Y" type="out"  rate="1" />
+    </actor>
+
+    <actor name="P" duration="1" maxAutoConcurrences="5">
+        <port name="X" type="in" rate="1"/>
+        <port name="B" type="in"  rate="1" />
+     </actor>
+
+ 
+
+    <channel name = "X" srcActor="G" srcPort="X" dstActor="P" dstPort="X" initialTokens="0"/>    
+ 
+
+    <channel name = "Y" srcActor="G" srcPort="Y" dstActor="A" dstPort="Y" initialTokens="0"/>
+
+    <channel name = "V" srcActor="A" srcPort="Vout" dstActor="A" dstPort="Vin" initialTokens="3"/>
+    <channel name = "Z" srcActor="A" srcPort="Z" dstActor="A1" dstPort="Z" initialTokens="0"/>
+    <channel name = "B" srcActor="A1" srcPort="B" dstActor="P" dstPort="B" initialTokens="0"/>
+   
+
+    <driver name="In" actorDest="G" portDest="In"/>
+
+ 
+ </sdf>

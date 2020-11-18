@@ -1,0 +1,252 @@
+include "../BitBlasting/toInclude_BitBlasting_ok.lus"
+
+--------------instruction with --------------------
+--node P(const n: int; B: bool^n) returns (p:bool);
+--let
+-- p = with n=1 then B[0]
+--      else XOR(B[n-1] , P(n-1,B[0..n-2]));
+--tel
+
+
+------------------------------SDFG weights
+const IN_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_X=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const X0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+const IN_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Y=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Y0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_Z=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const Z0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_V=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const V0=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];	const OUT_W=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const W0=[1 , 1 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_A=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const OUT_A=[1, 0 , 0 , 0,  0 , 0  ,0  ,0]; const A0=[0, 0 , 0 , 0,  0 , 0  ,0  ,0];
+const IN_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_B=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const B0=[1, 1,  1 , 0,  0 , 0  ,0  ,0];
+
+
+const IN_R=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0];     const OUT_R=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const R0=[0, 0,  0 , 0,  0 , 0  ,0  ,0];
+
+const IN_P=[1 , 0 , 0 , 0,  0 , 0  ,0  ,0]; const P0=[0 , 0 , 0 , 0,  0 , 0  ,0  ,0]; 
+
+
+--*******************node Generator*****************************************************
+
+node Generator (Q: UsrInt) returns (prodP : UsrInt);
+let
+ 
+prodP =  Q;
+
+tel
+
+--*******************node Tb*****************************************************
+
+node Tb (P, B: UsrInt) returns (consP, consB, prodA : UsrInt;  TbFired: bool);
+let
+TbFired =UsrIntGte (P, IN_P)  and UsrIntGte (B, IN_B) ;
+
+(consP, consB, prodA) =	if 	DoFireTb (P, B,UsrInt_4) then FireTb (UsrInt_4) 
+			else if DoFireTb (P, B,UsrInt_3) then FireTb (UsrInt_3) 
+			else if DoFireTb (P, B,UsrInt_2) then FireTb (UsrInt_2)  
+			else if DoFireTb (P, B,UsrInt_1) then FireTb (UsrInt_1) 
+			else 					FireTb (UsrInt_0);
+tel
+
+----------
+node FireTb (times:UsrInt) returns (consP, consB, prodA: UsrInt);
+let
+consP= FourBitsMult(times,IN_P) ;
+consB= FourBitsMult(times, IN_B) ;
+prodA= FourBitsMult(times, OUT_A);
+tel
+
+-----
+node DoFireTb (P, B, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (P, FourBitsMult(times, IN_P)) and 
+	 UsrIntGte (B, FourBitsMult(times, IN_B)) then true 
+	else false;
+tel
+
+
+--*******************node start*****************************************************
+
+node Start (A: UsrInt) returns (consA, prodX, prodY : UsrInt;  StartFired: bool);
+let
+
+StartFired =UsrIntGte (A, IN_A) ;
+
+(consA, prodX, prodY) =	if 	DoFireStart (A,UsrInt_4) then FireStart (UsrInt_4) 
+			else if DoFireStart (A,UsrInt_3) then FireStart (UsrInt_3) 
+			else if DoFireStart (A,UsrInt_2) then FireStart (UsrInt_2)  
+			else if DoFireStart (A,UsrInt_1) then FireStart (UsrInt_1) 
+			else 					FireStart (UsrInt_0);
+tel
+
+----------
+node FireStart (times:UsrInt) returns (consA, prodX, prodY: UsrInt);
+let
+consA= FourBitsMult(times,IN_A) ;
+prodX= FourBitsMult(times, OUT_X) ;
+prodY= FourBitsMult(times, OUT_Y);
+tel
+
+node DoFireStart (A,  times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (A, FourBitsMult(times, IN_A)) then true 
+	else false;
+tel
+---
+
+--******************node wait******************************************************
+
+node Wait (X, V: UsrInt) returns ( consX, consV, prodV, prodZ:UsrInt;  WaitFired:bool);
+let
+
+WaitFired =UsrIntGte (X, IN_X) and UsrIntGte (V, IN_V);
+(consX, consV, prodV, prodZ) =	if 	DoFireWait (X,V,UsrInt_4) then FireWait (UsrInt_4) 
+				else if DoFireWait (X,V,UsrInt_3) then FireWait (UsrInt_3) 
+				else if DoFireWait (X,V,UsrInt_2) then FireWait (UsrInt_2)  
+				else if DoFireWait (X,V,UsrInt_1) then FireWait (UsrInt_1) 
+				else 					FireWait (UsrInt_0);
+tel
+
+----
+node DoFireWait (X, V, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (X, FourBitsMult(times, IN_X)) and 
+	 UsrIntGte (V, FourBitsMult(times, IN_V)) then true 
+	else false;
+tel
+---
+
+node FireWait (times:UsrInt) returns (consX, consV, prodV, prodZ: UsrInt);
+let
+consX= FourBitsMult(times, IN_X) ;
+consV= FourBitsMult(times, IN_V);
+prodV= FourBitsMult(times,OUT_V) ;
+prodZ= FourBitsMult(times,OUT_Z) ;
+tel
+----
+
+--*****************node Ta*******************************************************
+ node Ta (Z, Y, W: UsrInt) returns (consZ, consY, consW,  prodB, prodR:UsrInt;  TaFired:bool);
+let
+
+TaFired =UsrIntGte (Z, IN_Z) and UsrIntGte (Y, IN_Y) and UsrIntGte (W, IN_W);
+(consZ, consY, consW,  prodB, prodR) =	if 	DoFireTa (Z, Y, W, UsrInt_4)  then FireTa (UsrInt_4) 
+				else if DoFireTa (Z, Y, W, UsrInt_3) then FireTa (UsrInt_3) 
+				else if DoFireTa (Z, Y, W, UsrInt_2) then FireTa (UsrInt_2)  
+				else if DoFireTa (Z, Y, W, UsrInt_1) then FireTa (UsrInt_1) 
+				else 					FireTa (UsrInt_0);
+tel
+
+----
+node DoFireTa (Z, Y, W, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (Z, FourBitsMult(times, IN_Z)) and 
+	 UsrIntGte (Y, FourBitsMult(times, IN_Y)) and 
+	 UsrIntGte (W, FourBitsMult(times, IN_W)) then true 
+	else false;
+tel
+---
+
+node FireTa (times:UsrInt) returns (consZ, consY, consW, prodB, prodR: UsrInt);
+let
+consZ= FourBitsMult(times, IN_Z) ;
+consY= FourBitsMult(times, IN_Y);
+consW= FourBitsMult(times, IN_W);
+prodB= FourBitsMult(times,OUT_B) ;
+prodR= FourBitsMult(times,OUT_R) ;
+tel
+----
+
+--*****************node TaBis*******************************************************
+ node TaBis (R: UsrInt) returns (consR, prodW:UsrInt;  TaBisFired:bool);
+let
+
+TaBisFired =UsrIntGte (R, IN_R) ;
+(consR, prodW) =	if 	DoFireTaBis (R, UsrInt_4)  then FireTaBis (UsrInt_4) 
+				else if DoFireTaBis (R, UsrInt_3) then FireTaBis (UsrInt_3) 
+				else if DoFireTaBis (R, UsrInt_2) then FireTaBis (UsrInt_2)  
+				else if DoFireTaBis (R, UsrInt_1) then FireTaBis (UsrInt_1) 
+				else 					FireTaBis (UsrInt_0);
+tel
+
+----
+node DoFireTaBis (R, times:UsrInt) returns ( yes: bool);
+let
+yes = if UsrIntGte (R, FourBitsMult(times, IN_R)) then true else false;
+tel
+---
+
+node FireTaBis (times:UsrInt) returns (consR, prodW : UsrInt);
+let
+consR= FourBitsMult(times, IN_R) ;
+prodW= FourBitsMult(times,OUT_W) ;
+tel
+----
+--********************top****************************************************
+node top (Q:UsrInt) returns (TbFired, TaFired, StartFired, WaitFired, TaBisFired, endFiringTa, noErreur: bool; X, nbrRuningTA: UsrInt);
+--delayedV, delayedZ,
+
+var  prodX, consX, prodY, consY,  prodZ, prodW, prodV, prodB, prodA, prodP, prodR,
+consA, consZ, delayedZ , consV, delayedV,  consW, delayedW,    consB, delayedB, consP, consR, delayedR,
+A,  Y, Z, V, W, B, P,R,  A1, X1, Y1, Z1, V1, W1, B1, P1, R1: UsrInt;
+--X: UsrInt;
+
+--endFiringTa: bool;
+--nbrRuningTA: UsrInt;
+
+let
+prodP =  Generator (Q);
+(consP, consB, prodA, TbFired) =  Tb (P, B);
+(consA, prodX, prodY, StartFired) =  Start (A);
+
+
+(consX, consV,   delayedV, delayedZ, WaitFired) = Wait(X,V);
+--(consX, consV, delayedV, delayedZ, WaitFired) = Wait(X,V);
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+-- delai == 2
+--prodV= UsrInt_0->(pre (UsrInt_0-> pre delayedV));
+prodV= UsrInt_0-> pre delayedV;
+prodZ= UsrInt_0-> pre delayedZ;
+
+
+(consZ, consY, consW,  delayedB, delayedR, TaFired)= Ta(Z,Y,W);
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+--delai Ta= 7
+prodR= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedR)))))))))));
+  prodB= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedB)))))))))));
+ 
+
+(consR,  delayedW, TaBisFired)= TaBis(R);
+--si delai du noeud est X cycles alors il faut X-1 "pre"
+--delai Tabis= 7
+prodW= UsrInt_0->(pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre (UsrInt_0-> (pre delayedW)))))))))));
+ 
+--------
+X1= UsrIntPlus (UsrIntMinus (X, consX), prodX);   X= X0-> (pre X1);
+Y1= UsrIntPlus (UsrIntMinus (Y, consY), prodY);   Y= Y0-> (pre Y1);
+Z1= UsrIntPlus (UsrIntMinus (Z, consZ), prodZ);   Z= Z0-> (pre Z1);
+V1= UsrIntPlus (UsrIntMinus (V, consV), prodV);     V= V0-> (pre V1);
+W1= UsrIntPlus (UsrIntMinus (W, consW), prodW);     W= W0-> (pre W1);
+B1= UsrIntPlus (UsrIntMinus (B, consB), prodB);       B= B0-> (pre B1);
+A1= UsrIntPlus (UsrIntMinus (A, consA), prodA);   A= A0-> (pre A1);
+P1= UsrIntPlus (UsrIntMinus (P, consP), prodP);   P= P0-> (pre P1);
+R1= UsrIntPlus (UsrIntMinus (R, consR), prodR);   R= R0-> (pre R1);
+
+-- les signaux suivants ajoutés pour la vérification du modele
+--enFiringTa vaut true qd Ta se termine; nbrRuningTA donne le nombre d'instance Ta en parallele
+--si le delai de Ta est X alors il faut X pre dans endFiringTa ( et non X-1)
+--Delai Ta= 7
+endFiringTa= false->(pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre (false-> (pre TaFired)))))))))))));
+nbrRuningTA = UsrInt_0 -> if (not endFiringTa and  TaFired) then UsrIntPlus(pre nbrRuningTA, UsrInt_1) else 
+(if  (endFiringTa and not TaFired) then UsrIntMinus(pre nbrRuningTA, UsrInt_1) else pre nbrRuningTA);
+
+
+--les deux propriété qui doivent être tjs vraies pour un pas de pipeline non inférieur à 2
+noErreur=   UsrIntLte (nbrRuningTA, W0) and (TaFired => not (pre  TaFired));
+--noErreur=   UsrIntLte (nbrRuningTA, W0) and (TaFired => not (pre  TaFired) and not (pre  pre TaFired));
+
+-- assertion à cause du manque d'espace RAM
+--assert (not P_7) and (not P_6) and (not P_5) and (not P_4) and (not P_3)  and (not P_2)  and (not P_1);
+assert UsrIntLte(Q, UsrInt_1);
+
+tel
+
+ 
+

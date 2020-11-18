@@ -1,0 +1,30 @@
+oc5:
+module: Harness
+
+signals: 2
+   0: input:in - single:1 bool:0
+   1: output:noError - single:2
+end: 
+
+variables: 3
+   0: $0
+   1: $0
+   2: $0
+end: 
+
+actions: 3
+   0: present: 0
+   1: output: 1
+   2: call:$0 (2) (@$1)
+end:
+
+states: 2
+startpoint: 0
+calls: 6
+0:  2 1 <1> 
+
+1:  2 1 <1> 
+
+end:
+
+endmodule:

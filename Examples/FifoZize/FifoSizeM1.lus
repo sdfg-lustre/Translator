@@ -1,0 +1,208 @@
+include "./toInclude_BitBlasting_ok.lus"
+
+const maxValue = [1,1,1,1,0,0,0,0];
+
+--**************** Const Rates ****************--
+
+const So_e1_in_rate_in = [1,0,0,0,0,0,0,0];
+const So_e1_out_rate_out = [1,0,0,0,0,0,0,0];
+const So_e2_rate_out = [1,0,0,0,0,0,0,0];
+const P_e2_rate_in = [1,0,0,0,0,0,0,0];
+const P_e3_in_rate_in = [1,0,0,0,0,0,0,0];
+const P_e3_out_rate_out = [1,0,0,0,0,0,0,0];
+const P_e4_rate_out = [1,0,0,0,0,0,0,0];
+const P_e7_rate_in = [1,0,0,0,0,0,0,0];
+const C_e4_rate_in = [1,0,0,0,0,0,0,0];
+const C_e5_in_rate_in = [1,0,0,0,0,0,0,0];
+const C_e5_out_rate_out = [1,0,0,0,0,0,0,0];
+const C_e6_rate_out = [1,0,0,0,0,0,0,0];
+const C_e7_rate_out = [1,0,0,0,0,0,0,0];
+const Si_e6_rate_in = [1,0,0,0,0,0,0,0];
+const Si_e8_in_rate_in = [1,0,0,0,0,0,0,0];
+const Si_e8_out_rate_out = [1,0,0,0,0,0,0,0];
+
+--**************** Init Channel ****************--
+
+const e1_I = [1,0,0,0,0,0,0,0];
+const e2_I = [0,0,0,0,0,0,0,0];
+const e3_I = [1,0,0,0,0,0,0,0];
+const e4_I = [0,0,0,0,0,0,0,0];
+const e5_I = [1,0,0,0,0,0,0,0];
+const e6_I = [0,0,0,0,0,0,0,0];
+const e7_I = [0,1,0,0,0,0,0,0];
+const e8_I = [1,0,0,0,0,0,0,0];
+
+
+--**************** Nodes Declaration ****************--
+
+node So(e1_in :UsrInt) returns (e1_in_C, e1_out_P, e2_P :UsrInt; SonbrFired: UsrInt );
+
+var
+e1_out_PD, e2_PD :UsrInt;
+let
+SonbrFired= if SoDoFire(e1_in,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e1_in_C,e1_out_PD, e2_PD) = (UsrIntMult(SonbrFired, So_e1_in_rate_in),UsrIntMult(SonbrFired, So_e1_out_rate_out),UsrIntMult(SonbrFired, So_e2_rate_out));
+
+e1_out_P = UsrInt_0 -> pre (e1_out_PD);
+
+e2_P = UsrInt_0 -> pre (e2_PD);
+
+
+tel;
+------------------
+node SoDoFire(e1_in,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e1_in, UsrIntMult(times, So_e1_in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node P(e2, e3_in, e7 :UsrInt) returns (e2_C, e3_in_C, e3_out_P, e4_P, e7_C :UsrInt; PnbrFired: UsrInt );
+
+let
+PnbrFired= if PDoFire(e2, e3_in, e7,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e2_C, e3_in_C, e7_C,e3_out_P, e4_P) = (UsrIntMult(PnbrFired, P_e2_rate_in),UsrIntMult(PnbrFired, P_e3_in_rate_in),UsrIntMult(PnbrFired, P_e7_rate_in),UsrIntMult(PnbrFired, P_e3_out_rate_out),UsrIntMult(PnbrFired, P_e4_rate_out));
+
+tel;
+------------------
+node PDoFire(e2, e3_in, e7,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e2, UsrIntMult(times, P_e2_rate_in)) 
+	and UsrIntGte(e3_in, UsrIntMult(times, P_e3_in_rate_in)) 
+	and UsrIntGte(e7, UsrIntMult(times, P_e7_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node C(e4, e5_in :UsrInt) returns (e4_C, e5_in_C, e5_out_P, e6_P, e7_P :UsrInt; CnbrFired: UsrInt );
+
+var
+e5_out_PD, e6_PD, e7_PD :UsrInt;
+let
+CnbrFired= if CDoFire(e4, e5_in,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e4_C, e5_in_C,e5_out_PD, e6_PD, e7_PD) = (UsrIntMult(CnbrFired, C_e4_rate_in),UsrIntMult(CnbrFired, C_e5_in_rate_in),UsrIntMult(CnbrFired, C_e5_out_rate_out),UsrIntMult(CnbrFired, C_e6_rate_out),UsrIntMult(CnbrFired, C_e7_rate_out));
+
+e5_out_P = UsrInt_0 -> pre (e5_out_PD);
+
+e6_P = UsrInt_0 -> pre (e6_PD);
+
+e7_P = UsrInt_0 -> pre (e7_PD);
+
+
+tel;
+------------------
+node CDoFire(e4, e5_in,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e4, UsrIntMult(times, C_e4_rate_in)) 
+	and UsrIntGte(e5_in, UsrIntMult(times, C_e5_in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node Si(e6, e8_in :UsrInt) returns (e6_C, e8_in_C, e8_out_P :UsrInt; SinbrFired: UsrInt );
+
+var
+e8_out_PD :UsrInt;
+let
+SinbrFired= if SiDoFire(e6, e8_in,UsrInt_1) then UsrInt_1
+		else UsrInt_0;
+
+(e6_C, e8_in_C,e8_out_PD) = (UsrIntMult(SinbrFired, Si_e6_rate_in),UsrIntMult(SinbrFired, Si_e8_in_rate_in),UsrIntMult(SinbrFired, Si_e8_out_rate_out));
+
+e8_out_P = UsrInt_0 -> pre (e8_out_PD);
+
+
+tel;
+------------------
+node SiDoFire(e6, e8_in,times:UsrInt) returns ( yes: bool);
+let
+
+yes = if UsrIntGte(e6, UsrIntMult(times, Si_e6_rate_in)) 
+	and UsrIntGte(e8_in, UsrIntMult(times, Si_e8_in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+
+--**************** Node Top Declaration ****************--
+
+node top (in: UsrInt) returns (e1, e2, e3, e4, e5, e6, e7, e8, SonbrFired, PnbrFired, CnbrFired, SinbrFired:UsrInt);
+
+-------------- Les variables -------------- 
+
+var
+
+e1_C, e1_P: UsrInt; 
+e2_C, e2_P: UsrInt; 
+e3_C, e3_P: UsrInt; 
+e4_C, e4_P: UsrInt; 
+e5_C, e5_P: UsrInt; 
+e6_C, e6_P: UsrInt; 
+e7_C, e7_P: UsrInt; 
+e8_C, e8_P: UsrInt; 
+
+let
+
+e1 = e1_I -> pre UsrIntPlus( UsrIntMinus( e1,e1_C), e1_P);
+e2 = e2_I -> pre UsrIntPlus( UsrIntMinus( e2,e2_C), e2_P);
+e3 = e3_I -> pre UsrIntPlus( UsrIntMinus( e3,e3_C), e3_P);
+e4 = e4_I -> pre UsrIntPlus( UsrIntMinus( e4,e4_C), e4_P);
+e5 = e5_I -> pre UsrIntPlus( UsrIntMinus( e5,e5_C), e5_P);
+e6 = e6_I -> pre UsrIntPlus( UsrIntMinus( e6,e6_C), e6_P);
+e7 = e7_I -> pre UsrIntPlus( UsrIntMinus( e7,e7_C), e7_P);
+e8 = e8_I -> pre UsrIntPlus( UsrIntMinus( e8,e8_C), e8_P);
+
+
+
+(e1_C, e1_P, e2_P, SonbrFired) = So(e1);
+(e2_C, e3_C, e3_P, e4_P, e7_C, PnbrFired) = P(e2, e3, e7);
+(e4_C, e5_C, e5_P, e6_P, e7_P, CnbrFired) = C(e4, e5);
+(e6_C, e8_C, e8_P, SinbrFired) = Si(e6, e8);
+
+
+tel;
+
+
+--**************** Node Harness Declaration ****************--
+
+node Harness (in: UsrInt) returns (noError :bool)
+
+var
+
+e1, e2, e3, e4, e5, e6, e7, e8, SonbrFired, PnbrFired, CnbrFired, SinbrFired:UsrInt;
+
+positiveValues: bool;
+
+let
+
+(e1, e2, e3, e4, e5, e6, e7, e8, SonbrFired, PnbrFired, CnbrFired, SinbrFired) = top(in);
+
+positiveValues = UsrIntGte( e1, UsrInt_0) 
+	and UsrIntGte( e2, UsrInt_0) 
+	and UsrIntGte( e3, UsrInt_0) 
+	and UsrIntGte( e4, UsrInt_0) 
+	and UsrIntGte( e5, UsrInt_0) 
+	and UsrIntGte( e6, UsrInt_0) 
+	and UsrIntGte( e7, UsrInt_0) 
+	and UsrIntGte( e8, UsrInt_0) 
+	and UsrIntGte( SonbrFired , UsrInt_0) 
+	and UsrIntGte( PnbrFired , UsrInt_0) 
+	and UsrIntGte( CnbrFired , UsrInt_0) 
+	and UsrIntGte( SinbrFired , UsrInt_0) ;
+
+noError= positiveValues and UsrIntLte( e2 , UsrInt_0);
+
+tel

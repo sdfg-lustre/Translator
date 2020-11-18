@@ -1,0 +1,9 @@
+autograph
+window "top" "top" 100 100 800 600 3000 3000
+labels 2
+0: "s0"
+1: "~xx/!e5_0!e7_0!e9_0!e15_0!e18_0!e20_0!e20_1!e17_0"
+vertices
+1: initial 100 100 unexpl names name struct 0 1 -10
+edges
+0: 1 1 names  name behav 1
