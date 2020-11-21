@@ -375,9 +375,17 @@ public class Main {
                                               
                          writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
                         
-                          str="";
+                                                 str="";
+  
+             /*              for (Actor arrNode : actorsArray) {
+                         str += arrNode.getName() + "nbrRun, ";
+                    
+                  }
+                
+                    writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
+                   */    
                         
-                        writer.println(" noDeadlock: bool; ");
+          //              writer.println(" noDeadlock: bool; ");
                         //******************generation the node body;
                         //updating the channel value
                         writer.println("\nlet\n");
@@ -433,17 +441,22 @@ public class Main {
                         }
     writer.println(";\n\n");
                        
+          /*                     for (Actor arrNode : actorsArray) {
                         
+                            writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
+ }*/
                     
                         //error checking
-                        writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
+      //                  writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
 
-                         for (DriverActor driver : driversArray) {
+         /*                for (DriverActor driver : driversArray) {
                             writer.println("assert " + driver.getName() + "_P  >=0; \n ");
-                        }
-                        writer.println("--%MAIN;\n");
-                        writer.println("--%PROPERTY  \"no deadlock \"  noDeadlock;\n");
-
+                        }*/
+                           writer.println("--%MAIN;\n");
+    writer.println("-- assert ....");
+         
+                    //    writer.println("--%PROPERTY  \"no deadlock \"  noDeadlock;\n");
+writer.println("-- --%PROPERTY  ....");
                         writer.println("\ntel;");
                         writer.println();
                         writer.println();

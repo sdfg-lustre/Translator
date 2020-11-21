@@ -160,7 +160,7 @@ public class Main {
                         SimpleDateFormat dateFormatComp;
 
                         dateFormatComp = new SimpleDateFormat("dd MMM yyyy hh:mm:ss a");
-                        PrintWriter writer = new PrintWriter(args[0] + "_cycle_cycle.lus", "UTF-8");
+                        PrintWriter writer = new PrintWriter(args[0] + "_cycle_by_cycle.lus", "UTF-8");
                         writer.println("--** This lustre code is generated automatically on " + dateFormatComp.format(date));
 
                         writer.println("--**It corresponds to a translation to Lustre of the  SDFG model  of the design \"" + SDFname + "\" ");
@@ -295,12 +295,15 @@ public class Main {
                                               
                          writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
                          str="";
-                //        for (Actor arrNode : actorsArray) {
-                  //        str += arrNode.getName() + "nbrRun, ";
-                    //    }
-                      //    writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
-                       
-                         writer.println("noDeadlock: bool;\n");
+      /*               
+                         for (Actor arrNode : actorsArray) {
+                         str += arrNode.getName() + "nbrRun, ";
+                    
+                  }
+                
+                    writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
+                   */    
+                     //    writer.println("noDeadlock: bool;\n");
 
                         //generation the node-top body
                         writer.println("\nlet\n");
@@ -342,20 +345,27 @@ public class Main {
                         }
                         writer.println();
 
-                      
+      /*                       for (Actor arrNode : actorsArray) {
+                        
+                            writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
+ }*/
                   //      writer.println("\npositiveValues = " + positiveValuesString(channelsArray, actorsArray, sinkArray, monitorsArray) + ";");
-                        writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
+  //                      writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
 
                         writer.println();
                               for (DriverActor driver : sinkArray) {
-                            writer.println("assert " + driver.getName() + "_P  >=0; \n ");
+    //                        writer.println("assert " + driver.getName() + "_P  >=0; \n ");
                         }
+                                         
+
 
                         writer.println("--%MAIN;\n");
-                       
+                                 writer.println("-- assert..... " );
 
-                         writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
-                                            
+
+                 //        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
+                    writer.println("-- --%PROPERTY  .....\n");
+                  
                         writer.println("\ntel;");
                         writer.println();
 
@@ -506,7 +516,7 @@ public class Main {
                             writer.println(monitor.getName() + "_P : int;");
                         }
 
-                        writer.println("noDeadlock : bool;");
+              //          writer.println("noDeadlock : bool;");
 
                         //generation the node-top body
                         writer.println("\nlet\n");
@@ -549,9 +559,9 @@ public class Main {
                         }
                         writer.println();
 
-                        writer.println("\nnoDeadlock = " + deadlockString(actorsArray) + ";");
+                  //      writer.println("\nnoDeadlock = " + deadlockString(actorsArray) + ";");
                         writer.println("--%MAIN;\n");
-                        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
+                 //       writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
                         writer.println("\ntel;");
                         writer.println();
                         writer.println();
