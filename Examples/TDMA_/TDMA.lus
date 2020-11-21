@@ -1,13 +1,12 @@
 --** This lustre code is generated automatically. 
 --**It corresponds to a translation of SDFG model to Lustre. This version produce a code that simulates each clock cycle of the SDFG.  
---     27 mai 2020 04:02:53 PM
+--     27 novembre 2020 04:02:53 PM
 
 
 
 
 --**************** Const Rates ****************--
 
-const maxValue = 15 ;
 const A_e1_rate_in = 1;
 const A_e3in_rate_in = 1;
 const A_e3out_rate_out = 1;
@@ -88,7 +87,7 @@ tel;
 ------------------
 node top (e1_P: int) returns (e3, e4, e1, e2, AnbrFired, A1nbrFired: int);
 
--------------- Les variables -------------- 
+--------------   variables -------------- 
 
 var
 
@@ -96,7 +95,6 @@ e3_C, e3_P: int;
 e4_C, e4_P: int; 
 e1_C : int;
 e2_P : int;
-positiveValues: bool;
 --e1_P : int;
 --n :int;
 
@@ -117,18 +115,10 @@ e4 = e4_I -> pre  (  ( e4-e4_C)+ e4_P);
 Sx= 0-> pre (0-> pre (0-> pre (0-> pre (0-> pre e2)))); --P
 Sy= 0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre Te1)))))));--P+N
 
- positiveValues = ( e3>=   0) 
-	and  ( e4>=   0) 
-	and  ( e1>=  0) 
-	and  ( e2>=  0) 
-	and  ( AnbrFired >= 0) 
-	and  ( A1nbrFired >= 0) ;
-
- 
 
 
---***************l'input se fait soit avec assert soit sans assert
-assert (e1_P >=0 and e1_P <=1);
+--***************
+assert (e1_P =1);
  
 --**************************
 --%MAIN;
