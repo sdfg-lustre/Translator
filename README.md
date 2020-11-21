@@ -2,7 +2,7 @@
 Lustre is a declarative synchronous language developed to model and verify reactive systems. -->
 <pre> 
 This application transformes a <b>timed SDFG</b> model to <b> Lustre</b> models. <br>
-Two Lustre models are produced :<br>
+Two Lustre models are produced :
    -  <b>cycle-by-cycle model</b>: it progresses in time cycle-by-cycle. <br>
    -  <b>merged-cycles model</b>: it progresses in time in larger steps.<br>
 
@@ -19,7 +19,6 @@ Two Lustre models are produced :<br>
         -SDFG2LUSTRE_merged_cycles.jar
 
 The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2 </a> is used.
-
 
 
 *********<b>Quick start</b>: verification of a ready-for-use example (verification of the Lustre model of the TDMA spec: TDMA.lus):
