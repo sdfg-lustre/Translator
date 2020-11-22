@@ -21,7 +21,7 @@ Two Lustre models are produced :
 The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2 </a> is used.
 
 
-*********<b>Quick start</b>: verification of a ready-for-use example (verification of the Lustre model of the TDMA spec: TDMA.lus):
+*********<b>Quick start</b>: verification of a ready-for-use example (verification of the Lustre model of the TDMA spec: TDMA_verified.lus):
 
 1. install the Doker and the Kind2-Docker (tested on ubuntu 16.04):
    >sudo apt install docker.io

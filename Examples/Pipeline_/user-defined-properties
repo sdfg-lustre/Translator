@@ -1,0 +1,18 @@
+---assert..... 
+
+assert e1_P>=0 and e1_P<=2;
+
+---%PROPERTY  .....
+P1= true->(e2_P <=1) and (e2_P=1) => (pre e2_P=0) ;--suivant la durée de a1
+P2= e3>=0;
+--P3= true -> (e4_C=0 =>  e4_P=0) and (e4_C=1 =>  e4_P=1) ;
+P3= a1nbrEnd=a2nbrFired;
+P4= true-> (a1nbrFired=0)=> (e3=0) or (e1=0) or (pre a1nbrFired  >0);  --suivant la durée de a1
+
+--%MAIN;
+
+ 
+--%PROPERTY  "P1"  P1;
+--%PROPERTY  "P2"  P2;
+--%PROPERTY  "P3"  P3;
+--%PROPERTY  "P4"  P4;
