@@ -230,7 +230,7 @@ e9_C, e9_P: int;
 e10_C, e10_P: int; 
 e11_C, e11_P: int; 
 e5_C, e5_P: int; 
-positiveValues, P1, P2, P3, P4: bool;
+P1, P2, P3: bool;
 
 
 let
@@ -258,26 +258,7 @@ e5 = e5_I -> pre  (  ( e5-e5_C)+ e5_P);
 (e11_P, e5_C, r0nbrFired) = r0(e5);
 
 
-positiveValues = ( e1>=   0) 
-	and  ( e8>=   0) 
-	and  ( e2>=   0) 
-	and  ( e12>=   0) 
-	and  ( e3>=   0) 
-	and  ( e6>=   0) 
-	and  ( e7>=   0) 
-	and  ( e4>=   0) 
-	and  ( e9>=   0) 
-	and  ( e10>=   0) 
-	and  ( e11>=   0) 
-	and  ( e5>=   0) 
-	and  ( rinbrFired >= 0) 
-	and  ( m1nbrFired >= 0) 
-	and  ( m2nbrFired >= 0) 
-	and  ( a1nbrFired >= 0) 
-	and  ( a2nbrFired >= 0) 
-	and  ( r0nbrFired >= 0) ;
-
-
+ 
 --P1= ( rinbrFired <=1) and  ( m1nbrFired <=1) 	and  ( m2nbrFired <=1) 	and  ( a1nbrFired <=1) 	and  ( a2nbrFired <=1) 	and  ( r0nbrFired <=1);
 P1= (e1_P <= 3) and (e2_P <= 1) and (e3_P <= 1) and (e4_P <= 1) and (e5_P <= 1) and (e6_P <= 1) ;
  
@@ -286,21 +267,13 @@ P2= (m1nbrFired >= 1 => a2nbrFired >= 1 ) and (a2nbrFired >= 1 => m1nbrFired >= 
  
 P3= (m2nbrFired >= 1 => a1nbrFired =0 ) and (a1nbrFired >= 1 => m2nbrFired =0 ) ;
 
----L1= 23, L2=25
- P4= r0nbrFired >= 1 => 
- 	(pre pre pre pre pre         pre pre pre pre pre 
-         pre pre pre pre pre         pre pre pre pre pre 
-         pre pre pre         	 rinbrFired >=1)  or
- 	(pre pre pre pre pre         pre pre pre pre pre 
-         pre pre pre pre pre         pre pre pre pre pre 
-         pre pre pre pre pre       rinbrFired >=1) ;
-
+ 
 --%MAIN;
 
----%PROPERTY  "Ok, all variables are positive "  positiveValues;
+ 
 --%PROPERTY  "P1"  P1;
 --%PROPERTY  "P2"  P2;
----%PROPERTY  "P3"  P3;
----%PROPERTY  "P4"  P4;
+--%PROPERTY  "P3"  P3;
+ 
 tel;
 
