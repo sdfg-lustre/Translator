@@ -32,7 +32,7 @@ The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2
    > git  clone https://github.com/sdfg-lustre/ENISoNOCCS 
 
 3. checking the properties of the examples/TDMA_/TDMA_cycle_by_cycle_verif
-   >sudo docker run -v /absolute path to /ENISoNOCCS/Examples/TDMA_/:/lus kind2/kind2 /lus/TDMA.lus
+   >sudo docker run -v /absolute path to /ENISoNOCCS/Examples/TDMA_/:/lus kind2/kind2 /lus/TDMA_verified.lus
 
 
 
