@@ -449,11 +449,11 @@ public class Main {
                         //error checking
       //                  writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
 
-         /*                for (DriverActor driver : driversArray) {
-                            writer.println("assert " + driver.getName() + "_P  >=0; \n ");
-                        }*/
+                        for (DriverActor driver : driversArray) {
+                            writer.println("assert " + driver.getName() + "_P  =1; \n ");
+                        }
                            writer.println("--%MAIN;\n");
-    writer.println("-- assert ....");
+  //  writer.println("-- assert ....");
          
                     //    writer.println("--%PROPERTY  \"no deadlock \"  noDeadlock;\n");
 writer.println("-- --%PROPERTY  ....");

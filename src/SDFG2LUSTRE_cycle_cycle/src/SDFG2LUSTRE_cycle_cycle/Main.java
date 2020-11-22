@@ -354,13 +354,13 @@ public class Main {
 
                         writer.println();
                               for (DriverActor driver : sinkArray) {
-    //                        writer.println("assert " + driver.getName() + "_P  >=0; \n ");
+                          writer.println("assert " + driver.getName() + "_P  =1; \n ");
                         }
                                          
 
 
                         writer.println("--%MAIN;\n");
-                                 writer.println("-- assert..... " );
+            //                     writer.println("-- assert..... " );
 
 
                  //        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
@@ -516,7 +516,7 @@ public class Main {
                             writer.println(monitor.getName() + "_P : int;");
                         }
 
-              //          writer.println("noDeadlock : bool;");
+                       writer.println("noDeadlock : bool;");
 
                         //generation the node-top body
                         writer.println("\nlet\n");
@@ -559,9 +559,9 @@ public class Main {
                         }
                         writer.println();
 
-                  //      writer.println("\nnoDeadlock = " + deadlockString(actorsArray) + ";");
+                    writer.println("\nnoDeadlock = " + deadlockString(actorsArray) + ";");
                         writer.println("--%MAIN;\n");
-                 //       writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
+                     writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
                         writer.println("\ntel;");
                         writer.println();
                         writer.println();

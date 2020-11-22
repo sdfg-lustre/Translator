@@ -1,0 +1,16 @@
+
+
+Te1= e1_P->pre (Te1) +e1_P;
+
+Sx= 0-> pre (0-> pre (0-> pre (0-> pre (0-> pre e2)))); 
+Sy= 0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre (0-> pre Te1)))))));
+
+
+
+--%PROPERTY  "P1"  (e2-Sx) <=5; 
+--%PROPERTY  "P2"  (e2<=Sy);
+--%PROPERTY  "P3"  true-> not (e2 = pre e2)=> ((e2-Sx)=5 or (e2= Sy)); 
+
+
+ 
+

@@ -1,0 +1,23 @@
+
+P1= (e1_P <= 3) and (e2_P <= 1) and (e3_P <= 1) and (e4_P <= 1) and (e5_P <= 1) and (e6_P <= 1) ;
+ 
+ 
+P2= (m1nbrFired >= 1 => a2nbrFired >= 1 ) and (a2nbrFired >= 1 => m1nbrFired >= 1 ) ;
+ 
+P3= (m2nbrFired >= 1 => a1nbrFired =0 ) and (a1nbrFired >= 1 => m2nbrFired =0 ) ;
+
+ P4= r0nbrFired >= 1 => 
+ 	(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre         	 rinbrFired >=1)  or
+ 	(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre       rinbrFired >=1) ;
+
+ 
+--%PROPERTY  "P1"  P1;
+--%PROPERTY  "P2"  P2;
+---%PROPERTY  "P3"  P3;
+---%PROPERTY  "P4"  P4;
+
+
