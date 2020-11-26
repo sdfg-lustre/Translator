@@ -29,12 +29,9 @@ public class Main {
              * Step 1 : Parsing the XML file containing the SDFG"
              */
             final DocumentBuilder builder = factory.newDocumentBuilder();
-         ///   final Document document = builder.parse(new File(args[0] + ".xml"));
-            final Document document = builder.parse(new File(args[0] + ".xml"));
+             final Document document = builder.parse(new File(args[0] + ".xml"));
 
-            final Element racine = document.getDocumentElement();
-            //      int nberBit = Integer.parseInt(racine.getAttribute("nberBit"));
-            //   String maxValue = racine.getAttribute("maxValue");
+            final Element racine = document.getDocumentElement(); 
             String SDFname = racine.getAttribute("name");
 
             final NodeList racineNodes = racine.getChildNodes();
@@ -149,8 +146,7 @@ public class Main {
                          *******Step 3.1: Generating all the constants*********
                          */
                         writer.println("\n--**************** Const Rates ****************--\n");
-                        //          writer.println("const maxValue = " + maxValue + ";");
-                        for (int i = 0; i <= nbrActors; i++) {
+                         for (int i = 0; i <= nbrActors; i++) {
 
                             String[][] arrPort = actorsArray[i].getPortsArray();
                             for (String[] s : arrPort) {
@@ -199,27 +195,15 @@ public class Main {
 
                             // generating variable's declarations 
                             if (actor.getOutputProduceDelayed() != "") {
- 
-                                if (Integer.parseInt(actor.getDuration()) != 1) {    
-                                    writer.println("var");
-
-                                    //     writer.println(actor.getOutputProduceDelayed() + " :int;");
-
-                                    //writer.println("const maxStages : " + Integer.toString(actor.getMaxStages()));
+                                 if (Integer.parseInt(actor.getDuration()) != 1) {    
+                                    writer.println("var"); 
                                     writer.println("stage :int;");
                                     if (actor.getMaxStages() > 1) {
                                         writer.println(" lastStage  :int;");
                                         for (int j = 1; j <= actor.getMaxStages(); j++) {
                                             String st = "";
                                             st += "rTime" + Integer.toString(j);
-                                            st += ", nbrEnd" + Integer.toString(j);
-
-                                            /*  for (String[] s : actor.getPortsArray()) {
-                                                if (s[1].equals("out")) {
-                                                    st += ", " + s[0] + "_P" + Integer.toString(j);
-                                                }
-                                            }
-                                             */
+                                            st += ", nbrEnd" + Integer.toString(j);                                       
                                             st += " : int; ";
                                             writer.println(st);
 
@@ -243,25 +227,6 @@ public class Main {
                             
                             //generating the produced data  
                             String st;
-/*
-                            if (actor.getOutputProduce() != "") {// case the actor has output edges
-                                if (Integer.parseInt(actor.getDuration()) != 1) { //case of multistage
-                                    writer.println(actor.getNextstageString());  // computing  the id of the next active stage                                
-                                    writer.println(actor.callStageNodesString());// calling the Stage node
-
-                                } else {        //case  the actor duration equals one i.e no stage
-                                    if (actor.getOutputProduce() != "") { //the actor has out  edges 
-                                        writer.println( "nbrEnd = 0 -> pre nbrFired  ;");
-                                        writer.println("(" + actor.getOutputProduce() + ") = " + actor.getProdMultFired() + "\n");
-                                    }
-                                    //computing the nextclock relatively to this actor
-                                    writer.println("nextClock = if (nbrFired = 0) then maxDuration else 1;");
-                                }
-                            } else { //case the actor does not have output edges
-                                writer.println("nextClock = maxDuration ;");
-                            }
-*/
- 
                        
                                  if (Integer.parseInt(actor.getDuration()) != 1) { //case of multistage
                                     writer.println(actor.getNextstageString());  // computing  the id of the next active stage                                
@@ -339,10 +304,6 @@ public class Main {
                             withDriverInput = true;
                             deleteComma(topDriverInput);
                              writer.println( "node top (" + topDriverInput.substring(0, topDriverInput.length()-2)  + " : int)");
-
-                        //   topDriverInput += ": int";
-                        //   writer.print("node top (" + topDriverInput + ") ");
-
                         } else {
                             writer.print("node top (_: bool) ");
 
@@ -377,15 +338,14 @@ public class Main {
                         
                                                  str="";
   
-             /*              for (Actor arrNode : actorsArray) {
-                         str += arrNode.getName() + "nbrRun, ";
-                    
-                  }
+             /*         for (Actor arrNode : actorsArray) {
+                         str += arrNode.getName() + "nbrRun, ";  
+                         }
                 
-                    writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
+                         writer.println(  str.substring(0, str.length()-2)  + " : int; \n");     
+                         writer.println(" noDeadlock: bool; ");
                    */    
                         
-          //              writer.println(" noDeadlock: bool; ");
                         //******************generation the node body;
                         //updating the channel value
                         writer.println("\nlet\n");
@@ -439,24 +399,20 @@ public class Main {
                         for (int i = 0; i < nbrActors; i++) {
                             writer.print(")");
                         }
-    writer.println(";\n\n");
+                    writer.println(";\n\n");
                        
-          /*                     for (Actor arrNode : actorsArray) {
-                        
+          /*            for (Actor arrNode : actorsArray) {
                             writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
- }*/
-                    
-                        //error checking
-      //                  writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
-
+                        }
+                        writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
+            */
                         for (DriverActor driver : driversArray) {
                             writer.println("assert " + driver.getName() + "_P  =1; \n ");
                         }
                            writer.println("--%MAIN;\n");
-  //  writer.println("-- assert ....");
-         
+          
                     //    writer.println("--%PROPERTY  \"no deadlock \"  noDeadlock;\n");
-writer.println("-- --%PROPERTY  ....");
+                     writer.println("-- --%PROPERTY  ....");
                         writer.println("\ntel;");
                         writer.println();
                         writer.println();

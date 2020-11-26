@@ -35,7 +35,7 @@ The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2
    > git  clone https://github.com/sdfg-lustre/ENISoNOCCS 
 
 3. checking the properties of the examples/TDMA_/TDMA_cycle_by_cycle_verif
-   >sudo docker run -v /absolute path to /ENISoNOCCS/Examples/TDMA_/:/lus kind2/kind2 /lus/TDMA_verified.lus
+   >sudo docker run -v /absolute path to /ENISoNOCCS/Examples/TDMA_/:/lus kind2/kind2 --timeout_wall 9000 /lus/TDMA_verified.lus
 
 
 
@@ -53,6 +53,6 @@ it produces a Lustre file named SDFGmodel_merged_cycles.lus
 3. Edit the lustre model and insert the user-defined properties and assertions
 
 4. launch the model checker:
-   > sudo docker run -v /absolute path to the Lustre model/:/lus kind2/kind2    /lus/SDFG2LUSTRE_cycle_cycle.lus
+   > sudo docker run -v /absolute path to the Lustre model/:/lus kind2/kind2   --timeout_wall 90  /lus/SDFG2LUSTRE_cycle_cycle.lus
 
 </pre> 

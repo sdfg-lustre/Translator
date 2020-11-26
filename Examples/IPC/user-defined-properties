@@ -1,0 +1,27 @@
+---%PROPERTY  .....
+--P1= true-> ((e28=e29) or (e28=e29+1)) and (   (pre e29=0) and e29=1 => (pre e28 =1)   );
+
+P1=( (e28=0) or (e28=1)) and((e28=e29) or (e28=e29+1)) and ((R1nbrFired=0) or  (R2nbrFired=0));
+P2=  true->(pre e29=0) and (e29=1) =>     (pre pre pre pre pre	e28)=1;  -- m=5
+P2_bis= true-> (pre e29=0) and (e29=1) => (pre pre pre  pre pre  pre  e28)=1; --m+1 pre
+
+P3= true-> (pre e29=0) and (e29=1) =>     (pre pre pre pre pre pre pre pre pre e28)=0; -- M+1=9 pre
+P3_bis= true-> (pre e29=0) and (e29=1) => (pre pre pre pre pre pre pre pre  e28)=0; -- M pre
+
+P4= e21-e22<=3 ;--v=3;
+P4_bis=  e21-e22<= 2;
+
+--%MAIN;
+ 
+ 
+ 
+--%PROPERTY  "P1" P1;
+
+---%PROPERTY  "P2" P2;
+---%PROPERTY  "P2_bis" P2_bis;
+
+---%PROPERTY  "P3" P3;
+---%PROPERTY  "P3_bis" P3_bis;
+
+---%PROPERTY  "P4" P4;
+---%PROPERTY  "P4_bis" P4_bis;

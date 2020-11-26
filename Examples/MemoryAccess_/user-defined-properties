@@ -6,10 +6,18 @@ P2= (m1nbrFired >= 1 => a2nbrFired >= 1 ) and (a2nbrFired >= 1 => m1nbrFired >= 
  
 P3= (m2nbrFired >= 1 => a1nbrFired =0 ) and (a1nbrFired >= 1 => m2nbrFired =0 ) ;
 
+---L1= 23, L2=25
+ P4= r0nbrFired >= 1 => 
+ 	(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre         	 rinbrFired >=1)  or
+ 	(pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre         pre pre pre pre pre 
+         pre pre pre pre pre       rinbrFired >=1) ;
  
 --%PROPERTY  "P1"  P1;
 --%PROPERTY  "P2"  P2;
 --%PROPERTY  "P3"  P3;
- 
+---%PROPERTY  "P4"  P4;
 
 

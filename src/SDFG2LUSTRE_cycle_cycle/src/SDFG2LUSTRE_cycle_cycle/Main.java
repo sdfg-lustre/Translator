@@ -23,35 +23,18 @@ import org.xml.sax.SAXException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        /*
-         * Etape 1 : récupération d'une instance de la classe "DocumentBuilderFactory"
-         */
+            /**
+                 * ************************************************
+                 ********* Parsing the XML file ************
+                 * *************************************************
+                 */
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         try {
-            /*
-             * Etape 2 : création d'un parseur
-             */
             final DocumentBuilder builder = factory.newDocumentBuilder();
-
-            /*
-             * Etape 3 : création d'un Document
-             */
             final Document document = builder.parse(new File(args[0] + ".xml"));
-
-            //  final Document document = builder.parse(new File("../HSDF/HSDF.xml"));
-            /*
-             * Etape 4 : récupération de l'Element racine
-             */
             final Element racine = document.getDocumentElement();
-
-            //      int nberBit = Integer.parseInt(racine.getAttribute("nberBit"));
-            //      String maxValue = racine.getAttribute("maxValue");
             String SDFname = racine.getAttribute("name");
-
-            /*
-             * Etape 5 : Récupération de données
-             */
             final NodeList racineNodes = racine.getChildNodes();
             final int nbRacineNodes = racineNodes.getLength();
 
@@ -140,18 +123,14 @@ public class Main {
 
                 }
                 int maxAutoConcurrences = Actor.getMaxAutoConcurrences();
-                /**
-                 * ************************************************
-                 ********* cheking the XML file ************
-                 * *************************************************
-                 */
+                
+                // verif of the XML file ************
                 VerifyXML verifyXML = new VerifyXML(channelsArray, actorsArray, sinkArray, monitorsArray, racine);
                 if (verifyXML.fichierOK()) {
-                    System.out.println("fichier Ok");
+                    System.out.println("file Ok");
                     /**
                      * ***********************************************************************************************
-                     ************************************Begin of Lustre code
-                     * generation
+                     **************Begin of Lustre code generation
                      * *************************************************
                      * **********************************************************************************************
                      */
@@ -169,12 +148,10 @@ public class Main {
                         writer.println();
 
                         /**
-                         * ****************generating the constants
+                         * ********generating the constants
                          * ****************
                          */
                         writer.println("\n--**************** Const Rates ****************--\n");
-                        //  writer.println("const maxValue = " + maxValue + " ;");
-
                         for (int i = 0; i <= nbrActors; i++) {
 
                             String[][] arrPort = actorsArray[i].getArrPort();
@@ -217,8 +194,7 @@ public class Main {
                             String str = node.getDoFireString(node.getMaxAutoConc());
                             writer.println(node.getName() + "nbrFired= " + str + "\n");
 
-                            
-                           writer.println(node.getName() + "nbrEnd= " + node.getZeroPreRecur(Integer.parseInt(node.getDuration()), node.getName() + "nbrFired") + ";\n\n"+ "\n");
+                            writer.println(node.getName() + "nbrEnd= " + node.getZeroPreRecur(Integer.parseInt(node.getDuration()), node.getName() + "nbrFired") + ";\n\n"+ "\n");
  
                             //4. generating the output streams of the node
                              if (node.getOutputConsume() != "") { //the actor has inputs  edges 
@@ -252,21 +228,18 @@ public class Main {
                         /* **************** generating the node top  *****
                            ************                                     *****
                          */
-                        // generating the IO interface of the node
+                        // generating the IO interface of the node top
                         String topDriverInput = "";
                         for (DriverActor driver : sinkArray) {
                             topDriverInput += driver.getName() + "_P, ";
                         }
                         Boolean withDriverInput = false;
-                        if (topDriverInput != "") {
+                        if (topDriverInput != "") { // the SDFG has input edges
                             withDriverInput = true;
                             deleteComma(topDriverInput);
                              writer.println( "node top (" + topDriverInput.substring(0, topDriverInput.length()-2)  + " : int)");
 
-                        //   topDriverInput += ": int";
-                        //   writer.print("node top (" + topDriverInput + ") ");
-
-                        } else {
+                         } else {
                             writer.print("node top (_: bool) ");
 
                         }
@@ -295,20 +268,20 @@ public class Main {
                                               
                          writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
                          str="";
-      /*               
+                    /*               
                          for (Actor arrNode : actorsArray) {
                          str += arrNode.getName() + "nbrRun, ";
                     
-                  }
+                         }
                 
-                    writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
-                   */    
-                     //    writer.println("noDeadlock: bool;\n");
+                          writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
+                        writer.println("noDeadlock: bool;\n");
 
-                        //generation the node-top body
+                       */    
+
+                        //generating the node-top body
                         writer.println("\nlet\n");
-
-                                          
+                                        
                         for (int i = 0; i <= nbrChannels; i++) {
                             writer.println(channelsArray[i].getName() + " = " + channelsArray[i].getName()
                                     + "_I -> pre  (   " + channelsArray[i].getName() + "-"
@@ -345,12 +318,10 @@ public class Main {
                         }
                         writer.println();
 
-      /*                       for (Actor arrNode : actorsArray) {
-                        
-                            writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
- }*/
-                  //      writer.println("\npositiveValues = " + positiveValuesString(channelsArray, actorsArray, sinkArray, monitorsArray) + ";");
-  //                      writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
+                     /*  for (Actor arrNode : actorsArray) {
+                        writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
+                         writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
+                        }*/
 
                         writer.println();
                               for (DriverActor driver : sinkArray) {
@@ -360,11 +331,8 @@ public class Main {
 
 
                         writer.println("--%MAIN;\n");
-            //                     writer.println("-- assert..... " );
-
-
-                 //        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
-                    writer.println("-- --%PROPERTY  .....\n");
+                  //        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
+                        writer.println("-- --%PROPERTY  .....\n");
                   
                         writer.println("\ntel;");
                         writer.println();
@@ -378,7 +346,7 @@ public class Main {
                     }
                     /**
                      * ***********************************************************************************************
-                     ******************************** output Utimed.lus
+                     ******************************** production of the  Utimed Lustre model
                      * *********************************************
                      * **********************************************************************************************
                      */
@@ -491,9 +459,7 @@ public class Main {
                             deleteComma(topDriverInput);
                                                          writer.println( "node top (" + topDriverInput.substring(0, topDriverInput.length()-2)  + " : int)");
 
-                        //    topDriverInput += ": int";
-                         //   writer.print("node top (" + topDriverInput + ") ");
-
+             
                         } else {
                             writer.print("node top (_: bool) ");
 
@@ -501,7 +467,6 @@ public class Main {
 
                         writer.println("returns ("
                                 + getOutputNodeTop(channelsArray, actorsArray, sinkArray, monitorsArray) + ");\n");
-///
 
                         writer.println("var\n");
 
