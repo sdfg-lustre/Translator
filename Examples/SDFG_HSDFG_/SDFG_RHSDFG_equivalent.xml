@@ -43,7 +43,7 @@
 
 
   
- <actor name="b0b1bis" duration="2" maxAutoConcurrences="1">
+ <actor name="b0b1bis" duration="2" maxAutoConcurrences="1"  maxStages="1">
          <port name="e3_" type="in"  rate="1" />
         <port name="e8_" type="in"  rate="1" />
         <port name="e6_" type="out"  rate="1" />
@@ -52,7 +52,7 @@
       
     </actor>
 
- <actor name="b2bis" duration="1" maxAutoConcurrences="1">
+ <actor name="b2bis" duration="1" maxAutoConcurrences="1"  maxStages="1">
          <port name="e4_" type="in"  rate="1" />
           <port name="e5_" type="in"  rate="1" />
         <port name="e8_" type="out"  rate="1" />
@@ -60,22 +60,22 @@
         
     </actor>
 
- <actor name="c0bis" duration="1" maxAutoConcurrences="1">
+ <actor name="c0bis" duration="1" maxAutoConcurrences="1"  maxStages="1">
          <port name="e6_" type="in"  rate="1" />
         <port name="e12_" type="out"  rate="1" />
     
     </actor>
- <actor name="c1bis" duration="1" maxAutoConcurrences="1">
+ <actor name="c1bis" duration="1" maxAutoConcurrences="1"  maxStages="1">
           <port name="e2_" type="in"  rate="1" />
         <port name="e13_" type="out"  rate="1" />
       
     </actor>
- <actor name="c2bis" duration="1" maxAutoConcurrences="1">
+ <actor name="c2bis" duration="1" maxAutoConcurrences="1"  maxStages="1">
          <port name="e11_" type="in"  rate="1" />
         <port name="e14_" type="out"  rate="1" />
       
     </actor>
- <actor name="d0bis" duration="1" maxAutoConcurrences="1">
+ <actor name="d0bis" duration="1" maxAutoConcurrences="1"  maxStages="1">
         <port name="e12_" type="in"  rate="1" />
         <port name="e13_" type="in"  rate="1" />
         <port name="e14_" type="in"  rate="1" />

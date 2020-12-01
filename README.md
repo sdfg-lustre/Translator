@@ -43,11 +43,11 @@ The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2
 
 1.  Describe the SDFG into an xml file (SDFGmodel.xml)
 2.  Translate the xml to a lustre model:
-  >java -jar SDFG2LUSTRE_cycle_cycle SDFGmodel  //without .xml extension
+  >java -jar SDFG2LUSTRE_cycle_cycle.jar SDFGmodel  //without .xml extension
 it produces two Lustre files named SDFGmodel_cycle_cycle.lus and SDFGmodel_untimed.lus
 
  or 
-  >java -jar SDFG2LUSTRE_merged_cycles SDFGmodel //without the .xml extension
+  >java -jar SDFG2LUSTRE_merged_cycles.jar SDFGmodel //without the .xml extension
 it produces a Lustre file named SDFGmodel_merged_cycles.lus
 
 3. Edit the lustre model and insert the user-defined properties and assertions

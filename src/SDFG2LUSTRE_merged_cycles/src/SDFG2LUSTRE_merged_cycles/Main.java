@@ -406,13 +406,15 @@ public class Main {
                         }
                         writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
             
+                        
+                        writer.println("--%MAIN;\n");
+                     writer.println("--- add below user-defined properties and assertions if any");
+
                         for (DriverActor driver : driversArray) {
                             writer.println("assert " + driver.getName() + "_P  =1; \n ");
                         }
-                           writer.println("--%MAIN;\n");
           
-                        writer.println("--%PROPERTY  \"no deadlock \"  noDeadlock;\n");
-                     writer.println("-- --%PROPERTY  ....");
+                        writer.println("---%PROPERTY  \"no deadlock \"  noDeadlock;\n");
                         writer.println("\ntel;");
                         writer.println();
                         writer.println();

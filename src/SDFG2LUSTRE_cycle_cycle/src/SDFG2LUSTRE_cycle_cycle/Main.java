@@ -324,16 +324,19 @@ public class Main {
                          writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
 
                         writer.println();
-                              for (DriverActor driver : sinkArray) {
-                          writer.println("assert " + driver.getName() + "_P  =1; \n ");
-                        }
+                        
                                          
 
 
-                        writer.println("--%MAIN;\n");
-                        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
-                        writer.println("-- --%PROPERTY  .....\n");
-                  
+                        writer.println("--%MAIN;\n"); 
+                        writer.println("---%PROPERTY  \"Deadlock free \"  noDeadlock;\n"); 
+
+                        writer.println("----Add  below the user-defined properties  and the assertions if any \n");
+
+                        for (DriverActor driver : sinkArray) {
+                          writer.println("assert " + driver.getName() + "_P  =1; \n ");
+                        }       
+                        
                         writer.println("\ntel;");
                         writer.println();
 
