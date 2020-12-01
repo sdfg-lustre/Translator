@@ -1,0 +1,461 @@
+--** This lustre code is generated automatically on 01 déc. 2020 01:30:43 PM
+--**It corresponds to a translation to Lustre of the  SDFG model  of the design "hdfs" 
+
+
+
+--**************** Const Rates ****************--
+
+const a0_in_rate_in = 1;
+const a0_e1in_rate_in = 1;
+const a0_e1out_rate_out = 1;
+const a0_e2_rate_out = 1;
+const a0_e3_rate_out = 1;
+const a0_e4_rate_out = 1;
+const a0_e5x_rate_out = 3;
+const b0_e3_rate_in = 1;
+const b0_e8_rate_in = 1;
+const b0_e6_rate_out = 1;
+const b0_e7_rate_out = 1;
+const b1_e2_rate_in = 1;
+const b1_e7_rate_in = 1;
+const b1_e9_rate_out = 1;
+const b1_e10_rate_out = 1;
+const b2_e4_rate_in = 1;
+const b2_e9_rate_in = 1;
+const b2_e8_rate_out = 1;
+const b2_e11_rate_out = 1;
+const c0_e6_rate_in = 1;
+const c0_e12_rate_out = 1;
+const c1_e10_rate_in = 1;
+const c1_e13_rate_out = 1;
+const c2_e11_rate_in = 1;
+const c2_e14_rate_out = 1;
+const d0_e12_rate_in = 1;
+const d0_e13_rate_in = 1;
+const d0_e14_rate_in = 1;
+const d0_e15in_rate_in = 1;
+const d0_e15out_rate_out = 1;
+const b__e5x_rate_in = 1;
+const b__e16in_rate_in = 1;
+const b__e16out_rate_out = 1;
+const b__e17x_rate_out = 1;
+const c__e17x_rate_in = 1;
+const c__e18x_rate_out = 1;
+const d__e18x_rate_in = 3;
+const d__e19in_rate_in = 1;
+const d__e19out_rate_out = 1;
+
+--**************** Init Channel ****************--
+
+const e1_I = 1 ;
+const e2_I = 0 ;
+const e3_I = 0 ;
+const e4_I = 0 ;
+const e6_I = 0 ;
+const e7_I = 0 ;
+const e8_I = 1 ;
+const e9_I = 0 ;
+const e10_I = 0 ;
+const e11_I = 0 ;
+const e12_I = 0 ;
+const e13_I = 0 ;
+const e14_I = 0 ;
+const e15_I = 1 ;
+const e5x_I = 0 ;
+const e16x_I = 1 ;
+const e17x_I = 0 ;
+const e18x_I = 0 ;
+const e19x_I = 1 ;
+
+const in_I = 0 ;
+
+--**************** Actors Translation ****************--
+
+node a0(in, e1in :int) returns (in_C, e1in_C, e1out_P, e2_P, e3_P, e4_P, e5x_P :int; a0nbrFired, a0nbrEnd : int );
+
+let
+a0nbrFired= if a0DoFire(in, e1in,1) then 1
+		else 0;
+
+a0nbrEnd= 0 -> pre (0 -> pre (0 -> pre (0 -> pre (a0nbrFired))));
+
+
+
+(in_C, e1in_C) = ((a0nbrFired * a0_in_rate_in), (a0nbrFired * a0_e1in_rate_in));
+
+(e1out_P, e2_P, e3_P, e4_P, e5x_P) = ((a0nbrEnd * a0_e1out_rate_out), (a0nbrEnd * a0_e2_rate_out), (a0nbrEnd * a0_e3_rate_out), (a0nbrEnd * a0_e4_rate_out), (a0nbrEnd * a0_e5x_rate_out));
+
+tel;
+------------------
+node a0DoFire(in, e1in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (in>=  (times * a0_in_rate_in)) 
+	and  (e1in>=  (times * a0_e1in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b0(e3, e8 :int) returns (e3_C, e8_C, e6_P, e7_P :int; b0nbrFired, b0nbrEnd : int );
+
+let
+b0nbrFired= if b0DoFire(e3, e8,1) then 1
+		else 0;
+
+b0nbrEnd= 0 -> pre (b0nbrFired);
+
+
+
+(e3_C, e8_C) = ((b0nbrFired * b0_e3_rate_in), (b0nbrFired * b0_e8_rate_in));
+
+(e6_P, e7_P) = ((b0nbrEnd * b0_e6_rate_out), (b0nbrEnd * b0_e7_rate_out));
+
+tel;
+------------------
+node b0DoFire(e3, e8 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e3>=  (times * b0_e3_rate_in)) 
+	and  (e8>=  (times * b0_e8_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b1(e2, e7 :int) returns (e2_C, e7_C, e9_P, e10_P :int; b1nbrFired, b1nbrEnd : int );
+
+let
+b1nbrFired= if b1DoFire(e2, e7,1) then 1
+		else 0;
+
+b1nbrEnd= 0 -> pre (b1nbrFired);
+
+
+
+(e2_C, e7_C) = ((b1nbrFired * b1_e2_rate_in), (b1nbrFired * b1_e7_rate_in));
+
+(e9_P, e10_P) = ((b1nbrEnd * b1_e9_rate_out), (b1nbrEnd * b1_e10_rate_out));
+
+tel;
+------------------
+node b1DoFire(e2, e7 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e2>=  (times * b1_e2_rate_in)) 
+	and  (e7>=  (times * b1_e7_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b2(e4, e9 :int) returns (e4_C, e9_C, e8_P, e11_P :int; b2nbrFired, b2nbrEnd : int );
+
+let
+b2nbrFired= if b2DoFire(e4, e9,1) then 1
+		else 0;
+
+b2nbrEnd= 0 -> pre (b2nbrFired);
+
+
+
+(e4_C, e9_C) = ((b2nbrFired * b2_e4_rate_in), (b2nbrFired * b2_e9_rate_in));
+
+(e8_P, e11_P) = ((b2nbrEnd * b2_e8_rate_out), (b2nbrEnd * b2_e11_rate_out));
+
+tel;
+------------------
+node b2DoFire(e4, e9 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e4>=  (times * b2_e4_rate_in)) 
+	and  (e9>=  (times * b2_e9_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c0(e6 :int) returns (e6_C, e12_P :int; c0nbrFired, c0nbrEnd : int );
+
+let
+c0nbrFired= if c0DoFire(e6,1) then 1
+		else 0;
+
+c0nbrEnd= 0 -> pre (c0nbrFired);
+
+
+
+(e6_C) = ((c0nbrFired * c0_e6_rate_in));
+
+(e12_P) = ((c0nbrEnd * c0_e12_rate_out));
+
+tel;
+------------------
+node c0DoFire(e6 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e6>=  (times * c0_e6_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c1(e10 :int) returns (e10_C, e13_P :int; c1nbrFired, c1nbrEnd : int );
+
+let
+c1nbrFired= if c1DoFire(e10,1) then 1
+		else 0;
+
+c1nbrEnd= 0 -> pre (c1nbrFired);
+
+
+
+(e10_C) = ((c1nbrFired * c1_e10_rate_in));
+
+(e13_P) = ((c1nbrEnd * c1_e13_rate_out));
+
+tel;
+------------------
+node c1DoFire(e10 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e10>=  (times * c1_e10_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c2(e11 :int) returns (e11_C, e14_P :int; c2nbrFired, c2nbrEnd : int );
+
+let
+c2nbrFired= if c2DoFire(e11,1) then 1
+		else 0;
+
+c2nbrEnd= 0 -> pre (c2nbrFired);
+
+
+
+(e11_C) = ((c2nbrFired * c2_e11_rate_in));
+
+(e14_P) = ((c2nbrEnd * c2_e14_rate_out));
+
+tel;
+------------------
+node c2DoFire(e11 :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e11>=  (times * c2_e11_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node d0(e12, e13, e14, e15in :int) returns (e12_C, e13_C, e14_C, e15in_C, e15out_P :int; d0nbrFired, d0nbrEnd : int );
+
+let
+d0nbrFired= if d0DoFire(e12, e13, e14, e15in,1) then 1
+		else 0;
+
+d0nbrEnd= 0 -> pre (d0nbrFired);
+
+
+
+(e12_C, e13_C, e14_C, e15in_C) = ((d0nbrFired * d0_e12_rate_in), (d0nbrFired * d0_e13_rate_in), (d0nbrFired * d0_e14_rate_in), (d0nbrFired * d0_e15in_rate_in));
+
+(e15out_P) = ((d0nbrEnd * d0_e15out_rate_out));
+
+tel;
+------------------
+node d0DoFire(e12, e13, e14, e15in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e12>=  (times * d0_e12_rate_in)) 
+	and  (e13>=  (times * d0_e13_rate_in)) 
+	and  (e14>=  (times * d0_e14_rate_in)) 
+	and  (e15in>=  (times * d0_e15in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node b_(e5x, e16in :int) returns (e5x_C, e16in_C, e16out_P, e17x_P :int; b_nbrFired, b_nbrEnd : int );
+
+let
+b_nbrFired= if b_DoFire(e5x, e16in,1) then 1
+		else 0;
+
+b_nbrEnd= 0 -> pre (b_nbrFired);
+
+
+
+(e5x_C, e16in_C) = ((b_nbrFired * b__e5x_rate_in), (b_nbrFired * b__e16in_rate_in));
+
+(e16out_P, e17x_P) = ((b_nbrEnd * b__e16out_rate_out), (b_nbrEnd * b__e17x_rate_out));
+
+tel;
+------------------
+node b_DoFire(e5x, e16in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e5x>=  (times * b__e5x_rate_in)) 
+	and  (e16in>=  (times * b__e16in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node c_(e17x :int) returns (e17x_C, e18x_P :int; c_nbrFired, c_nbrEnd : int );
+
+let
+c_nbrFired= if c_DoFire(e17x,1) then 1
+		else 0;
+
+c_nbrEnd= 0 -> pre (c_nbrFired);
+
+
+
+(e17x_C) = ((c_nbrFired * c__e17x_rate_in));
+
+(e18x_P) = ((c_nbrEnd * c__e18x_rate_out));
+
+tel;
+------------------
+node c_DoFire(e17x :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e17x>=  (times * c__e17x_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node d_(e18x, e19in :int) returns (e18x_C, e19in_C, e19out_P :int; d_nbrFired, d_nbrEnd : int );
+
+let
+d_nbrFired= if d_DoFire(e18x, e19in,1) then 1
+		else 0;
+
+d_nbrEnd= 0 -> pre (d_nbrFired);
+
+
+
+(e18x_C, e19in_C) = ((d_nbrFired * d__e18x_rate_in), (d_nbrFired * d__e19in_rate_in));
+
+(e19out_P) = ((d_nbrEnd * d__e19out_rate_out));
+
+tel;
+------------------
+node d_DoFire(e18x, e19in :int; times: int) returns ( yes: bool);
+let
+
+yes = if  (e18x>=  (times * d__e18x_rate_in)) 
+	and  (e19in>=  (times * d__e19in_rate_in)) 
+	then true 
+	else false;
+
+tel;
+------------------
+node top (in_P : int)
+returns (e1, e2, e3, e4, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15, e5x, e16x, e17x, e18x, e19x, in, a0nbrFired, b0nbrFired, b1nbrFired, b2nbrFired, c0nbrFired, c1nbrFired, c2nbrFired, d0nbrFired, b_nbrFired, c_nbrFired, d_nbrFired: int);
+
+-------------- Les variables -------------- 
+
+var
+
+e1_C, e1_P: int; 
+e2_C, e2_P: int; 
+e3_C, e3_P: int; 
+e4_C, e4_P: int; 
+e6_C, e6_P: int; 
+e7_C, e7_P: int; 
+e8_C, e8_P: int; 
+e9_C, e9_P: int; 
+e10_C, e10_P: int; 
+e11_C, e11_P: int; 
+e12_C, e12_P: int; 
+e13_C, e13_P: int; 
+e14_C, e14_P: int; 
+e15_C, e15_P: int; 
+e5x_C, e5x_P: int; 
+e16x_C, e16x_P: int; 
+e17x_C, e17x_P: int; 
+e18x_C, e18x_P: int; 
+e19x_C, e19x_P: int; 
+in_C : int;
+a0nbrEnd, b0nbrEnd, b1nbrEnd, b2nbrEnd, c0nbrEnd, c1nbrEnd, c2nbrEnd, d0nbrEnd, b_nbrEnd, c_nbrEnd, d_nbrEnd : int; 
+
+a0nbrRun, b0nbrRun, b1nbrRun, b2nbrRun, c0nbrRun, c1nbrRun, c2nbrRun, d0nbrRun, b_nbrRun, c_nbrRun, d_nbrRun : int; 
+
+
+
+
+let
+
+e1 = e1_I -> pre  (   e1-e1_C)+ e1_P;
+e2 = e2_I -> pre  (   e2-e2_C)+ e2_P;
+e3 = e3_I -> pre  (   e3-e3_C)+ e3_P;
+e4 = e4_I -> pre  (   e4-e4_C)+ e4_P;
+e6 = e6_I -> pre  (   e6-e6_C)+ e6_P;
+e7 = e7_I -> pre  (   e7-e7_C)+ e7_P;
+e8 = e8_I -> pre  (   e8-e8_C)+ e8_P;
+e9 = e9_I -> pre  (   e9-e9_C)+ e9_P;
+e10 = e10_I -> pre  (   e10-e10_C)+ e10_P;
+e11 = e11_I -> pre  (   e11-e11_C)+ e11_P;
+e12 = e12_I -> pre  (   e12-e12_C)+ e12_P;
+e13 = e13_I -> pre  (   e13-e13_C)+ e13_P;
+e14 = e14_I -> pre  (   e14-e14_C)+ e14_P;
+e15 = e15_I -> pre  (   e15-e15_C)+ e15_P;
+e5x = e5x_I -> pre  (   e5x-e5x_C)+ e5x_P;
+e16x = e16x_I -> pre  (   e16x-e16x_C)+ e16x_P;
+e17x = e17x_I -> pre  (   e17x-e17x_C)+ e17x_P;
+e18x = e18x_I -> pre  (   e18x-e18x_C)+ e18x_P;
+e19x = e19x_I -> pre  (   e19x-e19x_C)+ e19x_P;
+
+in = in_P -> pre  ( in-in_C)+ in_P ;
+
+
+(in_C, e1_C, e1_P, e2_P, e3_P, e4_P, e5x_P, a0nbrFired, a0nbrEnd ) = a0(in, e1);
+(e3_C, e8_C, e6_P, e7_P, b0nbrFired, b0nbrEnd ) = b0(e3, e8);
+(e2_C, e7_C, e9_P, e10_P, b1nbrFired, b1nbrEnd ) = b1(e2, e7);
+(e4_C, e9_C, e8_P, e11_P, b2nbrFired, b2nbrEnd ) = b2(e4, e9);
+(e6_C, e12_P, c0nbrFired, c0nbrEnd ) = c0(e6);
+(e10_C, e13_P, c1nbrFired, c1nbrEnd ) = c1(e10);
+(e11_C, e14_P, c2nbrFired, c2nbrEnd ) = c2(e11);
+(e12_C, e13_C, e14_C, e15_C, e15_P, d0nbrFired, d0nbrEnd ) = d0(e12, e13, e14, e15);
+(e5x_C, e16x_C, e16x_P, e17x_P, b_nbrFired, b_nbrEnd ) = b_(e5x, e16x);
+(e17x_C, e18x_P, c_nbrFired, c_nbrEnd ) = c_(e17x);
+(e18x_C, e19x_C, e19x_P, d_nbrFired, d_nbrEnd ) = d_(e18x, e19x);
+
+a0nbrRun=  a0nbrFired  -> (pre a0nbrRun) +a0nbrFired - a0nbrEnd ;
+
+b0nbrRun=  b0nbrFired  -> (pre b0nbrRun) +b0nbrFired - b0nbrEnd ;
+
+b1nbrRun=  b1nbrFired  -> (pre b1nbrRun) +b1nbrFired - b1nbrEnd ;
+
+b2nbrRun=  b2nbrFired  -> (pre b2nbrRun) +b2nbrFired - b2nbrEnd ;
+
+c0nbrRun=  c0nbrFired  -> (pre c0nbrRun) +c0nbrFired - c0nbrEnd ;
+
+c1nbrRun=  c1nbrFired  -> (pre c1nbrRun) +c1nbrFired - c1nbrEnd ;
+
+c2nbrRun=  c2nbrFired  -> (pre c2nbrRun) +c2nbrFired - c2nbrEnd ;
+
+d0nbrRun=  d0nbrFired  -> (pre d0nbrRun) +d0nbrFired - d0nbrEnd ;
+
+b_nbrRun=  b_nbrFired  -> (pre b_nbrRun) +b_nbrFired - b_nbrEnd ;
+
+c_nbrRun=  c_nbrFired  -> (pre c_nbrRun) +c_nbrFired - c_nbrEnd ;
+
+d_nbrRun=  d_nbrFired  -> (pre d_nbrRun) +d_nbrFired - d_nbrEnd ;
+
+
+assert in_P  =1; 
+ 
+--%MAIN;
+ 
+
+-- --%PROPERTY  .....
+--%PROPERTY  "equivalence" d0nbrFired=d_nbrFired;
+
+tel;
+

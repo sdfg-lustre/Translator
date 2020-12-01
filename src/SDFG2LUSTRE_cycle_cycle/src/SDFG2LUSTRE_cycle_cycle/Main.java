@@ -268,7 +268,7 @@ public class Main {
                                               
                          writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
                          str="";
-                    /*               
+                                  
                          for (Actor arrNode : actorsArray) {
                          str += arrNode.getName() + "nbrRun, ";
                     
@@ -277,7 +277,7 @@ public class Main {
                           writer.println(  str.substring(0, str.length()-2)  + " : int; \n");
                         writer.println("noDeadlock: bool;\n");
 
-                       */    
+                           
 
                         //generating the node-top body
                         writer.println("\nlet\n");
@@ -318,10 +318,10 @@ public class Main {
                         }
                         writer.println();
 
-                     /*  for (Actor arrNode : actorsArray) {
+                       for (Actor arrNode : actorsArray) {
                         writer.println(arrNode.getName() + "nbrRun=  " + arrNode.getName() + "nbrFired  -> (pre " + arrNode.getName() + "nbrRun) +" + arrNode.getName() + "nbrFired - " + arrNode.getName() + "nbrEnd ;" + "\n");
+                        }
                          writer.println("\nnoDeadlock = " + deadlockStringNew(actorsArray) + ";");
-                        }*/
 
                         writer.println();
                               for (DriverActor driver : sinkArray) {
@@ -331,7 +331,7 @@ public class Main {
 
 
                         writer.println("--%MAIN;\n");
-                  //        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
+                        writer.println("--%PROPERTY  \"Deadlock free \"  noDeadlock;\n");
                         writer.println("-- --%PROPERTY  .....\n");
                   
                         writer.println("\ntel;");

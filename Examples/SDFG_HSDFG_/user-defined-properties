@@ -1,0 +1,5 @@
+---%PROPERTY  .....
+ 
+---equivalence HSDFG_SDFG:   d0nbrFired=d_nbrFired;
+---equivalence HSDFG_RHDFG:  d0nbrFired=d0bisnbrFired;
+---equivalence SDFG_RHDFG:  d0bisnbrFired=d_nbrFired;
