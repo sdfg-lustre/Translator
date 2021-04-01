@@ -32,7 +32,7 @@ The formal verification tool <a href="https://kind2-mc.github.io/kind2/"> Kind 2
    >sudo docker pull kind2/kind2
 
 2. clone the project from github:
-   > git  clone https://github.com/sdfg-lustre/ENISoNOCCS 
+   > git  clone https://github.com/sdfg-lustre/Translator 
 
 3. checking the properties of the examples/TDMA_/TDMA_cycle_by_cycle_verif
    >sudo docker run -v /absolute path to /ENISoNOCCS/Examples/TDMA_/:/lus kind2/kind2 --timeout_wall 9000 /lus/TDMA_verified.lus
@@ -56,3 +56,5 @@ it produces a Lustre file named SDFGmodel_merged_cycles.lus
    > sudo docker run -v /absolute path to the Lustre model/:/lus kind2/kind2   --timeout_wall 90  /lus/SDFG2LUSTRE_cycle_cycle.lus
 
 </pre> 
+
+Reference: Imed E. Bennour, Formal verification of timed synchronous dataflow graphs using Lustre   https://www.sciencedirect.com/science/article/abs/pii/S2352220821000419
